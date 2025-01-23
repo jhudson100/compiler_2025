@@ -15,7 +15,9 @@ public class Token{
     }
     public override string ToString()
     {
-        return $"{{ \"sym\": \"{this.sym}\" , \"line\" : {this.line}, \"lexeme\" : \"{this.lexeme}\"  }}";
+        var lex = lexeme.Replace("\\","\\\\").Replace("\"","\\\"").Replace("\n","\\n");
+
+        return $"{{ \"sym\": \"{this.sym}\" , \"line\" : {this.line}, \"lexeme\" : \"{lex}\"  }}";
     }
 
 }
@@ -28,11 +30,16 @@ public class Tokenizer{
     int line;   //current line number
     int index;  //where we are at in the input
 
+    Stack<Token> nesting = new();
+
     public Tokenizer(string inp){
         this.input = inp;
         this.line = 1;
         this.index = 0;
     }
+
+    //we can insert an implicit semicolon after these things
+    List<string> implicitSemiAfter = new(){"NUM","RPAREN"};
 
     public Token next(){
 
@@ -51,10 +58,19 @@ public class Tokenizer{
                 Console.WriteLine("Trying terminal "+t.sym+ "   Matched? "+M.Success);
             }
             if( M.Success ){
+                //FIXME: Need maximal munch
                 sym = t.sym;
                 lexeme = M.Groups[0].Value;
                 break;
             }
+        }
+
+        if( sym == "WHITESPACE" && lexeme.Contains('\n') && nesting.Count == 0){
+            //insert implicit semicolon depending on what 
+            //the previous token was: If previous token
+            //is in my list, return semi
+            //don't forget to update last token returned
+            return new Token("SEMI", "", this.line);
         }
 
         if( sym == null ){
@@ -69,6 +85,20 @@ public class Tokenizer{
         if( verbose ){
             Console.WriteLine("RETURNING TOKEN: "+tok);
         }
+
+        //adjust line number
+
+        if( sym == "WHITESPACE" ){
+            return this.next();
+        }        
+
+        //do maintenance on nesting stack
+        // if LPAREN or LBRACKET: push to stack
+        // if RPAREN or RBRACKET: pop from stack (first do checks!)
+        
+        //update my 'last token' data: Either store the token
+        //itself or just store its sym or just store a bool
+        //that says if it's in the eligible for implicit semis
         return tok;
     }//next()
 
