@@ -86,19 +86,20 @@ public class Tokenizer{
             Console.WriteLine("RETURNING TOKEN: "+tok);
         }
 
-        //adjust line number
+        //FIXME: adjust line number
 
         if( sym == "WHITESPACE" ){
             return this.next();
         }        
 
-        //do maintenance on nesting stack
+        //FIXME: Do maintenance on nesting stack
         // if LPAREN or LBRACKET: push to stack
         // if RPAREN or RBRACKET: pop from stack (first do checks!)
         
-        //update my 'last token' data: Either store the token
+        //FIXME: update my 'last token' data: Either store the token
         //itself or just store its sym or just store a bool
         //that says if it's in the eligible for implicit semis
+        
         return tok;
     }//next()
 
