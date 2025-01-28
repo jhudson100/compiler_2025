@@ -5,8 +5,16 @@ public class CompilersAreGreat{
 
         //initialize our grammar
         Terminals.makeAllOfTheTerminals();
-        Grammar.addTerminals(new Terminal[]{  new("WHITESPACE",@"\s+" )});
+        Productions.makeThem();
 
+        Grammar.addTerminals(new Terminal[]{  new("WHITESPACE",@"\s+" )});
+        
+        Grammar.check();
+
+        Grammar.dump();
+
+        return;
+        
         string inp = File.ReadAllText(args[0]);
         var tokens = new List<Token>();
         var T = new Tokenizer(inp);
