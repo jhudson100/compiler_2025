@@ -7,13 +7,11 @@ public class CompilersAreGreat{
         Terminals.makeAllOfTheTerminals();
         Productions.makeThem();
 
-        Grammar.addTerminals(new Terminal[]{  new("WHITESPACE",@"\s+" )});
-        
         Grammar.check();
 
         Grammar.dump();
 
-        return;
+        // return;
         
         string inp = File.ReadAllText(args[0]);
         var tokens = new List<Token>();

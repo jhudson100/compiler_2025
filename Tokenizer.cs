@@ -43,6 +43,15 @@ public class Tokenizer{
 
     public Token next(){
 
+        //consume leading whitespace
+        while( this.index < this.input.Length && Char.IsWhiteSpace( this.input[this.index] ) ){
+            //TODO: Implicit semicolon insertion
+            if( this.input[this.index] == '\n' )
+                this.line++;
+            this.index++;
+        }
+
+        //If we've exhausted the input, return EOF
         if( this.index >= this.input.Length ){
             if(verbose){
                 Console.WriteLine("next(): At EOF!");
@@ -58,19 +67,11 @@ public class Tokenizer{
                 Console.WriteLine("Trying terminal "+t.sym+ "   Matched? "+M.Success);
             }
             if( M.Success ){
-                //FIXME: Need maximal munch
-                sym = t.sym;
-                lexeme = M.Groups[0].Value;
-                break;
+                if( lexeme == null || M.Groups[0].Value.Length > lexeme.Length ){
+                    sym = t.sym;
+                    lexeme = M.Groups[0].Value;
+                }
             }
-        }
-
-        if( sym == "WHITESPACE" && lexeme.Contains('\n') && nesting.Count == 0){
-            //insert implicit semicolon depending on what 
-            //the previous token was: If previous token
-            //is in my list, return semi
-            //don't forget to update last token returned
-            return new Token("SEMI", "", this.line);
         }
 
         if( sym == null ){
@@ -78,19 +79,19 @@ public class Tokenizer{
             Console.WriteLine("Error at line "+this.line);
             Environment.Exit(1);
         }
-        this.index += lexeme.Length;
-
 
         var tok = new Token( sym , lexeme, line);
         if( verbose ){
-            Console.WriteLine("RETURNING TOKEN: "+tok);
+            Console.WriteLine("GOT TOKEN: "+tok);
         }
 
-        //FIXME: adjust line number
+        foreach(var c in lexeme){
+            if( c == '\n' )
+                this.line++;
+        }
+        
+        this.index += lexeme.Length;
 
-        if( sym == "WHITESPACE" ){
-            return this.next();
-        }        
 
         //FIXME: Do maintenance on nesting stack
         // if LPAREN or LBRACKET: push to stack
@@ -100,7 +101,12 @@ public class Tokenizer{
         //itself or just store its sym or just store a bool
         //that says if it's in the eligible for implicit semis
         
-        return tok;
+
+        if( sym == "COMMENT" ){
+            return this.next();
+        } else {       
+            return tok;
+        }
     }//next()
 
 } //class Tokenizer
