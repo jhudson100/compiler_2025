@@ -5,6 +5,8 @@ public static class Grammar{
     public static HashSet<string> allTerminals = [];
     public static List<Production> productions = new();
     public static HashSet<string> allNonterminals = new();
+    public static HashSet<string> nullable = new();
+    public static Dictionary<string,HashSet<string>> first = new();
 
     public static void addTerminals( Terminal[] terminals){
         foreach(var t in terminals){
@@ -45,8 +47,35 @@ public static class Grammar{
         foreach( var p in productions ){
             Console.WriteLine(p);
         }
+        Console.Write("NULLABLE: FINISH ME");
+        Console.WriteLine();
+        foreach(var sym in first.Keys){
+            Console.Write($"first[{sym}] = ");
+            Console.WriteLine("FINISH ME");
+        }
     }
 
+    public static void computeNullableAndFirst(){
+        var flag = true;
+        while(flag){
+            flag=false;
+            //TODO: Finish computing nullable
+        }
+        
+        foreach( var sym in Grammar.allTerminals){
+            first[sym] = new();
+            first[sym].Add(sym);
+        }
+        foreach(var sym in Grammar.allNonterminals){
+            first[sym] = new();
+        }
+
+        flag=true;
+        while(flag){
+            flag=false;
+            //TODO: Finish computing first
+        }
+    }
 } //end class Grammar
 
 
