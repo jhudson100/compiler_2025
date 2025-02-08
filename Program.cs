@@ -9,9 +9,9 @@ public class CompilersAreGreat{
 
         Grammar.check();
 
-        Grammar.computeNullableAndFirst();
+        // Grammar.computeNullableAndFirst();
         
-        Grammar.dump();
+        // Grammar.dump();
 
         // return;
         
@@ -24,9 +24,14 @@ public class CompilersAreGreat{
                 break;
             tokens.Add(tok);
         }
-        foreach(var t in tokens){
-            Console.WriteLine(t);
+        Console.WriteLine("[");
+        for(int i=0;i<tokens.Count;++i){
+            Console.Write(tokens[i]);
+            if( i != tokens.Count-1 )
+                Console.Write(",");
+            Console.WriteLine();
         }
+        Console.WriteLine("]");
     }
 } //class
 

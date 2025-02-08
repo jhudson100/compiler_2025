@@ -27,28 +27,53 @@ public class Tokenizer{
     bool verbose=false;
 
     string input;   //stuff we are tokenizing
-    int line;   //current line number
-    int index;  //where we are at in the input
+    int line = 1;   //current line number
+    int index = 0;  //where we are at in the input
+    string lastSym = null;  //last symbol returned from next()
 
     Stack<Token> nesting = new();
 
     public Tokenizer(string inp){
         this.input = inp;
-        this.line = 1;
-        this.index = 0;
     }
 
     //we can insert an implicit semicolon after these things
-    List<string> implicitSemiAfter = new(){"NUM","RPAREN"};
+    List<string> implicitSemiAfter = new(){
+        "BOOLCONST", "BREAK", "CONTINUE", "FNUM", "NUM",
+        "PLUSPLUS", "RBRACE", "RBRACKET", "RETURN",
+        "RPAREN", "STRINGCONST", "TYPE", "ID"
+    };
+
+    private bool needImplicitSemi(){
+        return lastSym != null && nesting.Count == 0 && implicitSemiAfter.Contains(lastSym);
+    }
+
+    private void checkNesting(string sym){
+        if( this.nesting.Count == 0 ){
+            Console.WriteLine($"Error at line {this.line}: When looking for match to {sym}: Did not find any");
+            Environment.Exit(2);
+        }
+
+        var tok = this.nesting.Pop();
+
+        if( (sym == "RPAREN" && tok.sym != "LPAREN") || (sym == "RBRACKET" && tok.sym != "LBRACKET") ){
+            Console.WriteLine($"Error at line {this.line}: When looking for match to {sym} found {tok.sym} at line {tok.line}");
+            Environment.Exit(2);
+        }
+    }
 
     public Token next(){
 
         //consume leading whitespace
         while( this.index < this.input.Length && Char.IsWhiteSpace( this.input[this.index] ) ){
-            //TODO: Implicit semicolon insertion
-            if( this.input[this.index] == '\n' )
+            if( this.input[this.index++] == '\n' ){
                 this.line++;
-            this.index++;
+                if( needImplicitSemi() ){
+                    var t = new Token("SEMI","",this.line-1);
+                    lastSym = "SEMI";
+                    return t ;
+                }
+            }
         }
 
         //If we've exhausted the input, return EOF
@@ -56,6 +81,22 @@ public class Tokenizer{
             if(verbose){
                 Console.WriteLine("next(): At EOF!");
             }
+
+            //special case: If file doesn't end with a newline,
+            //check to see if we need to manufacture a semicolon
+            if( needImplicitSemi() ){
+                var t = new Token("SEMI","",this.line);
+                lastSym = "SEMI";
+                return t ;
+            }
+
+            //see if we have any unterminated grouping symbols
+            if( this.nesting.Count > 0 ){
+                var n = this.nesting.Pop();
+                Console.WriteLine($"Error at line {this.line}: At EOF: Unpaired {n.sym} at line {n.line}");
+                Environment.Exit(2);
+            }
+
             return null;
         }
 
@@ -76,7 +117,7 @@ public class Tokenizer{
 
         if( sym == null ){
             //print error message
-            Console.WriteLine("Error at line "+this.line);
+            Console.WriteLine($"Error at line {this.line}: Could not match anything");
             Environment.Exit(1);
         }
 
@@ -92,19 +133,17 @@ public class Tokenizer{
         
         this.index += lexeme.Length;
 
-
-        //FIXME: Do maintenance on nesting stack
-        // if LPAREN or LBRACKET: push to stack
-        // if RPAREN or RBRACKET: pop from stack (first do checks!)
-        
-        //FIXME: update my 'last token' data: Either store the token
-        //itself or just store its sym or just store a bool
-        //that says if it's in the eligible for implicit semis
-        
+        if( sym == "LPAREN" || sym == "LBRACKET" ){
+            this.nesting.Push(tok);
+        } else if( sym == "RPAREN" || sym == "RBRACKET"){
+            checkNesting(sym);
+        }
 
         if( sym == "COMMENT" ){
+            //do not update lastSym here
             return this.next();
-        } else {       
+        } else { 
+            this.lastSym = sym;
             return tok;
         }
     }//next()
