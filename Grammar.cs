@@ -4,6 +4,7 @@ public static class Grammar{
     public static List<Terminal> terminals = new();
     public static HashSet<string> allTerminals = [];
     public static List<Production> productions = new();
+    public static Dictionary<string, List<Production> > productionsByLHS = new();
     public static HashSet<string> allNonterminals = new();
     public static HashSet<string> nullable = new();
     public static Dictionary<string,HashSet<string>> first = new();
@@ -24,11 +25,16 @@ public static class Grammar{
         return allNonterminals.Contains(sym);
     }
 
-    public static void defineProductions(PSpec[] specs){
+    public static int defineProductions(PSpec[] specs){
+        //Return the index of the first production that we added
+        int howMany = productions.Count;
         //parse stuff out of our pspec's and put it somewhere
         foreach( var psec in specs){
             //do something...
+            // productions.Add( new Production( ... ) );
         }
+        //FIXME: Add to productionsByLHS also!
+        return howMany;
     }
 
     public static void check(){
