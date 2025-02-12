@@ -7,25 +7,15 @@ public class CompilersAreGreat{
 
     public static void Main(string[] args){
 
-        // ImmutableHashSet<int> x1 = ImmutableHashSet.Create<int>(1,2, V);
-        // var x2 = ImmutableHashSet.Create<int>(1,2,3);
-        // Console.WriteLine(x1.GetHashCode());
-        // Console.WriteLine(x2.GetHashCode());
-        // return;
-
-
-
         //initialize our grammar
-        Terminals.makeAllOfTheTerminals();
+        Terminals.makeThem();
         Productions.makeThem();
 
         Grammar.check();
 
-        Grammar.computeNullableAndFirst();
-        
         Grammar.dump();
 
-        // return;
+        return;
         
         string inp = File.ReadAllText(args[0]);
         var tokens = new List<Token>();
