@@ -1,10 +1,14 @@
-﻿namespace lab{
+﻿using System.Collections.Immutable;
+
+namespace lab{
 
 public class CompilersAreGreat{
+    private const int V = 3;
+
     public static void Main(string[] args){
 
         //initialize our grammar
-        Terminals.makeAllOfTheTerminals();
+        Terminals.makeThem();
         Productions.makeThem();
 
         Grammar.check();
@@ -13,7 +17,7 @@ public class CompilersAreGreat{
         
         // Grammar.dump();
 
-        // return;
+        return;
         
         string inp = File.ReadAllText(args[0]);
         var tokens = new List<Token>();
