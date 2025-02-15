@@ -5,6 +5,8 @@ public static class Grammar{
     public static HashSet<string> allTerminals = [];
     public static List<Production> productions = new();
     public static HashSet<string> allNonterminals = new();
+    public static HashSet<string> nullable = new();
+    public static Dictionary<string,HashSet<string>> first = new();
 
     public static void addTerminals( Terminal[] terminals){
         foreach(var t in terminals){
@@ -61,10 +63,62 @@ public static class Grammar{
 
     }
 
+    public static void computeNullableAndFirst(){
+        bool keeplooping=true;
+        while(keeplooping){
+            keeplooping=false;
+            foreach( Production P in productions){
+                if( nullable.Contains(P.lhs) )
+                    continue;
+                bool foundNonNullable=false;
+                foreach(string sym in P.rhs){
+                    if( !nullable.Contains(sym) ){
+                        foundNonNullable=true;
+                        break;
+                    }
+                }
+                if(!foundNonNullable){
+                    nullable.Add(P.lhs);
+                    keeplooping=true;
+                }
+            }
+        }
+
+        foreach(string sym in allTerminals){
+            first[sym] = new (){ sym };
+        }
+        foreach(string sym in allNonterminals){
+            first[sym] = new();
+        }
+
+        keeplooping=true;
+        while(keeplooping){
+            keeplooping=false;
+            foreach( Production P in productions ){
+                foreach( string sym in P.rhs ){
+                    int s1 = first[P.lhs].Count;
+                    first[P.lhs].UnionWith( first[sym] );
+                    int s2 = first[P.lhs].Count;
+                    if( s1 != s2 )
+                        keeplooping=true;
+                    if(!nullable.Contains(sym))
+                        break;
+                }
+            }
+        }
+
+    }
+
     public static void dump(){
         //dump grammar stuff to the screen (debugging)
         foreach( var p in productions ){
             Console.WriteLine(p);
+        }
+        Console.Write("Nullable: ");
+        Console.WriteLine( String.Join(" , ", nullable ) );
+        foreach(string sym in first.Keys){
+            Console.Write($"first[{sym}] = ");
+            Console.WriteLine( String.Join(" , ", first[sym] ) );
         }
     }
 

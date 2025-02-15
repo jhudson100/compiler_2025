@@ -13,9 +13,9 @@ public class CompilersAreGreat{
 
         Grammar.check();
 
-        // Grammar.computeNullableAndFirst();
+        Grammar.computeNullableAndFirst();
         
-        // Grammar.dump();
+        Grammar.dump();
 
         return;
         

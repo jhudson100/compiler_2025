@@ -2,7 +2,7 @@
 namespace lab{
 
 public class Terminals{
-    public static void makeAllOfTheTerminals(){
+    public static void makeThem(){
         Grammar.addTerminals( new Terminal[] {
             new("ADDOP",            @"[-+]"),
             new("ANDOP",            @"\band\b"),
