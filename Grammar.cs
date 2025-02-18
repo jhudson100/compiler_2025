@@ -5,6 +5,7 @@ public static class Grammar{
     public static HashSet<string> allTerminals = [];
     public static List<Production> productions = new();
     public static HashSet<string> allNonterminals = new();
+    public static Dictionary<string,List<Production>> productionsByLHS = new();
 
     public static void addTerminals( Terminal[] terminals){
         foreach(var t in terminals){
@@ -40,7 +41,11 @@ public static class Grammar{
                 for(int i=0;i<rhs.Length;++i){
                     rhs[i]=rhs[i].Trim();
                 }
-                Grammar.productions.Add( new Production(pspec, lhs, rhs));
+                var p = new Production(pspec, lhs, rhs);
+                Grammar.productions.Add( p );
+                if(! productionsByLHS.Keys.Contains(lhs))
+                    productionsByLHS[lhs]= new();
+                productionsByLHS[lhs].Add(p);
             }
         }
         return howMany;

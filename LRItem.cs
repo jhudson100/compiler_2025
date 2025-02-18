@@ -3,10 +3,17 @@ namespace lab{
 public class LRItem{
     public readonly Production production;
     public readonly int dpos;
-
+    public HashSet<string> lookahead = new();
     public LRItem(Production production, int dpos){
         this.production = production;
         this.dpos=dpos;
+
+        //dummy, for testing only
+        this.lookahead.Add("$");
+    }
+
+    public bool dposAtEnd(){
+        return true;   //FIXME: Finish this
     }
 
     public string symbolAfterDistinguishedPosition {
@@ -40,6 +47,12 @@ public class LRItem{
     public static bool operator!=(LRItem o1, LRItem o2){
         return !(o1==o2);
     }
+    public override string ToString()
+    {
+        //FIXME: Need to show distinguished position
+        return this.production.ToString();
+    }
+
 }
 
 }

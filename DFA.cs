@@ -63,7 +63,7 @@ public class DFAState{
 }
 
 public static class DFA{
-    static List<DFAState> allStates = new();
+    public static List<DFAState> allStates = new();
     
     static void dump(string filename){
         using(var sw = new StreamWriter(filename)){
@@ -99,6 +99,8 @@ public static class DFA{
             keeplooping=false;
             HashSet<LRItem> tmp = new();
             foreach(LRItem I in s){
+                if( I.dposAtEnd() )
+                    continue;
                 string sym = I.symbolAfterDistinguishedPosition;
                 if( Grammar.allNonterminals.Contains(sym)){
                     //sym is a nonterminal
@@ -163,7 +165,7 @@ public static class DFA{
     static Dictionary<string, HashSet<LRItem> > getOutgoingTransitions(DFAState q){
         var tr = new Dictionary<string, HashSet<LRItem> >();
         foreach( LRItem I in q.label.items){
-            if( !I.dposAtEnd ) {
+            if( !I.dposAtEnd() ) {
                 string sym = I.symbolAfterDistinguishedPosition;
                 
                 if( !tr.ContainsKey(sym))

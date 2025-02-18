@@ -13,17 +13,19 @@ public class CompilersAreGreat{
         // Console.WriteLine(x2.GetHashCode());
         // return;
 
-
-
         //initialize our grammar
         Terminals.makeAllOfTheTerminals();
         Productions.makeThem();
-
         Grammar.check();
 
-        Grammar.computeNullableAndFirst();
-        
-        Grammar.dump();
+        if( args.Length == 1 && args[0] == "-g" ){
+            Grammar.computeNullableAndFirst();
+            DFA.makeDFA(); //time consuming
+            TableWriter.create();
+            return;
+        }
+
+        // Grammar.dump();
 
         // return;
         
@@ -36,6 +38,9 @@ public class CompilersAreGreat{
                 break;
             tokens.Add(tok);
         }
+
+        //TODO: build parse tree. Later.
+
         foreach(var t in tokens){
             Console.WriteLine(t);
         }

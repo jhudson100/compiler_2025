@@ -2,6 +2,28 @@
     "version": "2.0.0",
     "tasks": [
         {
+            "label": "buildIt",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "build",
+                "${workspaceFolder}/test.csproj",
+                "/property:GenerateFullPaths=true",
+                "/consoleloggerparameters:NoSummary;ForceNoAlign"
+            ],
+            "problemMatcher": "$msCompile",
+        },
+        {
+            "label": "generateTable",
+            "command": "dotnet",
+            "type": "process",
+            "args": [
+                "run",
+                "-g",
+            ],
+            "dependsOn": "buildIt"
+        },
+        {
             "label": "build",
             "command": "dotnet",
             "type": "process",
@@ -11,7 +33,12 @@
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary;ForceNoAlign"
             ],
-            "problemMatcher": "$msCompile"
-        }
+            "problemMatcher": "$msCompile",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "dependsOn": "generateTable"
+        },
     ]
 }
