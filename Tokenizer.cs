@@ -56,7 +56,7 @@ public class Tokenizer{
             if(verbose){
                 Console.WriteLine("next(): At EOF!");
             }
-            return null;
+            return new Token("$","",this.line);
         }
 
         String sym=null;

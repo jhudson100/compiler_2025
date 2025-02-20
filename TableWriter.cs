@@ -20,7 +20,7 @@ public static class TableWriter{
                     w.Write("                ");
                     w.Write("{");
                     w.Write($"\"{sym}\" , ");
-                    w.Write($"new ParseAction(PAction.SHIFT, {q.transitions[sym].unique}, null)");
+                    w.Write($"new ParseAction(PAction.SHIFT, {q.transitions[sym].unique}, null, -1)");
                     w.WriteLine("},");
                 }
                 //reduce rules
@@ -32,7 +32,7 @@ public static class TableWriter{
                             w.Write("{");
                             w.Write($"\"{lookahead}\"");
                             w.Write(",");
-                            w.Write($"new ParseAction(PAction.REDUCE, {I.production.rhs.Length}, \"{I.production.lhs}\")");
+                            w.Write($"new ParseAction(PAction.REDUCE, {I.production.rhs.Length}, \"{I.production.lhs}, {I.production.unique}\")");
                             w.WriteLine("},");
                         }
                     }
