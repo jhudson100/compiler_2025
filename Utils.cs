@@ -1,6 +1,10 @@
-public static class Utils{
-    public static void error(Token t, string msg){
-        Console.WriteLine($"Error at line {t.line}: {msg}");
-        Environment.Exit(1);
-    }
-}
+namespace lab{
+    
+    public static class Utils{
+        public static void error(Token t, string msg){
+            Console.WriteLine($"Error at line {t.line}: {msg}");
+            Environment.Exit(1);
+        }
+    } //Utils
+
+} //namespace
