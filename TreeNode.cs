@@ -11,6 +11,15 @@ public class TreeNode{
 
     public TreeNode parent = null;
 
+
+    Production production {
+        get {
+            if( this.productionNumber >= 0 )
+                return Grammar.productions[this.productionNumber];
+            return null;
+        }
+    }
+
     public TreeNode(string sym, Token tok, int prodNum){
         this.sym=sym;
         this.token = tok;
@@ -82,6 +91,10 @@ public class TreeNode{
             return this.sym;
         else
             return $"{this.sym} ({this.token.lexeme})";
+    }
+
+    public void collectClassNames(){
+        this.production?.pspec.collectClassNames(this);
     }
 
 } //end TreeNode

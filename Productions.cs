@@ -5,6 +5,14 @@ public class Productions{
     public static void makeThem(){
         Grammar.defineProductions( new PSpec[] {
 
+
+            //declaring a class
+            new("classdecl :: CLASS ID LBRACE memberdecls RBRACE",
+                collectClassNames: (n) => {
+                    Console.WriteLine("CLASS:"+n.children[1].token.lexeme);
+                }
+            ),
+
             //simple, one production
             new PSpec( "assign :: ID EQ NUM SEMI"),
 
