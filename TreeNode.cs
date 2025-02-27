@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace lab{
 
 public class TreeNode{
@@ -10,6 +12,20 @@ public class TreeNode{
     public int productionNumber;
 
     public TreeNode parent = null;
+
+    [JsonConverter(typeof(NodeTypeJsonConverter))]
+    public NodeType nodeType = null;
+
+    public TreeNode this[string childSym] {
+        get {
+            foreach( var c in this.children ){
+                if( c.sym == childSym ){
+                    return c;
+                }
+            }
+            throw new Exception("No such child");
+        }
+    }
 
 
     Production production {
@@ -89,12 +105,20 @@ public class TreeNode{
     public override string ToString(){
         if( this.token == null )
             return this.sym;
-        else
-            return $"{this.sym} ({this.token.lexeme})";
+        else{
+            string tmp = "";
+            if( this.nodeType != null )
+                tmp = this.nodeType.ToString();
+            return $"{this.sym} ({this.token.lexeme}) {tmp}";
+        }
     }
 
     public void collectClassNames(){
         this.production?.pspec.collectClassNames(this);
+    }
+
+    public void setNodeTypes(){
+        this.production?.pspec.setNodeTypes(this);
     }
 
 } //end TreeNode

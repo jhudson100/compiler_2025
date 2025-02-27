@@ -8,8 +8,9 @@ public class CompilersAreGreat{
     public static void Main(string[] args){
 
         //initialize our grammar
-        Terminals.makeAllOfTheTerminals();
+        Terminals.makeThem();
         Productions.makeThem();
+        ProductionsExpr.makeThem();
 
         if( args.Length == 1 && args[0] == "-g" ){
             Grammar.check();
@@ -26,7 +27,18 @@ public class CompilersAreGreat{
         TreeNode root = Parser.parse(T);
         
         root.collectClassNames();
-        
+        root.setNodeTypes();
+
+
+        //debug output: Write the tree in JSON format
+        var opts = new System.Text.Json.JsonSerializerOptions();
+        opts.IncludeFields=true;
+        opts.WriteIndented=true;
+        opts.MaxDepth=1000000;
+        string J = System.Text.Json.JsonSerializer.Serialize(root,opts);
+        using(var w = new StreamWriter("tree.json")){
+            w.WriteLine(J);
+        }
     }
 } //class
 
