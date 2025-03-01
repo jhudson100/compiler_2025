@@ -7,6 +7,7 @@ public static class Grammar{
     public static HashSet<string> allNonterminals = new();
     public static HashSet<string> nullable = new();
     public static Dictionary<string,HashSet<string>> first = new();
+    public static Dictionary<string,List<Production>> productionsByLHS = new();
 
     public static void addTerminals( Terminal[] terminals){
         foreach(var t in terminals){
@@ -24,7 +25,7 @@ public static class Grammar{
         return allNonterminals.Contains(sym);
     }
 
-    public static void defineProductions(PSpec[] specs){
+    public static int defineProductions(PSpec[] specs){
         //Return the index of the first production that we added
         int howMany = productions.Count;
         foreach( var pspec in specs){
@@ -42,9 +43,14 @@ public static class Grammar{
                 for(int i=0;i<rhs.Length;++i){
                     rhs[i]=rhs[i].Trim();
                 }
-                Grammar.productions.Add( new Production(pspec, lhs, rhs));
+                var P = new Production(pspec, lhs, rhs);
+                Grammar.productions.Add( P );
+                if( !Grammar.productionsByLHS.ContainsKey(P.lhs) )
+                    Grammar.productionsByLHS[P.lhs] = new();
+                Grammar.productionsByLHS[P.lhs].Add(P);
             }
         }
+        return howMany;
     }
 
     public static void check(){

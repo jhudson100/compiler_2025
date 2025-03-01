@@ -4,8 +4,11 @@ public class ItemSet{
     public HashSet<LRItem> items;
     public override int GetHashCode()
     {
-        //FIXME: Write this
-        return 0;
+        int H=0;
+        foreach(var I in this.items){
+            H ^= I.GetHashCode();
+        }
+        return H;
     }
     public override bool Equals(object obj)
     {
@@ -14,8 +17,7 @@ public class ItemSet{
         ItemSet S = obj as ItemSet;
         if( Object.ReferenceEquals(S,null) )
             return false;       
-        //FIXME: Write this
-        return true;
+        return this.items.SetEquals( S.items );
     }
 
     public static bool operator==(ItemSet o1, ItemSet o2){
@@ -50,12 +52,14 @@ public class DFAState{
     }
     public override string ToString()
     {
-        string r = $"State {this.unique}\n";
+        string r = $"\nState {this.unique}\n";
         r += this.label;
-        r += "---------------\n";
-        foreach( string sym in this.transitions.Keys){
-            DFAState q = transitions[sym];
-            r += $"{sym} -> {q.unique}";
+        r += "\n";
+        if(this.transitions.Count > 0 ){
+            foreach( string sym in this.transitions.Keys){
+                DFAState q = transitions[sym];
+                r += $"{sym} \u2192 {q.unique}\n";
+            }
         }
         return r;
     }
@@ -65,10 +69,10 @@ public class DFAState{
 public static class DFA{
     public static List<DFAState> allStates = new();
     
-    static void dump(string filename){
+    public static void dump(string filename){
         using(var sw = new StreamWriter(filename)){
             sw.WriteLine("digraph d{");
-
+            sw.WriteLine("node [shape=rectangle];");
             foreach( DFAState q in allStates ){
                 string x = q.label.ToString();
                 x = x.Replace("\n","\\n");

@@ -12,11 +12,13 @@ public class CompilersAreGreat{
         Productions.makeThem();
 
         Grammar.check();
-
         Grammar.computeNullableAndFirst();
-        
-        Grammar.dump();
+        DFA.makeDFA();
+        DFA.dump("dfa.dot");
 
+        foreach(var Q in DFA.allStates){
+            Console.Write(Q);
+        }
         return;
         
         string inp = File.ReadAllText(args[0]);

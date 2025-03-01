@@ -3,17 +3,14 @@ namespace lab{
 public class LRItem{
     public readonly Production production;
     public readonly int dpos;
-    public HashSet<string> lookahead = new();
+    
     public LRItem(Production production, int dpos){
         this.production = production;
         this.dpos=dpos;
-
-        //dummy, for testing only
-        this.lookahead.Add("$");
     }
 
     public bool dposAtEnd(){
-        return true;   //FIXME: Finish this
+        return this.dpos == this.production.rhs.Length ;
     }
 
     public string symbolAfterDistinguishedPosition {
@@ -49,8 +46,13 @@ public class LRItem{
     }
     public override string ToString()
     {
-        //FIXME: Need to show distinguished position
-        return this.production.ToString();
+        string s = $"{this.production.lhs} :: ";
+        for(var i=0;i<this.dpos;++i)
+            s += $"{this.production.rhs[i]} ";
+        s += "\u2022";  //bullet
+        for(var i=this.dpos;i<this.production.rhs.Length;++i)
+            s += $" {this.production.rhs[i]}";
+        return s;
     }
 
 }

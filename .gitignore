@@ -1,2 +1,4 @@
 obj/*
 bin/*
+dfa.dot
+tree.json
