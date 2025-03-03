@@ -25,7 +25,7 @@ public class ProductionsExpr{
             new("bitexp :: bitexp BITOP shiftexp"),
             new("bitexp :: shiftexp"),
 
-            new("shiftexp :: shiftexp :: sumexp"),
+            new("shiftexp :: shiftexp SHIFTOP sumexp"),
             new("shiftexp :: sumexp"),
 
             //addition and subtraction
