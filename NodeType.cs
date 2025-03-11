@@ -38,11 +38,11 @@ public abstract class NodeType {
 
     // NodeType.Int  <--->   new IntNodeType()
     public static readonly IntNodeType Int = new ();
-    public static readonly FloatNodeType Float = new ();
+    // public static readonly FloatNodeType Float = new ();
 
     //FIXME: Add these
     // public static readonly BoolNodeType Bool = new ();
-    // public static readonly StringNodeType String = new ();
+    public static readonly StringNodeType String = new ();
     // public static readonly VoidNodeType Void = new ();
 
     public static NodeType tokenToNodeType(Token t){
@@ -50,7 +50,7 @@ public abstract class NodeType {
             throw new Exception("ICE");
         switch(t.lexeme){
             case "int": return NodeType.Int;
-            case "float": return NodeType.Float;
+            case "string": return NodeType.String;
             //TODO: Finish me
             default: throw new Exception("ICE");
         }
@@ -62,8 +62,8 @@ public class IntNodeType : NodeType {
     public IntNodeType() : base("int") {}
 }
 
-public class FloatNodeType : NodeType {
-    public FloatNodeType() : base("float") {}
+public class StringNodeType : NodeType {
+    public StringNodeType() : base("string") {}
 }
 
 

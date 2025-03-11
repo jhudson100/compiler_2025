@@ -40,7 +40,8 @@ public class ProductionsExpr{
                     if( t1 != t2 )
                         Utils.error(addop,$"Type mismatch for add/subtract ({t1} and {t2})");
 
-                    if( t1 != NodeType.Int && t1 != NodeType.Float && t1 != NodeType.String ){
+                    throw new Exception("Should include NodeType.Float here");
+                    if( t1 != NodeType.Int /*&& t1 != NodeType.Float*/ && t1 != NodeType.String ){
                         n.print();
                         Utils.error(addop,$"Bad type for add/subtract ({t1})");
                     }
@@ -87,8 +88,6 @@ public class ProductionsExpr{
             //indivisible atom
             new("factor :: NUM",
                 setNodeTypes: (n) => {
-                    //demo: one way to set node type (for another way,
-                    //see FNUM)
                     n.nodeType = NodeType.Int;
                 }
             ),
@@ -105,9 +104,7 @@ public class ProductionsExpr{
 
             new("factor :: FNUM",
                 setNodeTypes: (n) => {
-                    //demo: The other way to set node type (see
-                    //NUM for the first way)
-                    n.nodeType = NodeType.Float;
+                    throw new Exception("FINISH ME");
                 }
             ),
             new("factor :: STRINGCONST",
