@@ -39,9 +39,11 @@ public abstract class NodeType {
     // NodeType.Int  <--->   new IntNodeType()
     public static readonly IntNodeType Int = new ();
     public static readonly FloatNodeType Float = new ();
-    public static readonly BoolNodeType Bool = new ();
-    public static readonly StringNodeType String = new ();
-    public static readonly VoidNodeType Void = new ();
+
+    //FIXME: Add these
+    // public static readonly BoolNodeType Bool = new ();
+    // public static readonly StringNodeType String = new ();
+    // public static readonly VoidNodeType Void = new ();
 
     public static NodeType tokenToNodeType(Token t){
         if( t.sym != "TYPE" )
@@ -59,7 +61,6 @@ public abstract class NodeType {
 public class IntNodeType : NodeType {
     public IntNodeType() : base("int") {}
 }
-
 
 public class FloatNodeType : NodeType {
     public FloatNodeType() : base("float") {}
