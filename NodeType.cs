@@ -61,6 +61,11 @@ public class IntNodeType : NodeType {
 }
 
 
+public class FloatNodeType : NodeType {
+    public FloatNodeType() : base("float") {}
+}
+
+
 
 
 public class NodeTypeJsonConverter : JsonConverter<NodeType> {

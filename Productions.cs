@@ -39,7 +39,7 @@ public class Productions{
             new("pdecls :: pdecl | pdecl COMMA pdecls"),
             new("pdecl :: ID COLON TYPE",
                 setNodeTypes: (n) => {
-                    FINISH ME
+                    throw new Exception("FINISH ME");
                 }),
             new("classdecl :: CLASS ID LBRACE memberdecls RBRACE SEMI",
                 collectClassNames: (TreeNode n) => {
