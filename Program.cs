@@ -29,6 +29,9 @@ public class CompilersAreGreat{
         root.collectClassNames();
         root.setNodeTypes();
 
+        root.removeUnitProductions();     
+        root.print();
+        
 
         //debug output: Write the tree in JSON format
         var opts = new System.Text.Json.JsonSerializerOptions();

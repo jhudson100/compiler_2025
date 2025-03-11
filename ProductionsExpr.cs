@@ -93,7 +93,16 @@ public class ProductionsExpr{
                 }
             ),
             new("factor :: LPAREN expr RPAREN"),
-            new("factor :: ID"),
+
+            new("factor :: ID",
+                setNodeTypes: (n) => {
+                    var tok = n.children[0].token;
+                    VarInfo vi =  SymbolTable.lookup(tok);
+                    n["ID"].varInfo = vi;
+                    n["ID"].nodeType = n.nodeType = vi.type;
+                }
+            ),
+
             new("factor :: FNUM",
                 setNodeTypes: (n) => {
                     //demo: The other way to set node type (see

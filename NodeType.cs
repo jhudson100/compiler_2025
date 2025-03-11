@@ -42,6 +42,18 @@ public abstract class NodeType {
     public static readonly BoolNodeType Bool = new ();
     public static readonly StringNodeType String = new ();
     public static readonly VoidNodeType Void = new ();
+
+    public static NodeType tokenToNodeType(Token t){
+        if( t.sym != "TYPE" )
+            throw new Exception("ICE");
+        switch(t.lexeme){
+            case "int": return NodeType.Int;
+            case "float": return NodeType.Float;
+            //TODO: Finish me
+            default: throw new Exception("ICE");
+        }
+
+    }
 }
 
 public class IntNodeType : NodeType {

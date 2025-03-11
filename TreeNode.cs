@@ -13,6 +13,10 @@ public class TreeNode{
 
     public TreeNode parent = null;
 
+    //only meaningful for tree nodes that are ID's and
+    //which are variables
+    public VarInfo varInfo = null;
+
     [JsonConverter(typeof(NodeTypeJsonConverter))]
     public NodeType nodeType = null;
 
@@ -103,14 +107,41 @@ public class TreeNode{
     }
 
     public override string ToString(){
-        if( this.token == null )
-            return this.sym;
-        else{
-            string tmp = "";
-            if( this.nodeType != null )
-                tmp = this.nodeType.ToString();
-            return $"{this.sym} ({this.token.lexeme}) {tmp}";
+        string tmp=this.sym;
+        
+        if( this.token != null )
+            tmp += $" ({this.token.lexeme})";
+
+        if( this.nodeType != null )
+            tmp += " "+this.nodeType.ToString();
+
+        if( this.varInfo != null )
+            tmp += " "+this.varInfo;
+
+        return tmp;
+    }
+
+    public void removeUnitProductions(){
+
+        for(int i=0;i<this.children.Count;++i)
+            this.children[i].removeUnitProductions();
+
+        if( this.children.Count == 1 && this.parent != null){
+            this.parent.replaceChild(this, this.children[0] );
         }
+    }
+
+    public void replaceChild( TreeNode n, TreeNode c){
+        //replace child n with c
+        for(int i=0;i<this.children.Count;++i){
+            if( this.children[i] == n ){
+                this.children[i] = c;
+                c.parent=this;
+                n.parent=null;
+                return;
+            }
+        }
+        throw new Exception();
     }
 
     public void collectClassNames(){
