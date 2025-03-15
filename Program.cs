@@ -1,4 +1,5 @@
 ﻿using System.Collections.Immutable;
+using System.Text.Json;
 
 namespace lab{
 
@@ -12,7 +13,7 @@ public class CompilersAreGreat{
         Productions.makeThem();
         ProductionsExpr.makeThem();
 
-        if( args.Length == 1 && args[0] == "-g" ){
+        if( args.Contains("-g") ){
             Grammar.check();
             Grammar.computeNullableAndFirst();
             DFA.makeDFA(); //time consuming
@@ -20,11 +21,28 @@ public class CompilersAreGreat{
             return;
         }
 
-        string inp = File.ReadAllText(args[0]);
-        var tokens = new List<Token>();
-        var T = new Tokenizer(inp);
+        TreeNode root=null;
 
-        TreeNode root = Parser.parse(T);
+        for(int i=0;i<args.Length;++i){
+            if( args[i] == "-t" ){
+                i++;
+                if( i >= args.Length ){
+                    Console.WriteLine("-t requires an argument");
+                    Environment.Exit(1);
+                }
+                string treefile = args[i];
+                using(var r = new StreamReader(treefile)){
+                    root = TreeNode.fromJson(r);
+                }
+            }
+        }
+
+        if( root == null){
+            string inp = File.ReadAllText(args[0]);
+            var tokens = new List<Token>();
+            var T = new Tokenizer(inp);
+            root = Parser.parse(T);
+        }
         
         root.collectClassNames();
         root.setNodeTypes();

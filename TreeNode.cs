@@ -60,9 +60,11 @@ public class TreeNode{
     public void toJson(StreamWriter w){
         w.WriteLine("{");
         w.WriteLine( $"\"sym\" : \"{this.sym}\",");
-        w.WriteLine( $"\"token\" : ");
-        //TODO: this.token.toJson(w);
+        w.WriteLine( $"\"token\" : {this.token.toJson(w)}");
         w.WriteLine(",");
+        w.WriteLine( $"\"productionNumber\" : {this.productionNumber},");
+        w.WriteLine($"\"varInfo\" : {this.varInfo.toJson(w)},");
+        w.WriteLine($"\"nodeType\" : {this.nodeType.toJson(w)},");
         w.WriteLine( "\"children\": [");
         for(int i=0;i<this.children.Count;i++){
             this.children[i].toJson(w);
@@ -70,9 +72,31 @@ public class TreeNode{
                 w.WriteLine(",");
         }
         w.WriteLine("],");
-        w.WriteLine( $"\"productionNumber\" : \"{this.productionNumber}\",");
         w.WriteLine("}");
     }
+
+
+    public static TreeNode fromJson(StreamReader r){
+        //this function only works with data that was produced with toJson() above.
+        TreeNode t = new TreeNode("",-1);
+        Utils.consumeWhitespace(r);
+        Utils.expect(r,"{");
+        t.sym = Utils.expectJson<string>(r,"sym");
+        t.token = Utils.expectJson<Token>(r,"token");
+        t.productionNumber = Utils.expectJson<int>(r,"productionNumber");
+        t.varInfo = Utils.expectJson<VarInfo>(r,"varInfo");
+        t.nodeType = Utils.expectJson<NodeType>(r,"nodeType");
+        w.WriteLine( "\"children\": [");
+        for(int i=0;i<this.children.Count;i++){
+            this.children[i].toJson(w);
+            if( i != this.children.Count-1)
+                w.WriteLine(",");
+        }
+        w.WriteLine("],");
+        w.WriteLine("}");
+        return t;
+    }
+
 
     public void print(string prefix=""){
         
