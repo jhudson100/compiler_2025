@@ -22,19 +22,19 @@ public class CompilersAreGreat{
 
         TreeNode root=null;
 
-        for(int i=0;i<args.Length;++i){
-            if( args[i] == "-t" ){
-                i++;
-                if( i >= args.Length ){
-                    Console.WriteLine("-t requires an argument");
-                    Environment.Exit(1);
-                }
-                string treefile = args[i];
-                using(var r = new StreamReader(treefile)){
-                    root = TreeNode.fromJson(r);
-                }
-            }
-        }
+        // for(int i=0;i<args.Length;++i){
+        //     if( args[i] == "-t" ){
+        //         i++;
+        //         if( i >= args.Length ){
+        //             Console.WriteLine("-t requires an argument");
+        //             Environment.Exit(1);
+        //         }
+        //         string treefile = args[i];
+        //         using(var r = new StreamReader(treefile)){
+        //             root = TreeNode.fromJson(r);
+        //         }
+        //     }
+        // }
 
         if( root == null){
             string inp = File.ReadAllText(args[0]);
