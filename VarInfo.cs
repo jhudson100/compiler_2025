@@ -16,29 +16,29 @@ public class VarInfo{
         string tmp = $"nesting={this.nestingLevel} type={this.type} loc={this.location}";
         return tmp;
     }
-    public void toJson(StreamWriter w){
-        w.Write("{");
-        w.Write($"\"token\": {token},");
-        w.Write($"\"nestingLevel\": {nestingLevel},");
-        w.Write($"\"type\": ");
-        type.toJson(w);
-        w.Write(",");
-        w.Write($"\"location\":");
-        location.toJson(w);
-        w.WriteLine("}");
-    }
-    public static VarInfo fromJson(StreamReader r){
-        if( Utils.expectJsonOpenBraceOrNull(r) ){
-            Token t = Utils.expectJsonToken(r,"token");
-            int nl = Utils.expectJsonInt(r,"nestingLevel");
-            NodeType nt = Utils.expectJsonNodeType(r,"type");
-            VarLocation loc = Utils.expectJsonVarLocation(r,"location");
-            Utils.expectJsonCloseBrace(r);
-            return new VarInfo(t,nl,nt,loc);
-        } else {
-            return null;
-        }
-    }
+    // public void toJson(StreamWriter w){
+    //     w.Write("{");
+    //     w.Write($"\"token\": {token},");
+    //     w.Write($"\"nestingLevel\": {nestingLevel},");
+    //     w.Write($"\"type\": ");
+    //     type.toJson(w);
+    //     w.Write(",");
+    //     w.Write($"\"location\":");
+    //     location.toJson(w);
+    //     w.WriteLine("}");
+    // }
+    // public static VarInfo fromJson(StreamReader r){
+    //     if( Utils.expectJsonOpenBraceOrNull(r) ){
+    //         Token t = Utils.expectJsonToken(r,"token");
+    //         int nl = Utils.expectJsonInt(r,"nestingLevel");
+    //         NodeType nt = Utils.expectJsonNodeType(r,"type");
+    //         VarLocation loc = Utils.expectJsonVarLocation(r,"location");
+    //         Utils.expectJsonCloseBrace(r);
+    //         return new VarInfo(t,nl,nt,loc);
+    //     } else {
+    //         return null;
+    //     }
+    // }
 
 }
 

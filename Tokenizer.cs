@@ -1,10 +1,11 @@
 
 
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace lab{
 
-public class Token{
+public class Token {
     public string sym; 
     public string lexeme;
     public int line;
@@ -23,16 +24,16 @@ public class Token{
         w.Write(this.ToString());
     }
 
-    public static Token fromJson(StreamReader r){
-        bool notNull = Utils.expectJsonOpenBraceOrNull(r);
-        if(notNull){
-            string sym = Utils.expectJsonString(r,"sym");
-            int line = Utils.expectJsonInt(r,"line");
-            string lex = Utils.expectJsonString(r,"lexeme");
-            return new Token(sym,lex,line);
-        } else
-            return null;
-    }
+    // public static Token fromJson(StreamReader r){
+    //     bool notNull = Utils.expectJsonOpenBraceOrNull(r);
+    //     if(notNull){
+    //         string sym = Utils.expectJsonString(r,"sym");
+    //         int line = Utils.expectJsonInt(r,"line");
+    //         string lex = Utils.expectJsonString(r,"lexeme");
+    //         return new Token(sym,lex,line);
+    //     } else
+    //         return null;
+    // }
 
 
 }
