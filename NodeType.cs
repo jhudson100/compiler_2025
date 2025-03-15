@@ -1,3 +1,4 @@
+
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -7,6 +8,26 @@ namespace lab{
 
 public abstract class NodeType {
     public readonly string friendlyName;
+
+    // public void toJson(StreamWriter w){
+    //     w.WriteLine($"\"{friendlyName}\"");
+    // }
+    // public static NodeType fromJson(StreamReader r){
+    //     string s = Utils.expectJsonPlainString(r);
+    //     if( s == null )
+    //         return null;
+    //     switch(s){
+    //         case "int":
+    //             return NodeType.Int;
+    //         case "float":
+    //             return NodeType.Float;
+    //         case "string":
+    //             return NodeType.String;
+    //         default:
+    //             throw new Exception($"Unknown NodeType: {s}");
+    //     }
+    // }
+
     public NodeType(string n){
         this.friendlyName=n;
     }
@@ -38,9 +59,7 @@ public abstract class NodeType {
 
     // NodeType.Int  <--->   new IntNodeType()
     public static readonly IntNodeType Int = new ();
-    // public static readonly FloatNodeType Float = new ();
-
-    //FIXME: Add these
+    public static readonly FloatNodeType Float = new ();
     // public static readonly BoolNodeType Bool = new ();
     public static readonly StringNodeType String = new ();
     // public static readonly VoidNodeType Void = new ();
@@ -62,6 +81,10 @@ public class IntNodeType : NodeType {
     public IntNodeType() : base("int") {}
 }
 
+public class FloatNodeType : NodeType {
+    public FloatNodeType() : base("float") {}
+}
+
 public class StringNodeType : NodeType {
     public StringNodeType() : base("string") {}
 }
@@ -77,7 +100,13 @@ public class NodeTypeJsonConverter : JsonConverter<NodeType> {
                                    Type toConvert,
                                    JsonSerializerOptions opts)
     {
-        throw new Exception("Not implemented");
+        string s = r.GetString();
+        switch(s){
+            case "int": return NodeType.Int;
+            case "float": return NodeType.Float;
+            case "string": return NodeType.String;
+            default: throw new Exception();
+        }
     }
     public override void Write( Utf8JsonWriter w,
         NodeType typ, JsonSerializerOptions opts )
@@ -85,4 +114,5 @@ public class NodeTypeJsonConverter : JsonConverter<NodeType> {
         w.WriteStringValue(typ.friendlyName);
     }
 }
+
 } //namespace

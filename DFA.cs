@@ -1,11 +1,15 @@
+
 namespace lab{
 
 public class ItemSet{
     public HashSet<LRItem> items;
     public override int GetHashCode()
     {
-        //FIXME: Write this
-        return 0;
+        int h=0;
+        foreach(var I in items){
+            h ^= I.GetHashCode();
+        }
+        return h;
     }
     public override bool Equals(object obj)
     {
@@ -13,9 +17,8 @@ public class ItemSet{
             return false;
         ItemSet S = obj as ItemSet;
         if( Object.ReferenceEquals(S,null) )
-            return false;       
-        //FIXME: Write this
-        return true;
+            return false;
+        return items.SetEquals(S.items);
     }
 
     public static bool operator==(ItemSet o1, ItemSet o2){
@@ -33,7 +36,7 @@ public class ItemSet{
         foreach(var I in this.items ){
             L.Add(I.ToString());
         }
-        return String.Join("\n",L.ToArray());
+        return String.Join("\n",L.ToArray()) + "\n";
     }
 
 }
@@ -50,12 +53,12 @@ public class DFAState{
     }
     public override string ToString()
     {
-        string r = $"State {this.unique}\n";
+        string r = "";
+        r += $"State {this.unique}\n";
         r += this.label;
-        r += "---------------\n";
         foreach( string sym in this.transitions.Keys){
             DFAState q = transitions[sym];
-            r += $"{sym} -> {q.unique}";
+            r += $"{sym} \u2192 {q.unique}\n";
         }
         return r;
     }
@@ -65,7 +68,7 @@ public class DFAState{
 public static class DFA{
     public static List<DFAState> allStates = new();
     
-    static void dump(string filename){
+    public static void dump(string filename){
         using(var sw = new StreamWriter(filename)){
             sw.WriteLine("digraph d{");
 
@@ -80,7 +83,7 @@ public static class DFA{
                 foreach( string sym in q.transitions.Keys){
                     DFAState q2 = q.transitions[sym];
                     string ending = $"q{q2.unique}";
-                    sw.WriteLine($"{starting} -> {ending} [label=\"{sym}\"]");
+                    sw.WriteLine($"{starting} \u2192 {ending} [label=\"{sym}\"]");
                 }
             }
 
@@ -131,6 +134,7 @@ public static class DFA{
 
         Production P = Grammar.productions[productionNumber];
         LRItem I = new LRItem( P, 0);
+        I.lookahead.Add("$");
         DFAState startState = new DFAState( 
             computeClosure(
                 new HashSet<LRItem>(){I} 
@@ -141,7 +145,6 @@ public static class DFA{
 
         var todo = new Stack<DFAState>();
         todo.Push(startState);
-
 
         while( todo.Count > 0 ){
             DFAState q = todo.Pop();
@@ -160,7 +163,68 @@ public static class DFA{
             }
         }
 
+        computeLookaheads();
     } //makeDFA
+
+    static void computeLookaheads(){
+        bool keeplooping=true;
+        while(keeplooping){
+            keeplooping=false;
+            foreach( DFAState Q in allStates){
+                foreach( LRItem I in Q.label.items){
+                    if( I.dposAtEnd() == false ){
+                        string x = I.production.rhs[I.dpos];
+                        DFAState Q2 = Q.transitions[x];
+                        LRItem I2 = findItemCreatedFromItem(Q2,I);
+                        int size = I2.lookahead.Count;
+                        I2.lookahead.UnionWith(I.lookahead);
+                        if( I2.lookahead.Count != size )
+                            keeplooping=true;
+        
+                        if( Grammar.isNonterminal(x) ){
+                            HashSet<string> syms = findfirst(I);
+                            foreach( Production P in Grammar.productionsByLHS[x]){
+                                LRItem I3 = findItemCreatedByProduction(Q,P);
+                                size = I3.lookahead.Count;
+                                I3.lookahead.UnionWith(syms);
+                                if( I3.lookahead.Count != size )
+                                    keeplooping=true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    static LRItem findItemCreatedByProduction(DFAState Q, Production P){
+        foreach(LRItem I in Q.label.items){
+            if( I.production == P && I.dpos == 0 )
+                return I;
+        }
+        throw new Exception("Logic error");
+    }
+
+    static HashSet<string> findfirst(LRItem I){
+        var f = new HashSet<string>();
+        for(int i=I.dpos+1;i<I.production.rhs.Length;++i){
+            string sym = I.production.rhs[i];
+            f.UnionWith(Grammar.first[sym]);
+            if( !Grammar.nullable.Contains(sym))
+                return f;
+        }
+        f.UnionWith(I.lookahead);
+        return f;
+    }
+
+    static LRItem findItemCreatedFromItem( DFAState Q2, LRItem I ){
+        foreach( LRItem I2 in Q2.label.items){
+            if (I.production==I2.production && I.dpos+1 == I2.dpos){
+                return I2;
+            }
+        }
+        throw new Exception("Logic error");
+    }
 
     static Dictionary<string, HashSet<LRItem> > getOutgoingTransitions(DFAState q){
         var tr = new Dictionary<string, HashSet<LRItem> >();

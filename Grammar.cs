@@ -101,6 +101,7 @@ public static class Grammar{
     }
 
     public static void dump(){
+        Console.WriteLine("Dumping grammar:");
         //dump grammar stuff to the screen (debugging)
         foreach( var p in productions ){
             Console.WriteLine(p);
