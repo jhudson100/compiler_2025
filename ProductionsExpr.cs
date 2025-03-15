@@ -40,8 +40,8 @@ public class ProductionsExpr{
                     if( t1 != t2 )
                         Utils.error(addop,$"Type mismatch for add/subtract ({t1} and {t2})");
 
-                    throw new Exception("Should include NodeType.Float here");
-                    if( t1 != NodeType.Int /*&& t1 != NodeType.Float*/ && t1 != NodeType.String ){
+                    
+                    if( t1 != NodeType.Int && t1 != NodeType.Float && t1 != NodeType.String ){
                         n.print();
                         Utils.error(addop,$"Bad type for add/subtract ({t1})");
                     }

@@ -16,9 +16,24 @@ public class Token{
     public override string ToString()
     {
         var lex = lexeme.Replace("\\","\\\\").Replace("\"","\\\"").Replace("\n","\\n");
-
         return $"{{ \"sym\": \"{this.sym}\" , \"line\" : {this.line}, \"lexeme\" : \"{lex}\"  }}";
     }
+
+    public void toJson(StreamWriter w){
+        w.Write(this.ToString());
+    }
+
+    public static Token fromJson(StreamReader r){
+        bool notNull = Utils.expectJsonOpenBraceOrNull(r);
+        if(notNull){
+            string sym = Utils.expectJsonString(r,"sym");
+            int line = Utils.expectJsonInt(r,"line");
+            string lex = Utils.expectJsonString(r,"lexeme");
+            return new Token(sym,lex,line);
+        } else
+            return null;
+    }
+
 
 }
 
@@ -97,7 +112,7 @@ public class Tokenizer{
                 Environment.Exit(2);
             }
 
-            return null;
+            return new Token("$","",this.line);
         }
 
         String sym=null;

@@ -13,9 +13,12 @@ public static class TableWriter{
 
             for(int i=0;i<DFA.allStates.Count;++i){
                 w.WriteLine("        // DFA STATE "+i); //index in allStates == state's "unique" number
+                DFAState q = DFA.allStates[i];
+                foreach(LRItem I in q.label.items){
+                    w.WriteLine($"        // {I}");
+                }
                 w.WriteLine("        new Dictionary<string,ParseAction>(){");
                 //shift rules
-                DFAState q = DFA.allStates[i];
                 foreach( string sym in q.transitions.Keys){
                     w.Write("                ");
                     w.Write("{");
@@ -26,31 +29,23 @@ public static class TableWriter{
                 //reduce rules
                 foreach( LRItem I in q.label.items){
                     if( I.dposAtEnd() ){
-                        w.WriteLine($"            // {I}");
                         foreach( string lookahead in I.lookahead){
-                            w.Write($"            ");
+                            w.Write($"                ");
                             w.Write("{");
                             w.Write($"\"{lookahead}\"");
                             w.Write(",");
-                            w.Write($"new ParseAction(PAction.REDUCE, {I.production.rhs.Length}, \"{I.production.lhs}, {I.production.unique}\")");
+                            w.Write($"new ParseAction(PAction.REDUCE, {I.production.rhs.Length}, \"{I.production.lhs}\", {I.production.unique})");
                             w.WriteLine("},");
                         }
                     }
                 }
-                w.WriteLine("        }");
+                w.WriteLine("        },");
             }
 
             w.WriteLine("    }; //close the table initializer");
             w.WriteLine("} //close the ParseTable class");
             w.WriteLine("} //close the namespace lab thing");
         }
-        /*
-                new(){      //one of these for each DFA state
-                    { "ID" , new(...) },    //one of these for each shift
-                    { "ID" , new(...) },    //one of these for each reduction
-                }
-        */
-
     }
 
 
