@@ -38,6 +38,7 @@ public static class Parser{
                 for(int i=0;i<A.num;++i){
                     stk.Pop();
                     var c = tstk.Pop();
+                    throw new Exception("FINISH ME");
                     //prepend c to n.children
                     //and set c's parent to n 
                 }

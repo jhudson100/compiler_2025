@@ -45,7 +45,7 @@ namespace lab{
         }
 
         public static VarInfo lookup(Token id){
-            throw new Exception("FINISH ME");
+            return table[id.lexeme];
             //look in table
             //find thing
             //if not found, signal error

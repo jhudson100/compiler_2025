@@ -105,7 +105,10 @@ public class ProductionsExpr{
             new("factor :: FNUM",
                 setNodeTypes: (n) => {
                     throw new Exception("FINISH ME");
-                }
+                },
+                generateCode: (n) => {
+                    throw new Exception("FINISH ME");
+                },
             ),
             new("factor :: STRINGCONST",
                 setNodeTypes: (n) => {
