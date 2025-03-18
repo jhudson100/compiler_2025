@@ -195,6 +195,9 @@ public class TreeNode{
         this.production?.pspec.setNodeTypes(this);
     }
 
+    public void generateCode(){
+        this.production?.pspec.generateCode(this);
+    }
 } //end TreeNode
 
 } //end namespace lab

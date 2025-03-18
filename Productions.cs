@@ -8,7 +8,9 @@ public class Productions{
             new("decls :: funcdecl decls | classdecl decls | vardecl decls | SEMI decls | lambda"),
             new("funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI",
                 setNodeTypes: (n) => {
-                    
+
+                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType() );
+
                     SymbolTable.enterFunctionScope();
 
                     foreach(TreeNode c in n.children){
@@ -17,7 +19,14 @@ public class Productions{
 
                     SymbolTable.leaveFunctionScope();
                     
-                }
+                },
+                generateCode: (n) => {
+                    VarInfo vi = SymbolTable.lookup( n["ID"].token );
+                    var loc = (vi.location as GlobalLocation);
+                    Asm.add( new OpLabel( loc.lbl ) );
+                    n["stmts"].generateCode();
+                    Asm.add(new OpRet());
+                }       
             ),
             new("braceblock :: LBRACE stmts RBRACE",
                 setNodeTypes: (n) => {
@@ -65,8 +74,27 @@ public class Productions{
             new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock"),
             new("loop :: WHILE LPAREN expr RPAREN braceblock"),
             new("loop :: REPEAT braceblock UNTIL LPAREN expr RPAREN"),
-            new("return :: RETURN expr"),
-            new("return :: RETURN"),
+            
+            
+            new("return :: RETURN expr",
+                generateCode: (n) => {
+
+                    Asm.add(new OpComment( 
+                            $"Return at line {n.children[0].token.line}"));
+                    n["expr"].generateCode();   //leaves value on top of stack
+
+                    //ABI says return values come back in rax
+                    Asm.add( new OpPop(Register.rax,null));
+                    Asm.add( new OpRet());
+                }
+            ),
+            new("return :: RETURN",
+                generateCode: (n) => {
+                    Asm.add( new OpRet() );
+                }
+            ),
+
+
             new("vardecl :: VAR ID COLON TYPE",
                 setNodeTypes:(n) => {
                     var t = NodeType.tokenToNodeType(n["TYPE"].token) ;

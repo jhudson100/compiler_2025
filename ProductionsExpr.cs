@@ -25,7 +25,25 @@ public class ProductionsExpr{
             new("bitexp :: bitexp BITOP shiftexp"),
             new("bitexp :: shiftexp"),
 
-            new("shiftexp :: shiftexp SHIFTOP sumexp"),
+            new("shiftexp :: shiftexp SHIFTOP sumexp",
+                generateCode: (n) => {
+
+                    //ex: 4 << 2
+
+                    //ex: 4
+                    n["shiftexp"].generateCode();
+
+                    //ex: 2
+                    n["sumexp"].generateCode();
+    
+                    Asm.add(new OpPop(Register.rcx,null));      //ex: 2
+                    Asm.add(new OpPop(Register.rax,null));      //ex: 4
+                    if( n["SHIFTOP"].token.lexeme == "<<" ){
+                        Asm.add(new OpShl(Register.rax, Register.rcx));
+                    }
+                    Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
+                }
+            ),
             new("shiftexp :: sumexp"),
 
             //addition and subtraction
@@ -58,7 +76,32 @@ public class ProductionsExpr{
             new("prodexp :: prodexp MULOP powexp",
                 setNodeTypes: (n) => {
                     //do stuff
-                }),
+                },
+                generateCode: (n) => {
+
+                    if( n.nodeType == NodeType.Int ){
+                        // 5 % 3
+
+                        //5
+                        n["prodexp"].generateCode();
+
+                        //3
+                        n["powexp"].generateCode();
+
+                        Asm.add(new OpPop( Register.rbx, null));  //3
+                        Asm.add(new OpPop( Register.rax, null));  //5
+
+                        Asm.add(new OpDiv( Register.rax, Register.rbx));
+                        
+                        //push remainder to stack
+                        Asm.add(new OpPush( Register.rdx, StorageClass.PRIMITIVE ));
+                    } else {
+                        //TODO: FLOAT
+                    }
+                
+                }
+                
+            ),
             new("prodexp :: powexp"),
 
             //exponentiation
@@ -66,8 +109,20 @@ public class ProductionsExpr{
             new("powexp :: unaryexp"),
 
             //bitwise not, negation, unary plus
-            new("unaryexp :: BITNOTOP unaryexp"),
-            new("unaryexp :: ADDOP unaryexp"),
+            new("unaryexp :: BITNOTOP unaryexp",
+                generateCode: (n) => {
+                    n["unaryexp"].generateCode();
+                    Asm.add(new OpPop(Register.rax,null));
+                    Asm.add(new OpNot(Register.rax));
+                    Asm.add(new OpPush(Register.rax,StorageClass.PRIMITIVE));
+                }
+            ),
+            new("unaryexp :: ADDOP unaryexp",
+                generateCode: (n) => {
+                    if( n["ADDOP"].token.lexeme == "+" )
+                        n["unaryexp"].generateCode();
+                }
+            ),
             new("unaryexp :: NOTOP unaryexp"),
             new("unaryexp :: preincexp"),
 
@@ -89,6 +144,13 @@ public class ProductionsExpr{
             new("factor :: NUM",
                 setNodeTypes: (n) => {
                     n.nodeType = NodeType.Int;
+                },
+                generateCode: (n) => {
+                    //make code for factor
+                    string s = n["NUM"].token.lexeme;
+                    long value = Int64.Parse(s);
+                    Asm.add( new OpMov(value, Register.rax));
+                    Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
                 }
             ),
             new("factor :: LPAREN expr RPAREN"),
@@ -107,8 +169,8 @@ public class ProductionsExpr{
                     throw new Exception("FINISH ME");
                 },
                 generateCode: (n) => {
-                    throw new Exception("FINISH ME");
-                },
+                    //throw new Exception("FINISH ME");
+                }
             ),
             new("factor :: STRINGCONST",
                 setNodeTypes: (n) => {

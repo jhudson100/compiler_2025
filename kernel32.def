@@ -1,0 +1,10 @@
+LIBRARY kernel32.dll
+EXPORTS
+    CreateFileA
+    GetStdHandle
+    ExitProcess
+    ReadFile
+    WriteFile
+    CloseHandle
+    VirtualAlloc
+    VirtualFree

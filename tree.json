@@ -139,102 +139,6 @@
                                                   "token": null,
                                                   "children": [
                                                     {
-                                                      "sym": "sumexp",
-                                                      "token": null,
-                                                      "children": [
-                                                        {
-                                                          "sym": "prodexp",
-                                                          "token": null,
-                                                          "children": [
-                                                            {
-                                                              "sym": "powexp",
-                                                              "token": null,
-                                                              "children": [
-                                                                {
-                                                                  "sym": "unaryexp",
-                                                                  "token": null,
-                                                                  "children": [
-                                                                    {
-                                                                      "sym": "preincexp",
-                                                                      "token": null,
-                                                                      "children": [
-                                                                        {
-                                                                          "sym": "postincexp",
-                                                                          "token": null,
-                                                                          "children": [
-                                                                            {
-                                                                              "sym": "amfexp",
-                                                                              "token": null,
-                                                                              "children": [
-                                                                                {
-                                                                                  "sym": "factor",
-                                                                                  "token": null,
-                                                                                  "children": [
-                                                                                    {
-                                                                                      "sym": "NUM",
-                                                                                      "token": {
-                                                                                        "sym": "NUM",
-                                                                                        "lexeme": "1",
-                                                                                        "line": 2
-                                                                                      },
-                                                                                      "children": [],
-                                                                                      "productionNumber": -1,
-                                                                                      "varInfo": null,
-                                                                                      "nodeType": null
-                                                                                    }
-                                                                                  ],
-                                                                                  "productionNumber": 72,
-                                                                                  "varInfo": null,
-                                                                                  "nodeType": "int"
-                                                                                }
-                                                                              ],
-                                                                              "productionNumber": 71,
-                                                                              "varInfo": null,
-                                                                              "nodeType": "int"
-                                                                            }
-                                                                          ],
-                                                                          "productionNumber": 67,
-                                                                          "varInfo": null,
-                                                                          "nodeType": "int"
-                                                                        }
-                                                                      ],
-                                                                      "productionNumber": 65,
-                                                                      "varInfo": null,
-                                                                      "nodeType": "int"
-                                                                    }
-                                                                  ],
-                                                                  "productionNumber": 63,
-                                                                  "varInfo": null,
-                                                                  "nodeType": "int"
-                                                                }
-                                                              ],
-                                                              "productionNumber": 59,
-                                                              "varInfo": null,
-                                                              "nodeType": "int"
-                                                            }
-                                                          ],
-                                                          "productionNumber": 57,
-                                                          "varInfo": null,
-                                                          "nodeType": "int"
-                                                        }
-                                                      ],
-                                                      "productionNumber": 55,
-                                                      "varInfo": null,
-                                                      "nodeType": "int"
-                                                    },
-                                                    {
-                                                      "sym": "ADDOP",
-                                                      "token": {
-                                                        "sym": "ADDOP",
-                                                        "lexeme": "\u002B",
-                                                        "line": 2
-                                                      },
-                                                      "children": [],
-                                                      "productionNumber": -1,
-                                                      "varInfo": null,
-                                                      "nodeType": null
-                                                    },
-                                                    {
                                                       "sym": "prodexp",
                                                       "token": null,
                                                       "children": [
@@ -266,7 +170,7 @@
                                                                                   "sym": "NUM",
                                                                                   "token": {
                                                                                     "sym": "NUM",
-                                                                                    "lexeme": "2",
+                                                                                    "lexeme": "123",
                                                                                     "line": 2
                                                                                   },
                                                                                   "children": [],
@@ -310,7 +214,7 @@
                                                       "nodeType": "int"
                                                     }
                                                   ],
-                                                  "productionNumber": 54,
+                                                  "productionNumber": 55,
                                                   "varInfo": null,
                                                   "nodeType": "int"
                                                 }

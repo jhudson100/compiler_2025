@@ -51,6 +51,9 @@ namespace lab{
             //if not found, signal error
             //else return data    
         }
+        public static VarInfo lookup(string id){
+            return table[id];
+        }
 
         public static void declareGlobal(Token token, NodeType type){
             string varname = token.lexeme;
@@ -59,7 +62,7 @@ namespace lab{
             }
             table[varname] = new VarInfo(token,
                 nestingLevel, //always zero
-                type, new GlobalLocation());
+                type, new GlobalLocation( new Label(token.lexeme) ));
         }
         public static void declareLocal(Token token, NodeType type){
             string varname = token.lexeme;

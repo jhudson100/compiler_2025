@@ -89,6 +89,18 @@ public class StringNodeType : NodeType {
     public StringNodeType() : base("string") {}
 }
 
+public class FunctionNodeType: NodeType {
+    public FunctionNodeType(): base("func") {}
+
+    public override bool Equals(Object o){
+        throw new Exception("TBD");
+    }
+
+    public override int GetHashCode()
+    {
+        throw new Exception("TBD");
+    }
+}
 
 
 

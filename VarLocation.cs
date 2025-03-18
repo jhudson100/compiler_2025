@@ -32,8 +32,12 @@ public abstract class VarLocation{
 
 
 public class GlobalLocation : VarLocation{
+    public Label lbl;
+    public GlobalLocation(Label lbl){
+        this.lbl = lbl;
+    }
     public override string ToString(){
-        return "global";
+        return $"global {lbl}";
     }
     // public override void toJson(StreamWriter w){
     //     w.Write( "{ \"locationType\" : \"global\" }" );
