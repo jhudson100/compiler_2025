@@ -29,7 +29,30 @@ public static class TableWriter{
                 //reduce rules
                 foreach( LRItem I in q.label.items){
                     if( I.dposAtEnd() ){
+
+                        foreach(LRItem II in q.label.items){
+                            if( Object.ReferenceEquals(I,II) || !II.dposAtEnd() )
+                                continue;
+                            var conflicts = I.lookahead.Intersect(II.lookahead).ToList();
+                            if( conflicts.Count > 0 ){
+                                Console.WriteLine("Error: Reduce-reduce conflict on {"+
+                                    String.Join(", ",conflicts)+"} in state "+q.unique);
+                                foreach(LRItem III in q.label.items){
+                                    Console.WriteLine("    "+III);
+                                }
+                                Environment.Exit(1);
+                            }
+                        }
+
                         foreach( string lookahead in I.lookahead){
+                            if( q.transitions.ContainsKey(lookahead) ){
+                                Console.WriteLine("Warning: Shift-reduce conflict on "+lookahead+" in state "+q.unique);
+                                foreach(LRItem II in q.label.items){
+                                    Console.WriteLine("    "+II);
+                                }
+                                continue;   //prefer shift to reduce
+                            }
+
                             w.Write($"                ");
                             w.Write("{");
                             w.Write($"\"{lookahead}\"");
