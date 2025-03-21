@@ -121,7 +121,7 @@ public class NodeTypeJsonConverter : JsonConverter<NodeType> {
             case "int": return NodeType.Int;
             case "float": return NodeType.Float;
             case "string": return NodeType.String;
-            case "boolean": return NodeType.Bool;
+            case "bool": return NodeType.Bool;
             default: throw new Exception("Unknown node type "+s);
         }
     }
