@@ -60,7 +60,7 @@ public abstract class NodeType {
     // NodeType.Int  <--->   new IntNodeType()
     public static readonly IntNodeType Int = new ();
     public static readonly FloatNodeType Float = new ();
-    // public static readonly BoolNodeType Bool = new ();
+    public static readonly BoolNodeType Bool = new ();
     public static readonly StringNodeType String = new ();
     // public static readonly VoidNodeType Void = new ();
 
@@ -75,6 +75,10 @@ public abstract class NodeType {
         }
 
     }
+}
+
+public class BoolNodeType : NodeType {
+    public BoolNodeType(): base("bool") {}
 }
 
 public class IntNodeType : NodeType {
@@ -117,7 +121,8 @@ public class NodeTypeJsonConverter : JsonConverter<NodeType> {
             case "int": return NodeType.Int;
             case "float": return NodeType.Float;
             case "string": return NodeType.String;
-            default: throw new Exception();
+            case "boolean": return NodeType.Bool;
+            default: throw new Exception("Unknown node type "+s);
         }
     }
     public override void Write( Utf8JsonWriter w,
