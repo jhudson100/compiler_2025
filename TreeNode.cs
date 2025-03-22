@@ -62,6 +62,11 @@ public class TreeNode{
         this.children.Add(n);
     }
 
+    public void prependChild(TreeNode n){
+        this.children.Insert(0,n);
+        n.parent=this;
+    }
+
     public void setParents(){
         foreach(var c in this.children){
             c.parent=this;

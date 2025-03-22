@@ -10,7 +10,6 @@ public class CompilersAreGreat{
         //initialize our grammar
         Terminals.makeThem();
         Productions.makeThem();
-        ProductionsExpr.makeThem();
 
         if( args.Contains("-g") ){
             Grammar.check();
