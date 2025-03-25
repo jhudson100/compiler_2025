@@ -18,7 +18,55 @@ public class ProductionsExpr{
             new("andexp :: relexp"),
 
             //relational: x>y
-            new("relexp :: bitexp RELOP bitexp"),
+            new("relexp :: bitexp RELOP bitexp",
+                setNodeTypes: (n) => {
+                    //TODO: Write this
+                },
+                generateCode: (n) => {
+                    n.children[0].generateCode();
+                    n.children[2].generateCode();
+
+                    var ntype = n["bitexp"].nodeType;
+                    if( ntype == NodeType.Bool || ntype == NodeType.Int ) {
+
+                        //10<20
+                        Asm.add( new OpPop( Register.rbx, null ));  //20
+                        Asm.add( new OpPop( Register.rax, null ));  //10
+                        
+                        string cmp;
+                        switch(n["RELOP"].token.lexeme ){
+                            case "<":       cmp = "lt"; break;
+                            default: throw new Exception();
+                        }
+                        Asm.add( new OpCmp(Register.rax, Register.rbx));
+                        Asm.add( new OpSetCC( cmp, Register.rax ));
+                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
+
+                    } else if( ntype == NodeType.String) {
+                        //TBD later
+                        throw new Exception();
+                    } else if( ntype == NodeType.Float ){
+                        //10<20
+                        Asm.add( new OpPopF( Register.xmm1, null ));  //20
+                        Asm.add( new OpPopF( Register.xmm0, null ));  //10
+                        
+                        string cmp;
+                        switch(n["RELOP"].token.lexeme ){
+                            case "<":       cmp = "lt"; break;
+                            default: throw new Exception();
+                        }
+                        Asm.add( new OpCmpF(cmp, Register.xmm0, Register.xmm1));
+                        Asm.add( new OpMov( Register.xmm0, Register.rax));
+                        Asm.add( new OpNeg( Register.rax ));
+                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
+
+                    
+                    } else 
+                    {
+                        throw new Exception();
+                    }
+                }    
+            ),
             new("relexp :: bitexp"),
 
             //bitwise: or, and, xor
@@ -95,8 +143,26 @@ public class ProductionsExpr{
                         
                         //push remainder to stack
                         Asm.add(new OpPush( Register.rdx, StorageClass.PRIMITIVE ));
-                    } else {
+                    } else if( n.nodeType == NodeType.Float){
+                        Asm.add(new OpPopF( Register.xmm1, null));  
+                        Asm.add(new OpPopF( Register.xmm0, null));  
+
+                        switch( n["MULOP"].token.lexeme ){
+                            case "*":
+                                Asm.add(new OpMulF( Register.xmm0, Register.xmm1));
+                                break;
+                            case "/":
+                                throw new Exception();
+                            case "%":
+                                Utils.error(n["MULOP"].token, "Cannot do modulo on floats");
+                                break;
+                        }
+
+                        Asm.add( new OpPushF( Register.xmm0, StorageClass.PRIMITIVE));
                         //TODO: FLOAT
+
+                    } else {
+                        //ERROR!
                     }
                 
                 }
@@ -119,8 +185,28 @@ public class ProductionsExpr{
             ),
             new("unaryexp :: ADDOP unaryexp",
                 generateCode: (n) => {
-                    if( n["ADDOP"].token.lexeme == "+" )
-                        n["unaryexp"].generateCode();
+                    if( n["unaryexp"].nodeType == NodeType.Int) {
+                        if( n["ADDOP"].token.lexeme == "+" )
+                            n["unaryexp"].generateCode();
+                        else{
+                            throw new Exception();
+                        }
+                    } else if( n["unaryexp"].nodeType == NodeType.Float){
+                        switch( n["ADDOP"].token.lexeme ){
+                            case "+":
+                                throw new Exception();
+                            case "-":
+                                Asm.add(new OpPop(Register.rax, null));
+                                Asm.add(new OpMov(0x8000000000000000, Register.rbx));
+                                Asm.add(new OpXor(Register.rax, Register.rbx));
+                                Asm.add(new OpPush( Register.rax, StorageClass.PRIMITIVE));
+                                break;
+                            default:
+                                throw new Exception();
+                        }
+                    } else {
+                        Utils.error(n["ADDOP"].token, "Cannot negate this");
+                    }
                 }
             ),
             new("unaryexp :: NOTOP unaryexp"),
@@ -166,10 +252,14 @@ public class ProductionsExpr{
 
             new("factor :: FNUM",
                 setNodeTypes: (n) => {
-                    throw new Exception("FINISH ME");
+                    n.nodeType = NodeType.Float;
                 },
                 generateCode: (n) => {
-                    //throw new Exception("FINISH ME");
+                    string s = n["FNUM"].token.lexeme;
+                    double value = Double.Parse(s);
+                    long ivalue = BitConverter.DoubleToInt64Bits(value);
+                    Asm.add( new OpMov(ivalue, Register.rax));
+                    Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
                 }
             ),
             new("factor :: STRINGCONST",
