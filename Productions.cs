@@ -7,10 +7,12 @@ public class Productions{
             new("S :: decls"),
             new("decls :: funcdecl decls | classdecl decls | vardecl decls | SEMI decls | lambda"),
             new("funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI",
+                collectClassNames: (n) => {
+                    string funcName = n.children[1].token.lexeme;
+                    Console.WriteLine($"FUNC: {funcName}");
+                },           
                 setNodeTypes: (n) => {
-
-                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType() );
-
+                    
                     SymbolTable.enterFunctionScope();
 
                     foreach(TreeNode c in n.children){
@@ -19,14 +21,7 @@ public class Productions{
 
                     SymbolTable.leaveFunctionScope();
                     
-                },
-                generateCode: (n) => {
-                    VarInfo vi = SymbolTable.lookup( n["ID"].token );
-                    var loc = (vi.location as GlobalLocation);
-                    Asm.add( new OpLabel( loc.lbl ) );
-                    n["stmts"].generateCode();
-                    Asm.add(new OpRet());
-                }       
+                }
             ),
             new("braceblock :: LBRACE stmts RBRACE",
                 setNodeTypes: (n) => {
@@ -46,16 +41,15 @@ public class Productions{
             new("optionalSemi :: lambda | SEMI"),
             new("optionalPdecls :: lambda | pdecls"),
             new("pdecls :: pdecl | pdecl COMMA pdecls"),
-            new("pdecl :: ID COLON TYPE",
-                setNodeTypes: (n) => {
-                    throw new Exception("FINISH ME");
-                }),
+            new("pdecl :: ID COLON TYPE"),
             new("classdecl :: CLASS ID LBRACE memberdecls RBRACE SEMI",
                 collectClassNames: (TreeNode n) => {
                     string className = n.children[1].token.lexeme;
                     Console.WriteLine($"CLASS: {className}");
                     //assuming no nested classes; no need to walk
                     //children of n
+                    //This also means we won't pick up member
+                    //functions of the class.
                 }
             ),
             new("memberdecls :: lambda | SEMI memberdecls | membervardecl memberdecls | memberfuncdecl memberdecls"),
@@ -66,10 +60,7 @@ public class Productions{
             new("stmts :: SEMI"),
             new("stmts :: lambda"),
             new("stmt :: assign | cond | loop | vardecl | return"),
-            new("assign :: expr EQ expr",
-                setNodeTypes: (n) => {
-                    throw new Exception("Need to write this");
-                }),
+            new("assign :: expr EQ expr"),
             new("cond :: IF LPAREN expr RPAREN braceblock"),
             new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock"),
             new("loop :: WHILE LPAREN expr RPAREN braceblock"),

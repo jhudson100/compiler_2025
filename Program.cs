@@ -11,7 +11,7 @@ public class CompilersAreGreat{
         Terminals.makeThem();
         Productions.makeThem();
         ProductionsExpr.makeThem();
-
+        
         if( args.Contains("-g") ){
             Grammar.check();
             Grammar.computeNullableAndFirst();
@@ -62,8 +62,8 @@ public class CompilersAreGreat{
 
         //root.removeUnitProductions();     
 
-        Console.WriteLine("The tree:");
-        root.print();
+        //Console.WriteLine("The tree:");
+        //root.print();
         
         //debug output: Write the tree in JSON format
         var opts = new System.Text.Json.JsonSerializerOptions();
