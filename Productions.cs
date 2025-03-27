@@ -151,6 +151,9 @@ public class Productions{
             ),
             new("vardecl :: VAR ID COLON TYPE EQ expr",
                 setNodeTypes:(n)=>{
+                    n["expr"].setNodeTypes();
+                    //look at expr.nodeType
+                    // look at TYPE
                     throw new Exception("FINISH ME");
                 }
             ),
