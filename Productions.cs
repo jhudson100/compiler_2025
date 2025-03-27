@@ -59,11 +59,64 @@ public class Productions{
             new("stmts :: stmt SEMI stmts"),
             new("stmts :: SEMI"),
             new("stmts :: lambda"),
-            new("stmt :: assign | cond | loop | vardecl | return"),
+            new("stmt :: assign | cond | loop | vardecl | return | break | continue"),
+
+            new( "break :: BREAK",
+                generateCode: (n) => {
+                    TreeNode x = n;
+                    while( x != null && x.sym != "loop" ){
+                        x=x.parent;
+                    }
+                    if( x == null ){
+                        Utils.error(n["BREAK"].token, "Break not inside a loop");
+                    }
+                    Asm.add( new OpJmp( x.exit ));
+                }
+            ),
+
+            new( "continue :: CONTINUE"),
+
             new("assign :: expr EQ expr"),
             new("cond :: IF LPAREN expr RPAREN braceblock"),
-            new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock"),
-            new("loop :: WHILE LPAREN expr RPAREN braceblock"),
+            new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock",
+                generateCode: (n) => {
+
+                    var elseLabel = new Label($"else at line {n["ELSE"].token.line}");
+                    var endifLabel = new Label($"end of if starting at line {n["IF"].token.line}");
+                    
+                    //make code for expr; leave result on stack
+                    n["expr"].generateCode();
+
+                    //get result into rax, discard storage class
+                    Asm.add(new OpPop(Register.rax, null));
+                    Asm.add( new OpJmpIfZero( Register.rax, elseLabel));
+                    n.children[4].generateCode();
+                    Asm.add( new OpJmp( endifLabel ));
+                    Asm.add( new OpLabel( elseLabel ));
+                    n.children[6].generateCode();
+                    Asm.add( new OpLabel( endifLabel));
+                }
+            ),
+            new("loop :: WHILE LPAREN expr RPAREN braceblock",
+                generateCode: (n) => {
+                    int line = n["WHILE"].token.line;
+                    var topLoop = new Label($"top of while loop at line {line}");
+                    var bottomLoop = new Label($"end of while loop at line {line}");
+
+                    n.entry = topLoop; 
+                    n.exit = bottomLoop;
+                    n.test = topLoop;
+
+                    Asm.add( new OpLabel(topLoop));
+                    n["expr"].generateCode();
+                    Asm.add( new OpPop( Register.rax, null));
+                    Asm.add( new OpJmpIfZero( Register.rax, bottomLoop));
+                    n["braceblock"].generateCode();
+                    Asm.add( new OpJmp( topLoop));
+                    Asm.add( new OpLabel( bottomLoop));
+                }
+
+            ),
             new("loop :: REPEAT braceblock UNTIL LPAREN expr RPAREN"),
             
             

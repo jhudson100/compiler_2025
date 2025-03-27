@@ -2,28 +2,27 @@ namespace lab{
 
     public class OpMov: Opcode {
         long srcImmediate;
-        IntRegister srcIntReg;
-        FloatRegister srcFloatReg;
+        IntRegister srcIntReg=null;
+        FloatRegister srcFloatReg=null;
 
-        IntRegister destIntReg;
-        FloatRegister destFloatReg;
+        IntRegister destIntReg=null;
+        FloatRegister destFloatReg=null;
 
         public OpMov( long src, IntRegister dest){
             this.srcImmediate=src;
-            this.srcIntReg=null;
-            this.srcFloatReg=null;
-
             this.destIntReg=dest;
-            this.destFloatReg=null;
+        }
+
+        public OpMov( IntRegister src, int offset, IntRegister dest){
+            this.srcImmediate = offset;
+            this.srcIntReg = src;
+            this.destIntReg = dest;
         }
 
         public OpMov( FloatRegister src, IntRegister dest){
             this.srcImmediate=-1;
-            this.srcIntReg=null;
             this.srcFloatReg=src;
-
             this.destIntReg=dest;
-            this.destFloatReg=null;
         }
 
         public OpMov( ulong src, IntRegister dest) : this((long)src, dest){}
@@ -31,9 +30,13 @@ namespace lab{
         public override void output(StreamWriter w){
             string src,dest;
 
-            if( srcIntReg != null )
-                src = srcIntReg.ToString();
-            else if( srcFloatReg != null )
+            if( srcIntReg != null ){
+                if( srcImmediate == 0 )
+                    src = srcIntReg.ToString();     //src = "%rax"
+                else {
+                    src = $" {srcImmediate}({srcIntReg})";  //src = "8(%rsp)
+                }
+            }else if( srcFloatReg != null )
                 src = srcFloatReg.ToString();
             else
                 src = $"{srcImmediate}";

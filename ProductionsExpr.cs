@@ -14,7 +14,25 @@ public class ProductionsExpr{
             new("orexp :: andexp"),
 
             //boolean AND
-            new("andexp :: andexp ANDOP relexp"),
+            new("andexp :: andexp ANDOP relexp",
+                generateCode: (n) => {
+
+                    //this is going to leave the result
+                    //on top of the stack
+                    n["andexp"].generateCode();
+
+                    var endexp = new Label($"end of and expr at line {n["ANDOP"].token.line}");
+                    //look on top of stack and if it is zero,
+                    //skip over relexp
+                    Asm.add( new OpComment( "See if result of first and operand was false"));
+                    Asm.add( new OpMov( src: Register.rsp, offset:8, dest:Register.rax) );
+                    Asm.add( new OpJmpIfZero(Register.rax, endexp) );
+
+                    Asm.add( new OpAdd( Register.rax, 16 ));
+                    n["relexp"].generateCode();
+                    Asm.add( new OpLabel( endexp ) );
+                }
+            ),
             new("andexp :: relexp"),
 
             //relational: x>y

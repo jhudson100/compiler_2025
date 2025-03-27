@@ -1,0 +1,40 @@
+
+
+    // +,- int, float, strings
+    // *,/ int float
+    
+    
+    void typeCheck( TreeNode n, 
+                    NodeType output,    //null -> output type matches input
+                    params NodeType[] allowedInputs)
+    {
+        setNodeTypes on n's children
+        verify n.children[0].nodeType == n.children[2].nodeType
+        verify n.children[0].nodeType is in allowedInputs
+        if( output == null )
+            n.nodeType = n.children[0].nodeType
+        else
+            n.nodeType = output
+    }
+    
+    
+    new( "sum :: sum ADDOP prod",
+        setNodeTypes: (n) => {
+            typeCheck( n, null, NodeType.Int, NodeType.Float, NodeType.String);
+        }
+    )
+    new( "prod :: prod MULOP pow",
+        setNodeTypes: (n) => {
+            typeCheck( n, null, NodeType.Int, NodeType.Float);
+        }
+    )
+    new( "andexp :: andexp ANDOP relexp",
+        setNodeTypes: (n) => {
+            typeCheck( n, NodeType.Bool, NodeType.Bool )
+        }
+    )
+    new( "relexp :: bitexp RELOP bitexp",
+        setNodeTypes: (n) => {
+            typeCheck( n, NodeType.Bool, NodeType.Int, NodeType.Float )
+        }
+    )

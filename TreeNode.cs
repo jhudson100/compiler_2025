@@ -19,6 +19,12 @@ public class TreeNode{
     //which are variables
     public VarInfo varInfo = null;
 
+
+    //only meaningful for loop nodes; otherwise they are null
+    public Label entry=null;
+    public Label exit=null;
+    public Label test=null;
+
     [JsonConverter(typeof(NodeTypeJsonConverter))]
     public NodeType nodeType = null;
 
