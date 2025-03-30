@@ -11,12 +11,16 @@ public class CompilersAreGreat{
         Terminals.makeThem();
         Productions.makeThem();
         ProductionsExpr.makeThem();
-        
-        if( args.Contains("-g") ){
+
+        if( args.Length == 1 && args[0] == "-g" ){
             Grammar.check();
             Grammar.computeNullableAndFirst();
             DFA.makeDFA(); //time consuming
+            DFA.dump("dfa.txt");
             TableWriter.create();
+            // foreach( var q in DFA.allStates ){
+            //     Console.WriteLine(q);
+            // }
             return;
         }
 
@@ -50,6 +54,7 @@ public class CompilersAreGreat{
         }
         
         root.collectClassNames();
+        root.collectFunctionNames();
         root.setNodeTypes();
 
         //root.removeUnitProductions();     

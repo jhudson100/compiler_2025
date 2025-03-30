@@ -27,10 +27,19 @@ public static class TableWriter{
                     w.WriteLine("},");
                 }
                 //reduce rules
+                var reduce = new HashSet<string>();
                 foreach( LRItem I in q.label.items){
                     if( I.dposAtEnd() ){
                         foreach( string lookahead in I.lookahead){
-                            w.Write($"                ");
+                            if( q.transitions.Keys.Contains(lookahead)){
+                                Console.WriteLine("Shift-Reduce conflict in state "+i+" on symbol "+lookahead);
+                            }
+                            if( reduce.Contains(lookahead)){
+                                Console.WriteLine("Reduce-Reduce conflict in state "+i+" on symbol "+lookahead);
+                                Environment.Exit(1);
+                            }
+                            reduce.Add(lookahead);
+                            w.Write($"            ");
                             w.Write("{");
                             w.Write($"\"{lookahead}\"");
                             w.Write(",");
