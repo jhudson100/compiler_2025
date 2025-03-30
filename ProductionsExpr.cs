@@ -74,7 +74,8 @@ public class ProductionsExpr{
                     Asm.add( new OpMov( src: Register.rsp, offset:8, dest:Register.rax) );
                     Asm.add( new OpJmpIfZero(Register.rax, endexp) );
 
-                    Asm.add( new OpAdd( Register.rax, 16 ));
+                    //discard two items from stack
+                    Asm.add( new OpAdd( Register.rsp, 16 ));
                     n["relexp"].generateCode();
                     Asm.add( new OpLabel( endexp ) );
                 }
