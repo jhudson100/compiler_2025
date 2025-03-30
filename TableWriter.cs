@@ -27,6 +27,7 @@ public static class TableWriter{
                     w.WriteLine("},");
                 }
                 //reduce rules
+                var reduce = new HashSet<string>();
                 foreach( LRItem I in q.label.items){
                     if( I.dposAtEnd() ){
 
@@ -45,15 +46,15 @@ public static class TableWriter{
                         }
 
                         foreach( string lookahead in I.lookahead){
-                            if( q.transitions.ContainsKey(lookahead) ){
-                                Console.WriteLine("Warning: Shift-reduce conflict on "+lookahead+" in state "+q.unique);
-                                foreach(LRItem II in q.label.items){
-                                    Console.WriteLine("    "+II);
-                                }
-                                continue;   //prefer shift to reduce
+                            if( q.transitions.Keys.Contains(lookahead)){
+                                Console.WriteLine("Shift-Reduce conflict in state "+i+" on symbol "+lookahead);
                             }
-
-                            w.Write($"                ");
+                            if( reduce.Contains(lookahead)){
+                                Console.WriteLine("Reduce-Reduce conflict in state "+i+" on symbol "+lookahead);
+                                Environment.Exit(1);
+                            }
+                            reduce.Add(lookahead);
+                            w.Write($"            ");
                             w.Write("{");
                             w.Write($"\"{lookahead}\"");
                             w.Write(",");

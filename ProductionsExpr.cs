@@ -2,6 +2,45 @@
 namespace lab{
 
 public class ProductionsExpr{
+
+    static void unary(TreeNode n, NodeType[] operandTypes, NodeType resultType){
+        foreach(var c in n.children)
+            c.setNodeTypes();
+        if( resultType == null )
+            n.nodeType = n.children[1].nodeType;
+        else
+            n.nodeType = resultType;
+        foreach(var t in operandTypes){
+            if( n.children[1].nodeType == t )
+                return;
+        }
+        Utils.error(n.children[0].token,$"Bad type for operation: {n.children[1].nodeType}");
+    }
+
+    static void unary(TreeNode n, NodeType operandType, NodeType resultType){
+        unary(n,new NodeType[]{operandType}, resultType);
+    }
+
+    static void binary(TreeNode n, NodeType[] operandTypes, NodeType resultType){
+        foreach(var c in n.children)
+            c.setNodeTypes();
+        if( n.children[0].nodeType != n.children[2].nodeType )
+            Utils.error(n.children[1].token, $"Different types: {n.children[0].nodeType} and {n.children[2].nodeType}");
+        if( resultType == null )
+            n.nodeType = n.children[0].nodeType;
+        else
+            n.nodeType = resultType;
+        foreach(var t in operandTypes){
+            if( n.children[0].nodeType == t )
+                return;
+        }
+        Utils.error(n.children[1].token,$"Bad type for operation: {n.children[0].nodeType}");
+    }
+
+    static void binary(TreeNode n, NodeType operandType, NodeType resultType){
+        binary(n,new[]{operandType},resultType);
+    }
+
     public static void makeThem(){
 
         Grammar.defineProductions( new PSpec[] {
@@ -10,10 +49,19 @@ public class ProductionsExpr{
             new("expr :: orexp"),
 
             //boolean OR
-            new("orexp :: orexp OROP andexp"),
+            new("orexp :: orexp OROP andexp",
+                setNodeTypes: (n) => {
+                    binary(n,NodeType.Bool,NodeType.Bool);
+                }
+            ),
             new("orexp :: andexp"),
 
             //boolean AND
+            new("andexp :: andexp ANDOP relexp",
+                setNodeTypes: (n) => {
+                    binary(n,NodeType.Bool,NodeType.Bool);
+                }
+            ),
             new("andexp :: andexp ANDOP relexp",
                 generateCode: (n) => {
 
@@ -38,7 +86,10 @@ public class ProductionsExpr{
             //relational: x>y
             new("relexp :: bitexp RELOP bitexp",
                 setNodeTypes: (n) => {
-                    //TODO: Write this
+                    binary(n,
+                        new NodeType[]{NodeType.Int,NodeType.Float,NodeType.String},
+                        NodeType.Bool
+                    );
                 },
                 generateCode: (n) => {
                     n.children[0].generateCode();
@@ -88,10 +139,16 @@ public class ProductionsExpr{
             new("relexp :: bitexp"),
 
             //bitwise: or, and, xor
-            new("bitexp :: bitexp BITOP shiftexp"),
+            new("bitexp :: bitexp BITOP shiftexp",
+                setNodeTypes: (n) => {
+                    binary(n,NodeType.Int,NodeType.Int);
+                }),
             new("bitexp :: shiftexp"),
 
             new("shiftexp :: shiftexp SHIFTOP sumexp",
+                setNodeTypes: (n) => {
+                    binary(n,NodeType.Int,NodeType.Int);
+                },
                 generateCode: (n) => {
 
                     //ex: 4 << 2
@@ -118,22 +175,12 @@ public class ProductionsExpr{
                     foreach(var c in n.children){
                         c.setNodeTypes();
                     }
-                    var t1 = n["sumexp"].nodeType;
-                    var t2 = n["prodexp"].nodeType;
-                    var addop = n["ADDOP"].token;
-                    if( t1 != t2 )
-                        Utils.error(addop,$"Type mismatch for add/subtract ({t1} and {t2})");
-
-                    
-                    if( t1 != NodeType.Int && t1 != NodeType.Float && t1 != NodeType.String ){
-                        n.print();
-                        Utils.error(addop,$"Bad type for add/subtract ({t1})");
-                    }
-
-                    if( t1 == NodeType.String && n["ADDOP"].token.lexeme != "+" )
-                        Utils.error(addop,"Cannot subtract strings");
-
-                    n.nodeType = t1;
+                    binary( n, 
+                        new NodeType[]{NodeType.Int, NodeType.Float, NodeType.String},
+                        null
+                    );
+                    if( n.children[0].nodeType == NodeType.String && n["ADDOP"].token.lexeme != "+" )
+                        Utils.error(n.children[0].token,"Cannot subtract strings");
                 }
             ),
             new("sumexp :: prodexp"),
@@ -141,7 +188,10 @@ public class ProductionsExpr{
             //multiplication, division, modulo
             new("prodexp :: prodexp MULOP powexp",
                 setNodeTypes: (n) => {
-                    //do stuff
+                    binary(n,
+                        new NodeType[]{NodeType.Int, NodeType.Float},
+                        null
+                    );
                 },
                 generateCode: (n) => {
 
@@ -182,9 +232,7 @@ public class ProductionsExpr{
                     } else {
                         //ERROR!
                     }
-                
                 }
-                
             ),
             new("prodexp :: powexp"),
 
@@ -194,6 +242,9 @@ public class ProductionsExpr{
 
             //bitwise not, negation, unary plus
             new("unaryexp :: BITNOTOP unaryexp",
+                setNodeTypes: (n) => {
+                    unary(n,NodeType.Int,NodeType.Int);
+                },
                 generateCode: (n) => {
                     n["unaryexp"].generateCode();
                     Asm.add(new OpPop(Register.rax,null));
@@ -202,6 +253,9 @@ public class ProductionsExpr{
                 }
             ),
             new("unaryexp :: ADDOP unaryexp",
+                setNodeTypes: (n) => {
+                    unary(n,new NodeType[]{NodeType.Int,NodeType.Float},null);
+                },
                 generateCode: (n) => {
                     if( n["unaryexp"].nodeType == NodeType.Int) {
                         if( n["ADDOP"].token.lexeme == "+" )
@@ -227,7 +281,11 @@ public class ProductionsExpr{
                     }
                 }
             ),
-            new("unaryexp :: NOTOP unaryexp"),
+            new("unaryexp :: NOTOP unaryexp",
+                setNodeTypes: (n) => {
+                    unary(n,NodeType.Bool,NodeType.Bool);
+                }
+            ),
             new("unaryexp :: preincexp"),
 
             //preincrement, predecrement

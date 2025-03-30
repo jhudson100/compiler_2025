@@ -7,7 +7,7 @@ public class Productions{
             new("S :: decls"),
             new("decls :: funcdecl decls | classdecl decls | vardecl decls | SEMI decls | lambda"),
             new("funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI",
-                collectClassNames: (n) => {
+                collectFunctionNames: (n) => {
                     string funcName = n.children[1].token.lexeme;
                     Console.WriteLine($"FUNC: {funcName}");
                 },           

@@ -1,4 +1,3 @@
-
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -8,26 +7,6 @@ namespace lab{
 
 public abstract class NodeType {
     public readonly string friendlyName;
-
-    // public void toJson(StreamWriter w){
-    //     w.WriteLine($"\"{friendlyName}\"");
-    // }
-    // public static NodeType fromJson(StreamReader r){
-    //     string s = Utils.expectJsonPlainString(r);
-    //     if( s == null )
-    //         return null;
-    //     switch(s){
-    //         case "int":
-    //             return NodeType.Int;
-    //         case "float":
-    //             return NodeType.Float;
-    //         case "string":
-    //             return NodeType.String;
-    //         default:
-    //             throw new Exception($"Unknown NodeType: {s}");
-    //     }
-    // }
-
     public NodeType(string n){
         this.friendlyName=n;
     }
@@ -89,6 +68,11 @@ public class FloatNodeType : NodeType {
     public FloatNodeType() : base("float") {}
 }
 
+
+public class BoolNodeType : NodeType {
+    public BoolNodeType() : base("bool") {}
+}
+
 public class StringNodeType : NodeType {
     public StringNodeType() : base("string") {}
 }
@@ -106,6 +90,9 @@ public class FunctionNodeType: NodeType {
     }
 }
 
+public class VoidNodeType : NodeType {
+    public VoidNodeType() : base("void") {}
+}
 
 
 public class NodeTypeJsonConverter : JsonConverter<NodeType> {
