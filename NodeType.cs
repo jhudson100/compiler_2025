@@ -69,10 +69,6 @@ public class FloatNodeType : NodeType {
 }
 
 
-public class BoolNodeType : NodeType {
-    public BoolNodeType() : base("bool") {}
-}
-
 public class StringNodeType : NodeType {
     public StringNodeType() : base("string") {}
 }

@@ -60,9 +60,7 @@ public class ProductionsExpr{
             new("andexp :: andexp ANDOP relexp",
                 setNodeTypes: (n) => {
                     binary(n,NodeType.Bool,NodeType.Bool);
-                }
-            ),
-            new("andexp :: andexp ANDOP relexp",
+                },
                 generateCode: (n) => {
 
                     //this is going to leave the result
