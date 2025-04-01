@@ -71,7 +71,7 @@ public class ProductionsExpr{
                     //look on top of stack and if it is zero,
                     //skip over relexp
                     Asm.add( new OpComment( "See if result of first and operand was false"));
-                    Asm.add( new OpMov( src: Register.rsp, offset:8, dest:Register.rax) );
+                    Asm.add( new OpMov( Register.rsp, 8, Register.rax) );
                     Asm.add( new OpJmpIfZero(Register.rax, endexp) );
 
                     //discard two items from stack
@@ -322,6 +322,12 @@ public class ProductionsExpr{
                     VarInfo vi =  SymbolTable.lookup(tok);
                     n["ID"].varInfo = vi;
                     n["ID"].nodeType = n.nodeType = vi.type;
+                },
+                generateCode: (n) => {
+                    n["ID"].varInfo.location.pushValueToStack(Register.rax, Register.rbx);
+                },
+                pushAddressToStack: (n) => {
+                    n["ID"].varInfo.location.pushAddressToStack(Register.rax);
                 }
             ),
 

@@ -2,11 +2,11 @@ namespace lab{
     
     public static class SymbolTable{
 
-        static int numLocals=0;
+        static public int numLocals=0;
         static int nestingLevel=0;
         static Stack< List<VarInfo> > shadowed = new();
 
-        static Dictionary<string, VarInfo> table = new();
+        public static Dictionary<string, VarInfo> table = new();
 
         public static void enterFunctionScope(){ 
             numLocals=0;
@@ -80,7 +80,7 @@ namespace lab{
             table[varname] = new VarInfo(token, 
                     nestingLevel, 
                     type, 
-                    new LocalLocation(numLocals)
+                    new LocalLocation(numLocals, token.lexeme)
             );
             numLocals++;
         }

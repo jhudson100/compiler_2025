@@ -10,6 +10,7 @@ public class Productions{
                 collectFunctionNames: (n) => {
                     string funcName = n.children[1].token.lexeme;
                     Console.WriteLine($"FUNC: {funcName}");
+                    SymbolTable.declareGlobal( n["ID"].token, new FunctionNodeType() );
                 },           
                 setNodeTypes: (n) => {
                     
@@ -19,8 +20,23 @@ public class Productions{
                         c.setNodeTypes();
                     }
 
+                    n.numLocals = SymbolTable.numLocals;
+
                     SymbolTable.leaveFunctionScope();
                     
+                },
+
+                generateCode: (n) => {
+                    VarInfo vi = SymbolTable.lookup(n["ID"].token); //lookup the function that we're in
+                    var loc = vi.location as GlobalLocation;
+                    Asm.add( new OpLabel(loc.lbl));
+                    Asm.add( new OpPush( Register.rbp, StorageClass.NO_STORAGE_CLASS));
+                    Asm.add( new OpMov( src: Register.rsp, dest: Register.rbp));
+                    if( n.numLocals > 0 ){
+                        Asm.add( new OpSub( Register.rsp, n.numLocals*16 ));
+                    }
+                    n["stmts"].generateCode();
+                    Utils.epilogue(n.lastToken());
                 }
             ),
             new("braceblock :: LBRACE stmts RBRACE",
@@ -76,7 +92,26 @@ public class Productions{
 
             new( "continue :: CONTINUE"),
 
-            new("assign :: expr EQ expr"),
+            new("assign :: expr EQ expr",
+                generateCode: (n) => {
+                    n.children[0].pushAddressToStack();
+                    n.children[2].generateCode();
+                    //get the value (rhs) to rax
+                    //storage class to rbx
+                    Asm.add(new OpPop(Register.rax, Register.rbx));
+                    //address of variable is in rcx;
+                    //discard storage class (storage class of an
+                    //address is 0)
+                    Asm.add( new OpPop( Register.rcx, null));
+
+                    //Write data + storage to memory
+                    //Storage class first, then data
+                    Asm.add( new OpMov( src: Register.rbx, Register.rcx, 0));
+                    Asm.add( new OpMov( src: Register.rax, Register.rcx, 8));
+
+                }
+            
+            ),
             new("cond :: IF LPAREN expr RPAREN braceblock"),
             new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock",
                 generateCode: (n) => {
@@ -129,12 +164,12 @@ public class Productions{
 
                     //ABI says return values come back in rax
                     Asm.add( new OpPop(Register.rax,null));
-                    Asm.add( new OpRet());
+                    Utils.epilogue(n["RETURN"].token);
                 }
             ),
             new("return :: RETURN",
                 generateCode: (n) => {
-                    Asm.add( new OpRet() );
+                    Utils.epilogue(n["RETURN"].token);
                 }
             ),
 
