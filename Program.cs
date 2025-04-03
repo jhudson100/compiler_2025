@@ -17,60 +17,28 @@ public class CompilersAreGreat{
             Grammar.computeNullableAndFirst();
             DFA.makeDFA(); //time consuming
             DFA.dump("dfa.txt");
-            TableWriter.create();
+            TableWriter.create(Console.Out);
             // foreach( var q in DFA.allStates ){
             //     Console.WriteLine(q);
             // }
             return;
         }
 
-        TreeNode root=null;
 
-        for(int i=0;i<args.Length;++i){
-            if( args[i] == "-t" ){
-                i++;
-                if( i >= args.Length ){
-                    Console.WriteLine("-t requires an argument");
-                    Environment.Exit(1);
-                }
-                string treefile = args[i];
-                using(var r = new StreamReader(treefile)){
-                    string data = r.ReadToEnd();
-                    var dopts = new System.Text.Json.JsonSerializerOptions();
-                    dopts.IncludeFields=true;
-                    dopts.WriteIndented=true;
-                    dopts.MaxDepth=1000000;
-                    root = System.Text.Json.JsonSerializer.Deserialize<TreeNode>(data,dopts);
-                    root.setParents();
-                }
-            }
-        }
+        string inp = File.ReadAllText(args[0]);
+        var tokens = new List<Token>();
+        var T = new Tokenizer(inp);
+        TreeNode root = Parser.parse(T);
 
-        if( root == null){
-            string inp = File.ReadAllText(args[0]);
-            var tokens = new List<Token>();
-            var T = new Tokenizer(inp);
-            root = Parser.parse(T);
-        }
-        
+
         root.collectClassNames();
         root.collectFunctionNames();
         root.setNodeTypes();
-
-        //root.removeUnitProductions();     
-
-        //Console.WriteLine("The tree:");
-        //root.print();
-        
-        //debug output: Write the tree in JSON format
-        var opts = new System.Text.Json.JsonSerializerOptions();
-        opts.IncludeFields=true;
-        opts.WriteIndented=true;
-        opts.MaxDepth=1000000;
-        string J = System.Text.Json.JsonSerializer.Serialize(root,opts);
+    
+        root.removeUnitProductions();
+        root.print();
         using(var w = new StreamWriter("tree.json")){
-            w.WriteLine(J);
-            //root.toJson(w);
+            root.toJson(w);
         }
     }
 } //class
