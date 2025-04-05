@@ -10,12 +10,10 @@ public class Terminals{
             new("BITNOTOP",         @"~"),
             new("BITOP",            @"[|&^]"),
             new("BOOLCONST",        @"\b(true|false)\b"),
-            new("BREAK",            @"\bbreak\b"),
             new("CLASS",            @"\bclass\b"),
             new("COLON",            @":"),
             new("COMMA",            @","),
             new("COMMENT",          @"//[^\n]*"),
-            new("CONTINUE",         @"\bcontinue\b"),
             new("DOT",              @"\."),
             new("ELSE",             @"\belse\b"),
             new("EQ",               @"="),
@@ -47,7 +45,6 @@ public class Terminals{
             new("TYPE",             @"\b(int|float|string|bool)\b"),
             new("UNTIL",            @"\buntil\b"),
             new("VAR",              @"\bvar\b"),
-            new("VOID",             @"\bvoid\b"),
             new("WHILE",            @"\bwhile\b"),
             new("ID",               @"(?!\d)\w+" )
         });

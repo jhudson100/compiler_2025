@@ -4,7 +4,7 @@ namespace lab{
 
 public static class TableWriter{
 
-    public static void create(){
+    public static void create(TextWriter wr){
         //create a file called ParseTable.cs which has the parse table
         using( var w = new StreamWriter("ParseTable.cs") ){
             w.WriteLine("namespace lab{");
@@ -12,10 +12,11 @@ public static class TableWriter{
             w.WriteLine("    public static List<Dictionary<string,ParseAction> > table = new() {");
 
             for(int i=0;i<DFA.allStates.Count;++i){
+                wr.WriteLine("Row "+i+":");
                 w.WriteLine("        // DFA STATE "+i); //index in allStates == state's "unique" number
                 DFAState q = DFA.allStates[i];
                 foreach(LRItem I in q.label.items){
-                    w.WriteLine($"        // {I}");
+                    w.WriteLine("        // "+I);
                 }
                 w.WriteLine("        new Dictionary<string,ParseAction>(){");
                 //shift rules
@@ -25,26 +26,14 @@ public static class TableWriter{
                     w.Write($"\"{sym}\" , ");
                     w.Write($"new ParseAction(PAction.SHIFT, {q.transitions[sym].unique}, null, -1)");
                     w.WriteLine("},");
+
+                    wr.WriteLine($"    {sym} S {q.transitions[sym].unique}");
                 }
                 //reduce rules
                 var reduce = new HashSet<string>();
                 foreach( LRItem I in q.label.items){
                     if( I.dposAtEnd() ){
-
-                        foreach(LRItem II in q.label.items){
-                            if( Object.ReferenceEquals(I,II) || !II.dposAtEnd() )
-                                continue;
-                            var conflicts = I.lookahead.Intersect(II.lookahead).ToList();
-                            if( conflicts.Count > 0 ){
-                                Console.WriteLine("Error: Reduce-reduce conflict on {"+
-                                    String.Join(", ",conflicts)+"} in state "+q.unique);
-                                foreach(LRItem III in q.label.items){
-                                    Console.WriteLine("    "+III);
-                                }
-                                Environment.Exit(1);
-                            }
-                        }
-
+                        // w.WriteLine($"            // {I}");
                         foreach( string lookahead in I.lookahead){
                             if( q.transitions.Keys.Contains(lookahead)){
                                 Console.WriteLine("Shift-Reduce conflict in state "+i+" on symbol "+lookahead);
@@ -60,6 +49,9 @@ public static class TableWriter{
                             w.Write(",");
                             w.Write($"new ParseAction(PAction.REDUCE, {I.production.rhs.Length}, \"{I.production.lhs}\", {I.production.unique})");
                             w.WriteLine("},");
+
+                            wr.WriteLine($"    {lookahead} R {I.production.rhs.Length} {I.production.lhs}");
+
                         }
                     }
                 }

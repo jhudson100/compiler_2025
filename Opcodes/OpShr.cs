@@ -1,9 +1,9 @@
 namespace lab{
 
-    public class OpShl: Opcode {
+    public class OpShr: Opcode {
         IntRegister value;
         IntRegister count;
-        public OpShl( IntRegister value, IntRegister count){
+        public OpShr( IntRegister value, IntRegister count){
             this.value=value;
             this.count=count;
             if( this.count != Register.rcx ){
@@ -12,7 +12,7 @@ namespace lab{
         }
 
         public override void output(StreamWriter w){
-            w.WriteLine($"    shl %cl, {this.value}");
+            w.WriteLine($"    shr %cl, {this.value}");
         }
     }
 

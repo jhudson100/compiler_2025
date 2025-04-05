@@ -13,7 +13,7 @@ namespace lab{
 
         public OpPop( IntRegister value, StorageClass c){
             if( c != StorageClass.NO_STORAGE_CLASS )
-                throw new Exception();
+                throw new Exception("Bad storage class");
             this.value = value;
             this.sclass = null;
             onlyPopOne=true;
