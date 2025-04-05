@@ -49,7 +49,8 @@ public abstract class NodeType {
         switch(t.lexeme){
             case "int": return NodeType.Int;
             case "string": return NodeType.String;
-            //TODO: Finish me
+            case "float": return NodeType.Float;
+            case "bool": return NodeType.Bool;
             default: throw new Exception("ICE");
         }
 

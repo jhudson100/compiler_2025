@@ -17,7 +17,20 @@ public class TreeNode{
     [JsonConverter(typeof(NodeTypeJsonConverter))]
     public NodeType nodeType = null;
 
+    //only meaningful for fundecl nodes: Number of locals
+    //declared in that function
+    public int numLocals = -1;
+
+    //only meaningful for tree nodes that are ID's and
+    //which are variables
     public VarInfo varInfo = null;
+
+
+    //only meaningful for loop nodes; otherwise they are null
+    public Label entry=null;
+    public Label exit=null;
+    public Label test=null;
+
 
     public TreeNode this[string childSym] {
         get {
@@ -26,7 +39,7 @@ public class TreeNode{
                     return c;
                 }
             }
-            throw new Exception("No such child");
+            throw new Exception($"No such child {childSym} for node of {sym}");
         }
     }
 
@@ -60,7 +73,27 @@ public class TreeNode{
         this.children.Insert(0,n);
     }
 
-    
+    public Token firstToken(){
+        if( this.token != null)
+            return this.token;
+        foreach(var c in this.children){
+            Token t = c.firstToken();
+            if(t!=null)
+                return t;
+        }
+        return null;
+    }
+
+    public Token lastToken(){
+        if( this.token != null)
+            return this.token;
+        for(int i=this.children.Count-1;i>=0;i--){
+            Token t = this.children[i].lastToken();
+            if(t!=null)
+                return t;
+        }
+        return null;
+    }
 
     public void toJson(StreamWriter w, string prefix=""){
         string prefix0=prefix;
@@ -166,6 +199,13 @@ public class TreeNode{
             }
         }
         throw new Exception("No such child");
+    }
+
+    public void pushAddressToStack(){
+        if( this.production != null )
+            this.production.pspec.pushAddressToStack(this);
+        else
+            Utils.error(this.firstToken(),"Cannot get address");
     }
 
     public void collectClassNames(){

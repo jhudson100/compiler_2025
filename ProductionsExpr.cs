@@ -103,6 +103,24 @@ public class ProductionsExpr{
             new("andexp :: andexp ANDOP relexp",
                 setNodeTypes: (n) => {
                     binary(n,NodeType.Bool,NodeType.Bool);
+                },
+                generateCode: (n) => {
+ 
+                    //this is going to leave the result
+                    //on top of the stack
+                    n["andexp"].generateCode();
+
+                    var endexp = new Label($"end of and expr at line {n["ANDOP"].token.line}");
+                    //look on top of stack and if it is zero,
+                    //skip over relexp
+                    Asm.add( new OpComment( "See if result of first and operand was false"));
+                    Asm.add( new OpMov( Register.rsp, 8, Register.rax) );
+                    Asm.add( new OpJmpIfZero(Register.rax, endexp) );
+
+                    //discard two items from stack
+                    Asm.add( new OpAdd( Register.rsp, 16 ));
+                    n["relexp"].generateCode();
+                    Asm.add( new OpLabel( endexp ) );
                 }
             ),
             new("andexp :: relexp"),
@@ -114,7 +132,53 @@ public class ProductionsExpr{
                         new NodeType[]{NodeType.Int,NodeType.Float,NodeType.String},
                         NodeType.Bool
                     );
-                }),
+                },
+                generateCode: (n) => {
+                    n.children[0].generateCode();
+                    n.children[2].generateCode();
+
+                    var ntype = n["bitexp"].nodeType;
+                    if( ntype == NodeType.Bool || ntype == NodeType.Int ) {
+
+                        //10<20
+                        Asm.add( new OpPop( Register.rbx, null ));  //20
+                        Asm.add( new OpPop( Register.rax, null ));  //10
+                        
+                        string cmp;
+                        switch(n["RELOP"].token.lexeme ){
+                            case "<":       cmp = "lt"; break;
+                            default: throw new Exception();
+                        }
+                        Asm.add( new OpCmp(Register.rax, Register.rbx));
+                        Asm.add( new OpSetCC( cmp, Register.rax ));
+                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
+
+                    } else if( ntype == NodeType.String) {
+                        //TBD later
+                        throw new Exception();
+                    } else if( ntype == NodeType.Float ){
+                        //10<20
+                        Asm.add( new OpPopF( Register.xmm1, null ));  //20
+                        Asm.add( new OpPopF( Register.xmm0, null ));  //10
+                        
+                        string cmp;
+                        switch(n["RELOP"].token.lexeme ){
+                            case "<":       cmp = "lt"; break;
+                            default: throw new Exception();
+                        }
+                        Asm.add( new OpCmpF(cmp, Register.xmm0, Register.xmm1));
+                        Asm.add( new OpMov( Register.xmm0, Register.rax));
+                        Asm.add( new OpNeg( Register.rax ));
+                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
+
+                    
+                    } else 
+                    {
+                        throw new Exception();
+                    }
+                }    
+                
+                ),
             new("relexp :: bitexp"),
 
             //bitwise: or, and, xor
@@ -291,6 +355,12 @@ public class ProductionsExpr{
                     var vi =  SymbolTable.lookup(tok);
                     n["ID"].varInfo = vi;
                     n["ID"].nodeType = n.nodeType = vi.type;
+                },
+                generateCode: (n) => {
+                     n["ID"].varInfo.location.pushValueToStack(Register.rax, Register.rbx);
+                },
+                pushAddressToStack: (n) => {
+                    n["ID"].varInfo.location.pushAddressToStack(Register.rax);
                 }
             ),
             new("factor :: FNUM",
