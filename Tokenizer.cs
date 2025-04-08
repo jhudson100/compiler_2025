@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace lab{
 
-public class Token {
+public class Token{
     public string sym; 
     public string lexeme;
     public int line;
@@ -19,7 +19,6 @@ public class Token {
 
         return $"{{ \"sym\": \"{this.sym}\" , \"line\" : {this.line}, \"lexeme\" : \"{lex}\"  }}";
     }
-
     public void toJson(StreamWriter w){
         w.Write(this.ToString());
     }

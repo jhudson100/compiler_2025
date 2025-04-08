@@ -3,7 +3,7 @@ namespace lab{
 public static class Parser{
 
     public static TreeNode parse(Tokenizer tokenizer){
-        
+
         var stk = new Stack<int>();
         var tstk = new Stack<TreeNode>();
 

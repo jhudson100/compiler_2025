@@ -7,6 +7,10 @@ public class Label{
         this.value = $"lbl{ctr++}";
         this.comment = comment;
     }
+    public Label(string value, string comment){
+        this.value = value;
+        this.comment = comment;
+    }
     public override string ToString(){
         return this.value;
     }

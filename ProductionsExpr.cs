@@ -298,7 +298,59 @@ public class ProductionsExpr{
             //array, member, function call
             new("amfexp :: amfexp DOT factor"),
             new("amfexp :: amfexp LBRACKET expr RBRACKET"),
-            new("amfexp :: amfexp LPAREN calllist RPAREN"),
+            new("amfexp :: amfexp LPAREN calllist RPAREN",
+                setNodeTypes: (n) => {
+                    foreach(var c in n.children){
+                        c.setNodeTypes();
+                    }
+
+                    List<NodeType> ptypes = new();  //parameter types
+                    Utils.walk( n["calllist"], (TreeNode c) => {
+                        if( c.sym == "expr" )
+                            ptypes.Add(c.nodeType);
+                        if( c.sym == "amfexp" &&  c.children.Count > 1 )
+                            return false;       //don't do subtree (nested
+                                                //function call or array)
+                        else
+                            return true;
+                    });
+
+
+                    var ftype = n.children[0].nodeType as FunctionNodeType;
+                    if( ftype == null ){
+                        Utils.error(n["LPAREN"].token,
+                            "Cannot call a non-function"
+                        );
+                    }
+
+                    n.nodeType = ftype.returnType;
+
+                    if( ftype.paramTypes.Count != ptypes.Count ){
+                        Utils.error(n["LPAREN"].token,
+                            $"Parameter count mismatch: Expected {ftype.paramTypes.Count} but got {ptypes.Count}"
+                        );
+                    }
+
+                    for(int i=0;i<ftype.paramTypes.Count;i++){
+                        ....compare them....
+                    }
+                }
+                generateCode: (n) => {
+                    n["callist"].generateCode();
+                    //parameters are now on stack, from right to left
+                    n.children[0].pushAddressToStack();
+                    Asm.add( new OpPop( Register.rax, null));
+                    Asm.add( new OpMov( Register.rsp, Register.rcx));
+                    Asm.add( new OpCall( Register.rax, 
+                        $"function call at line {n["LPAREN"].token.line}"));
+                    var ftype = n.children[0].nodeType as FunctionNodeType;
+                    Asm.add( new OpAdd( Register.rsp, ftype.paramTypes.Count * 16 ));
+                    //function return value came back in rax
+                    if( ftype.returnType != NodeType.Void ){
+                        Asm.add(new OpPush( Register.rax, StorageClass.PRIMITIVE ));
+                    }
+                }
+            ),
             new("amfexp :: factor"),
 
             //indivisible atom
@@ -330,7 +382,6 @@ public class ProductionsExpr{
                     n["ID"].varInfo.location.pushAddressToStack(Register.rax);
                 }
             ),
-
             new("factor :: FNUM",
                 setNodeTypes: (n) => {
                     n.nodeType = NodeType.Float;
@@ -354,9 +405,15 @@ public class ProductionsExpr{
             //calllist = zero or more arguments
             //calllist2 = 1 or more arguments
             new("calllist :: lambda"),
-            new("calllist :: calllist2 COMMA expr"),
+            new("calllist :: calllist2"),
             new("calllist2 :: expr"),
-            new("calllist2 :: calllist2 COMMA expr")
+            new("calllist2 :: calllist2 COMMA expr",
+                generateCode: (n) => {
+                    //right to left
+                    n["expr"].generateCode();
+                    n["calllist2"].generateCode();
+                }
+            )
 
         });
 

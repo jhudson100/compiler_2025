@@ -4,7 +4,6 @@ using System.Text.Json.Serialization;
 namespace lab{
     
 
-
 public abstract class NodeType {
     public readonly string friendlyName;
     public NodeType(string n){
@@ -41,18 +40,17 @@ public abstract class NodeType {
     public static readonly FloatNodeType Float = new ();
     public static readonly BoolNodeType Bool = new ();
     public static readonly StringNodeType String = new ();
-    // public static readonly VoidNodeType Void = new ();
+    public static readonly VoidNodeType Void = new ();
 
-    public static NodeType tokenToNodeType(Token t){
-        if( t.sym != "TYPE" )
-            throw new Exception("ICE");
+    public static NodeType typeFromToken(Token t){
         switch(t.lexeme){
             case "int": return NodeType.Int;
+            case "float": return NodeType.Float;
+            case "bool": return NodeType.Bool;
             case "string": return NodeType.String;
-            //TODO: Finish me
-            default: throw new Exception("ICE");
+            default:
+                throw new Exception("Internal compiler error: type from token "+t);
         }
-
     }
 }
 
@@ -64,6 +62,7 @@ public class IntNodeType : NodeType {
     public IntNodeType() : base("int") {}
 }
 
+
 public class FloatNodeType : NodeType {
     public FloatNodeType() : base("float") {}
 }
@@ -74,9 +73,19 @@ public class StringNodeType : NodeType {
 }
 
 public class FunctionNodeType: NodeType {
-    public FunctionNodeType(): base("func") {}
+    public NodeType returnType;
+    public List<NodeType> paramTypes;
+    public FunctionNodeType(NodeType returnType, 
+        List<NodeType> paramTypes): base("func") {
+            this.returnType = returnType;
+            this.paramTypes = paramTypes;
+    }
 
     public override bool Equals(Object o){
+        var f2 = o as FunctionNodeType;
+        if( f2 == null )
+            return false;
+
         throw new Exception("TBD");
     }
 
@@ -114,5 +123,4 @@ public class NodeTypeJsonConverter : JsonConverter<NodeType> {
         w.WriteStringValue(typ.friendlyName);
     }
 }
-
 } //namespace

@@ -57,15 +57,20 @@ public class Productions{
             new("optionalSemi :: lambda | SEMI"),
             new("optionalPdecls :: lambda | pdecls"),
             new("pdecls :: pdecl | pdecl COMMA pdecls"),
-            new("pdecl :: ID COLON TYPE"),
+            new("pdecl :: ID COLON TYPE",
+                setNodeTypes: (n) => {
+                    SymbolTable.declareParameter(
+                        n["ID"].token,
+                        NodeType.typeFromToken(n["TYPE"].token)
+                    );
+                }
+            ),
             new("classdecl :: CLASS ID LBRACE memberdecls RBRACE SEMI",
                 collectClassNames: (TreeNode n) => {
                     string className = n.children[1].token.lexeme;
-                    Console.WriteLine($"CLASS: {className}");
+                    //Console.WriteLine($"CLASS: {className}");
                     //assuming no nested classes; no need to walk
                     //children of n
-                    //This also means we won't pick up member
-                    //functions of the class.
                 }
             ),
             new("memberdecls :: lambda | SEMI memberdecls | membervardecl memberdecls | memberfuncdecl memberdecls"),
@@ -75,9 +80,8 @@ public class Productions{
             new("stmts :: stmt SEMI stmts"),
             new("stmts :: SEMI"),
             new("stmts :: lambda"),
-            new("stmt :: assign | cond | loop | vardecl | return | break | continue"),
-
-            new( "break :: BREAK",
+            new("stmt :: assign | cond | loop | vardecl | return"),
+                        new( "break :: BREAK",
                 generateCode: (n) => {
                     TreeNode x = n;
                     while( x != null && x.sym != "loop" ){
@@ -90,9 +94,27 @@ public class Productions{
                 }
             ),
 
+            new("stmt :: expr",
+                generateCode: (n) => {
+                    n["expr"].generateCode();
+                    //if result is not void, must discard values
+                    if( n["expr"].nodeType != NodeType.Void ){
+                        Asm.add( new OpAdd(Register.rsp,16));
+                    }
+                }
+            )
+
             new( "continue :: CONTINUE"),
 
+
             new("assign :: expr EQ expr",
+                setNodeTypes: (n) => {
+                    n.children[0].setNodeTypes();
+                    n.children[2].setNodeTypes();
+                    if( n.children[0].nodeType != n.children[2].nodeType){
+                        Utils.error(n["EQ"].token,$"Type mismatch in assign: {n.children[0].nodeType} vs {n.children[2].nodeType}");
+                    }
+                },
                 generateCode: (n) => {
                     n.children[0].pushAddressToStack();
                     n.children[2].generateCode();
@@ -176,7 +198,7 @@ public class Productions{
 
             new("vardecl :: VAR ID COLON TYPE",
                 setNodeTypes:(n) => {
-                    var t = NodeType.tokenToNodeType(n["TYPE"].token) ;
+                    var t = NodeType.typeFromToken(n["TYPE"].token) ;
                     if( SymbolTable.currentlyInGlobalScope()){
                         SymbolTable.declareGlobal( n["ID"].token, t);
                     } else {

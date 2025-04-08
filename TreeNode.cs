@@ -11,7 +11,7 @@ public class TreeNode{
 
     public int productionNumber;
 
-    [JsonIgnore()]
+    [JsonIgnore]
     public TreeNode parent = null;
 
 
@@ -32,7 +32,6 @@ public class TreeNode{
     [JsonConverter(typeof(NodeTypeJsonConverter))]
     public NodeType nodeType = null;
 
-
     public TreeNode this[string childSym] {
         get {
             foreach( var c in this.children ){
@@ -44,7 +43,6 @@ public class TreeNode{
         }
     }
 
-
     Production production {
         get {
             if( this.productionNumber >= 0 )
@@ -52,9 +50,6 @@ public class TreeNode{
             return null;
         }
     }
-
-    //this is here for json deserialization
-    public TreeNode(){}
 
     public TreeNode(string sym, Token tok, int prodNum){
         this.sym=sym;
@@ -74,18 +69,52 @@ public class TreeNode{
     }
 
     public void prependChild(TreeNode n){
+        n.parent = this;
         this.children.Insert(0,n);
-        n.parent=this;
     }
 
-    public void setParents(){
-        foreach(var c in this.children){
-            c.parent=this;
-            c.setParents();
+    
+
+    public void toJson(StreamWriter w, string prefix=""){
+        string prefix0=prefix;
+        prefix += "  ";
+        w.WriteLine(prefix0+"{");
+        w.WriteLine( prefix+$"\"sym\" : \"{this.sym}\",");
+        w.Write( prefix+$"\"token\" : ");
+        if( this.token != null )
+            this.token.toJson(w);
+        else
+            w.Write("null");
+        w.WriteLine(",");
+
+        // w.WriteLine(prefix+$"\"productionNumber\" : \"{this.productionNumber}\",");
+
+        //node type string
+        string nts = ( this.nodeType == null ? "null" : $"\"{this.nodeType}\"" );
+
+        w.WriteLine(prefix+$"\"nodeType\": {nts},");
+
+        w.Write(prefix+$"\"varInfo\": ");
+        if( this.varInfo == null )
+            w.Write("null");
+        else
+            this.varInfo.toJson(w);
+        w.WriteLine(",");
+
+        if( this.children.Count == 0 ){
+            w.WriteLine( prefix+"\"children\": []");
+        } else {
+            w.WriteLine( prefix+"\"children\": [");
+            string prefix2=prefix+"  ";
+            for(int i=0;i<this.children.Count;i++){
+                this.children[i].toJson(w,prefix2);
+                if( i != this.children.Count-1)
+                    w.WriteLine(prefix2+",");
+            }
+            w.WriteLine(prefix+"]");
         }
+        w.WriteLine(prefix0+"}");
     }
-
-
 
     public void print(string prefix=""){
         
@@ -120,19 +149,18 @@ public class TreeNode{
     }
 
     public override string ToString(){
-        string tmp=this.sym;
-        
+        string s = $"{this.sym}";
         if( this.token != null )
-            tmp += $" ({this.token.lexeme})";
-
+            s += $" ({this.token.lexeme})";
         if( this.nodeType != null )
-            tmp += " nodeType="+this.nodeType.ToString();
-
-        return tmp;
+            s += $" {this.nodeType}";
+        if( this.varInfo != null )
+            s += $" varInfo[{this.varInfo}]";
+        return s;
     }
 
-    public void removeUnitProductions(){
 
+    public void removeUnitProductions(){
         for(int i=0;i<this.children.Count;++i)
             this.children[i].removeUnitProductions();
 
@@ -142,7 +170,6 @@ public class TreeNode{
     }
 
     public void replaceChild( TreeNode n, TreeNode c){
-        //replace child n with c
         for(int i=0;i<this.children.Count;++i){
             if( this.children[i] == n ){
                 this.children[i] = c;
