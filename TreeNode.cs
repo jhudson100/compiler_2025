@@ -31,9 +31,6 @@ public class TreeNode{
     public Label exit=null;
     public Label test=null;
 
-    [JsonConverter(typeof(NodeTypeJsonConverter))]
-    public NodeType nodeType = null;
-
     public TreeNode this[string childSym] {
         get {
             foreach( var c in this.children ){

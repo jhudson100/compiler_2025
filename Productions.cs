@@ -9,7 +9,10 @@ public class Productions{
             new("funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI",
                 collectFunctionNames: (n) => {
                     string funcName = n.children[1].token.lexeme;
-                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType());
+                    Console.WriteLine("WARNING: IMPLEMENT ME");
+                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType(
+                        null,null
+                    ));
                     foreach(var c in n.children ){
                         c.collectFunctionNames();
                     }
@@ -94,7 +97,7 @@ public class Productions{
                         Asm.add( new OpAdd(Register.rsp,16));
                     }
                 }
-            )
+            ),
 
             new( "continue :: CONTINUE",
                 generateCode: (n) => {
@@ -191,13 +194,21 @@ public class Productions{
                 }
             ),
             new("vardecl :: VAR ID COLON TYPE",
-                setNodeTypes: (n) => {
-                    var tok = n["ID"].token;
-                    var typ = NodeType.tokenToNodeType(n["TYPE"].token);
-                    if( SymbolTable.currentlyInGlobalScope() )
-                        SymbolTable.declareGlobal(tok,typ);
-                    else
-                        SymbolTable.declareLocal(tok,typ);
+                setNodeTypes:(n) => {
+                    var t = NodeType.typeFromToken(n["TYPE"].token) ;
+                    if( SymbolTable.currentlyInGlobalScope()){
+                        SymbolTable.declareGlobal( n["ID"].token, t);
+                    } else {
+                        SymbolTable.declareLocal( n.children[1].token, t );
+                    }
+                }
+            ),
+            new("vardecl :: VAR ID COLON TYPE EQ expr",
+                setNodeTypes:(n)=>{
+                    n["expr"].setNodeTypes();
+                    //look at expr.nodeType
+                    // look at TYPE
+                    throw new Exception("FINISH ME");
                 }
             ),
             new("vardecl :: VAR ID COLON TYPE EQ expr"),

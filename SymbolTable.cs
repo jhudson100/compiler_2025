@@ -68,10 +68,13 @@ public static class SymbolTable{
         return table[name];
     }
 
-    public static void declareGlobal(Token token, NodeType type){ 
+    public static void declareGlobal(Token token, NodeType type, Label lbl=null){ 
+        if(lbl == null)
+            lbl = new Label(token.lexeme);
         if( table.ContainsKey(token.lexeme) )
             Utils.error(token,$"Redeclaration of global variable {token.lexeme}");
-        table[token.lexeme] = new VarInfo(token,0,type,new GlobalLocation(new Label(token.lexeme)));
+        table[token.lexeme] = new VarInfo(token,0,type,
+            new GlobalLocation(lbl));
     }
     public static void declareLocal(Token token, NodeType type){
         string name = token.lexeme;
@@ -106,6 +109,16 @@ public static class SymbolTable{
 
     public static bool currentlyInGlobalScope(){ 
         return locals.Count == 0;
+    }
+    public static void populateBuiltins(){
+        SymbolTable.declareGlobal(new Token("ID","putc",-1),
+            new FunctionNodeType(
+                returnType: NodeType.Int, 
+                paramTypes: new List<NodeType>(){NodeType.Int}
+            ),
+            new Label("putc","putc")
+        );
+
     }
 }
 
