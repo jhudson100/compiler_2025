@@ -14,6 +14,8 @@ public class TreeNode{
     [JsonIgnore]
     public TreeNode parent = null;
 
+    [JsonConverter(typeof(NodeTypeJsonConverter))]
+    public NodeType nodeType = null;
 
     //only meaningful for fundecl nodes: Number of locals
     //declared in that function
@@ -39,7 +41,7 @@ public class TreeNode{
                     return c;
                 }
             }
-            throw new Exception("No such child");
+            throw new Exception($"No such child {childSym} for node of {sym}");
         }
     }
 
@@ -73,7 +75,27 @@ public class TreeNode{
         this.children.Insert(0,n);
     }
 
-    
+    public Token firstToken(){
+        if( this.token != null)
+            return this.token;
+        foreach(var c in this.children){
+            Token t = c.firstToken();
+            if(t!=null)
+                return t;
+        }
+        return null;
+    }
+
+    public Token lastToken(){
+        if( this.token != null)
+            return this.token;
+        for(int i=this.children.Count-1;i>=0;i--){
+            Token t = this.children[i].lastToken();
+            if(t!=null)
+                return t;
+        }
+        return null;
+    }
 
     public void toJson(StreamWriter w, string prefix=""){
         string prefix0=prefix;
@@ -178,28 +200,14 @@ public class TreeNode{
                 return;
             }
         }
-        throw new Exception();
+        throw new Exception("No such child");
     }
 
-public Token firstToken(){
-        if( this.token != null)
-            return this.token;
-        foreach(var c in this.children){
-            Token t = c.firstToken();
-            if(t!=null)
-                return t;
-        }
-        return null;
-    }
-    public Token lastToken(){
-        if( this.token != null)
-            return this.token;
-        for(int i=this.children.Count-1;i>=0;i--){
-            Token t = this.children[i].lastToken();
-            if(t!=null)
-                return t;
-        }
-        return null;
+    public void pushAddressToStack(){
+        if( this.production != null )
+            this.production.pspec.pushAddressToStack(this);
+        else
+            Utils.error(this.firstToken(),"Cannot get address");
     }
 
     public void collectClassNames(){
@@ -218,12 +226,7 @@ public Token firstToken(){
         this.production?.pspec.generateCode(this);
     }
 
-    public void pushAddressToStack(){
-        if( this.production != null )
-            this.production.pspec.pushAddressToStack(this);
-        else
-            Utils.error(this.firstToken(),"Cannot get address");
-    }
+
 } //end TreeNode
 
 } //end namespace lab

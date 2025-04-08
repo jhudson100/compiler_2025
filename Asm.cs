@@ -25,15 +25,21 @@ public static class Asm{
         //if not, make a nice message telling the user
         //we need a main function.
 
-        VarInfo vi  = SymbolTable.lookup("main");
-        if( vi.type as FunctionNodeType == null ){
-            //error: main was declared but as a variable
+        if( !SymbolTable.table.ContainsKey("main")){
+            Console.Error.WriteLine("WARNING: File does not have a main() method; executable will not be valid");
+        } else {
+            VarInfo vi  = SymbolTable.lookup("main");
+            if( vi.type as FunctionNodeType == null ){
+                //error: main was declared but as a variable
+                throw new Exception();
+            }
+            GlobalLocation loc = vi.location as GlobalLocation;
+            if( loc == null ){
+                //error! print a nice message
+                throw new Exception();
+            }
+            w.WriteLine($"    call {loc.lbl.value}  /* {loc.lbl.comment} */");
         }
-        GlobalLocation loc = vi.location as GlobalLocation;
-        if( loc == null ){
-            //error! print a nice message
-        }
-        w.WriteLine($"    call {loc.lbl.value}  /* {loc.lbl.comment} */");
 
         //return value from main is in rax
 
@@ -58,8 +64,8 @@ public static class Asm{
 
         w.WriteLine(".section .data");
         foreach( string name in SymbolTable.table.Keys){
-            vi = SymbolTable.table[name];
-            loc = vi.location as GlobalLocation;
+            var vi = SymbolTable.table[name];
+            var loc = vi.location as GlobalLocation;
             if( vi.type as FunctionNodeType != null  )
                 continue;
             w.WriteLine( $"{loc.lbl}:   /* {loc.lbl.comment} */" );

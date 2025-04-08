@@ -1,10 +1,10 @@
 namespace lab{
     
 public abstract class VarLocation{
+    public abstract void toJson(StreamWriter w);
     public abstract void pushAddressToStack(IntRegister temporary);
     public abstract void pushValueToStack(IntRegister temp1,
                                           IntRegister temp2);
-    public abstract void toJson(StreamWriter w);
 }
 
 
@@ -21,9 +21,9 @@ public class GlobalLocation : VarLocation{
     }
 
     public override void pushAddressToStack(IntRegister temporary){
-        throw new Exception();
+        throw new NotImplementedException();
     }
-
+ 
     public override void pushValueToStack(IntRegister temp1, IntRegister temp2)
     {
         //get address of the global to temp1
@@ -35,6 +35,8 @@ public class GlobalLocation : VarLocation{
         //push value and storage class
         Asm.add( new OpPush( temp1, temp2));
     }
+
+  
 }
 
 public class LocalLocation : VarLocation{
@@ -62,14 +64,12 @@ public class LocalLocation : VarLocation{
 
         //an address is always a primitive object
         Asm.add( new OpPush( temporary, StorageClass.PRIMITIVE));
-
     }
 
     public override void pushValueToStack(IntRegister temp1, IntRegister temp2)
     {
         throw new NotImplementedException();
     }
-
 
 }
 
@@ -80,13 +80,11 @@ public class ParameterLocation : VarLocation {
         this.num = num;
     }
 
-    public override void pushAddressToStack(IntRegister temporary)
-    {
+    public override void pushAddressToStack(IntRegister temporary){
         throw new NotImplementedException();
     }
 
-    public override void pushValueToStack(IntRegister temp1, IntRegister temp2)
-    {
+    public override void pushValueToStack(IntRegister temp1, IntRegister temp2){
         throw new NotImplementedException();
     }
 

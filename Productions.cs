@@ -9,23 +9,19 @@ public class Productions{
             new("funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI",
                 collectFunctionNames: (n) => {
                     string funcName = n.children[1].token.lexeme;
-                    Console.WriteLine($"FUNC: {funcName}");
-                    SymbolTable.declareGlobal( n["ID"].token, new FunctionNodeType() );
-                },           
+                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType());
+                    foreach(var c in n.children ){
+                        c.collectFunctionNames();
+                    }
+                },
                 setNodeTypes: (n) => {
-                    
                     SymbolTable.enterFunctionScope();
-
-                    foreach(TreeNode c in n.children){
+                    foreach(var c in n.children ){
                         c.setNodeTypes();
                     }
-
                     n.numLocals = SymbolTable.numLocals;
-
                     SymbolTable.leaveFunctionScope();
-                    
                 },
-
                 generateCode: (n) => {
                     VarInfo vi = SymbolTable.lookup(n["ID"].token); //lookup the function that we're in
                     var loc = vi.location as GlobalLocation;
@@ -41,16 +37,10 @@ public class Productions{
             ),
             new("braceblock :: LBRACE stmts RBRACE",
                 setNodeTypes: (n) => {
-       
                     SymbolTable.enterLocalScope();
-
-                    foreach(TreeNode c in n.children){
+                    foreach(var c in n.children)
                         c.setNodeTypes();
-                    }
-
                     SymbolTable.leaveLocalScope();
-             
-
                 }
             ),
             new("optionalReturn :: lambda | COLON TYPE"),
@@ -71,6 +61,8 @@ public class Productions{
                     //Console.WriteLine($"CLASS: {className}");
                     //assuming no nested classes; no need to walk
                     //children of n
+                    //This also means we won't pick up member
+                     //functions of the class.
                 }
             ),
             new("memberdecls :: lambda | SEMI memberdecls | membervardecl memberdecls | memberfuncdecl memberdecls"),
@@ -104,9 +96,11 @@ public class Productions{
                 }
             )
 
-            new( "continue :: CONTINUE"),
-
-
+            new( "continue :: CONTINUE",
+                generateCode: (n) => {
+                    throw new NotImplementedException();
+                }
+            ),
             new("assign :: expr EQ expr",
                 setNodeTypes: (n) => {
                     n.children[0].setNodeTypes();
@@ -130,14 +124,15 @@ public class Productions{
                     //Storage class first, then data
                     Asm.add( new OpMov( src: Register.rbx, Register.rcx, 0));
                     Asm.add( new OpMov( src: Register.rax, Register.rcx, 8));
-
                 }
-            
             ),
-            new("cond :: IF LPAREN expr RPAREN braceblock"),
-            new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock",
+            new("cond :: IF LPAREN expr RPAREN braceblock",
                 generateCode: (n) => {
-
+                    throw new NotImplementedException();
+                }
+            ),
+            new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock",
+            generateCode: (n) => {
                     var elseLabel = new Label($"else at line {n["ELSE"].token.line}");
                     var endifLabel = new Label($"end of if starting at line {n["IF"].token.line}");
                     
@@ -155,7 +150,7 @@ public class Productions{
                 }
             ),
             new("loop :: WHILE LPAREN expr RPAREN braceblock",
-                generateCode: (n) => {
+            generateCode: (n) => {
                     int line = n["WHILE"].token.line;
                     var topLoop = new Label($"top of while loop at line {line}");
                     var bottomLoop = new Label($"end of while loop at line {line}");
@@ -172,11 +167,12 @@ public class Productions{
                     Asm.add( new OpJmp( topLoop));
                     Asm.add( new OpLabel( bottomLoop));
                 }
-
             ),
-            new("loop :: REPEAT braceblock UNTIL LPAREN expr RPAREN"),
-            
-            
+            new("loop :: REPEAT braceblock UNTIL LPAREN expr RPAREN",
+                generateCode: (n) => {
+                    throw new NotImplementedException();
+                }
+            ),
             new("return :: RETURN expr",
                 generateCode: (n) => {
 
@@ -187,33 +183,24 @@ public class Productions{
                     //ABI says return values come back in rax
                     Asm.add( new OpPop(Register.rax,null));
                     Utils.epilogue(n["RETURN"].token);
-                }
-            ),
+                
+                }),
             new("return :: RETURN",
                 generateCode: (n) => {
                     Utils.epilogue(n["RETURN"].token);
                 }
             ),
-
-
             new("vardecl :: VAR ID COLON TYPE",
-                setNodeTypes:(n) => {
-                    var t = NodeType.typeFromToken(n["TYPE"].token) ;
-                    if( SymbolTable.currentlyInGlobalScope()){
-                        SymbolTable.declareGlobal( n["ID"].token, t);
-                    } else {
-                        SymbolTable.declareLocal( n.children[1].token, t );
-                    }
+                setNodeTypes: (n) => {
+                    var tok = n["ID"].token;
+                    var typ = NodeType.tokenToNodeType(n["TYPE"].token);
+                    if( SymbolTable.currentlyInGlobalScope() )
+                        SymbolTable.declareGlobal(tok,typ);
+                    else
+                        SymbolTable.declareLocal(tok,typ);
                 }
             ),
-            new("vardecl :: VAR ID COLON TYPE EQ expr",
-                setNodeTypes:(n)=>{
-                    n["expr"].setNodeTypes();
-                    //look at expr.nodeType
-                    // look at TYPE
-                    throw new Exception("FINISH ME");
-                }
-            ),
+            new("vardecl :: VAR ID COLON TYPE EQ expr"),
             new("vardecl :: VAR ID COLON ID"),  //for user-defined types
             new("vardecl :: VAR ID COLON ID EQ expr"),  //for user-defined types
 

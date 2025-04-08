@@ -2,10 +2,9 @@ namespace lab{
     
     public static class Utils{
         public static void error(Token t, string msg){
-            Console.WriteLine($"Error at line {t.line}: {msg}");
+            Console.WriteLine($"Error at line {t?.line}: {msg}");
             Environment.Exit(1);
         }
-
         public static void epilogue(Token t){
             Asm.add(new OpComment( "Epilogue at line "+t.line));
             Asm.add( new OpMov( src: Register.rbp, dest: Register.rsp));

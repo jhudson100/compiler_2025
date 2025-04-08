@@ -33,21 +33,7 @@ public static class TableWriter{
                 var reduce = new HashSet<string>();
                 foreach( LRItem I in q.label.items){
                     if( I.dposAtEnd() ){
-
-                        foreach(LRItem II in q.label.items){
-                            if( Object.ReferenceEquals(I,II) || !II.dposAtEnd() )
-                                continue;
-                            var conflicts = I.lookahead.Intersect(II.lookahead).ToList();
-                            if( conflicts.Count > 0 ){
-                                Console.WriteLine("Error: Reduce-reduce conflict on {"+
-                                    String.Join(", ",conflicts)+"} in state "+q.unique);
-                                foreach(LRItem III in q.label.items){
-                                    Console.WriteLine("    "+III);
-                                }
-                                Environment.Exit(1);
-                            }
-                        }
-
+                        // w.WriteLine($"            // {I}");
                         foreach( string lookahead in I.lookahead){
                             if( q.transitions.Keys.Contains(lookahead)){
                                 Console.WriteLine("Shift-Reduce conflict in state "+i+" on symbol "+lookahead);
