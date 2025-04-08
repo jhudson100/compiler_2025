@@ -184,6 +184,18 @@ public class TreeNode{
         this.production?.pspec.generateCode(this);
     }
 
+    public Token firstToken(){
+        if( this.token != null )
+            return this.token;
+        else {
+            foreach(var c in children){
+                var t = c.firstToken();
+                if(t != null )
+                    return t;
+            }
+            return null;
+        }
+    }
 
 } //end TreeNode
 

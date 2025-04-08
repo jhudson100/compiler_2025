@@ -111,10 +111,63 @@ public class ProductionsExpr{
             new("relexp :: bitexp RELOP bitexp",
                 setNodeTypes: (n) => {
                     binary(n,
-                        new NodeType[]{NodeType.Int,NodeType.Float,NodeType.String},
+                        new NodeType[]{NodeType.Int,NodeType.Float,NodeType.String,NodeType.Bool},
                         NodeType.Bool
                     );
-                }),
+                    if( n.children[0].nodeType == NodeType.Bool){
+                        switch(n["RELOP"].token.lexeme){
+                            case "==":
+                            case "!=":
+                                break;
+                            default:
+                                Utils.error(n["RELOP"],"Cannot do this comparison with booleans");
+                                break;  //bogus
+                        }
+                    }
+                },
+                generateCode: (n) => {
+                    n.children[0].generateCode();
+                    n.children[2].generateCode();
+                    if( n.children[0].nodeType == NodeType.Int ||
+                        n.children[0].nodeType == NodeType.Bool){
+                            string cmp;
+                            switch(n["RELOP"].token.lexeme){
+                                case "==": cmp="e"; break;
+                                case "!=": cmp="ne"; break;
+                                case ">=": cmp="ge"; break;
+                                case ">": cmp="g"; break;
+                                case "<=": cmp="le"; break;
+                                case "<": cmp="l"; break;
+                                default: throw new Exception();
+                            }
+                            Asm.add( new OpPop(Register.rbx,null));
+                            Asm.add( new OpPop(Register.rax,null));
+                            Asm.add( new OpCmp(Register.rax, Register.rbx));
+                            Asm.add( new OpSetCC(cmp,Register.rax));
+                            Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
+                    } else if( n.children[0].nodeType == NodeType.Float) {
+                        string cmp;
+                        switch(n["RELOP"].token.lexeme){
+                            case "==": cmp="eq"; break;
+                            case "!=": cmp="neq"; break;
+                            case ">=": cmp="nlt"; break;
+                            case ">": cmp="nle"; break;
+                            case "<=": cmp="le"; break;
+                            case "<": cmp="lt"; break;
+                            default: throw new Exception();
+                        }
+                        Asm.add( new OpPopF(Register.xmm1,null));
+                        Asm.add( new OpPopF(Register.xmm0,null));
+                        Asm.add( new OpCmpF(cmp,Register.xmm0, Register.xmm1));
+                        Asm.add( new OpMov( Register.xmm0, Register.rax));
+                        Asm.add( new OpAnd(Register.rax, 1));
+                        Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
+                    } else {
+                        Console.WriteLine("Bad node type:" +n.nodeType);
+                        throw new NotImplementedException();
+                    }
+                }
+            ),
             new("relexp :: bitexp"),
 
             //bitwise: or, and, xor
@@ -320,7 +373,14 @@ public class ProductionsExpr{
                     n.nodeType = NodeType.Bool;
                 },
                 generateCode: (n) => {
-                    throw new NotImplementedException();
+                    int v;
+                    switch(n["BOOLCONST"].token.lexeme){
+                        case "true":    v=1; break;
+                        case "false":   v=0; break;
+                        default: throw new Exception();
+                    }
+                    Asm.add(new OpMov(v,Register.rax,n["BOOLCONST"].token.lexeme));
+                    Asm.add(new OpPush(Register.rax,StorageClass.PRIMITIVE));
                 }
             ),
 
