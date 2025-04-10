@@ -25,6 +25,9 @@ public class TreeNode{
     //which are variables
     public VarInfo varInfo = null;
 
+    //true if we can prove that some code under this node
+    //absolutely definitely positively no doubt about it returns.
+    public bool returns=false;
 
     //only meaningful for loop nodes; otherwise they are null
     public Label entry=null;
@@ -221,6 +224,10 @@ public class TreeNode{
 
     public void generateCode(){
         this.production?.pspec.generateCode(this);
+    }
+
+    public void returnCheck(){
+        this.production?.pspec.returnCheck(this);
     }
 
 

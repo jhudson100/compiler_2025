@@ -368,16 +368,32 @@ public class ProductionsExpr{
                 generateCode: (n) => {
                     n["callist"].generateCode();
                     //parameters are now on stack, from right to left
+
+                    //find out where in memory the function code lives
                     n.children[0].pushAddressToStack();
+
+                    //get the address where the function lives to rax
                     Asm.add( new OpPop( Register.rax, null));
-                    Asm.add( new OpMov( Register.rsp, Register.rcx));
+
+                    var ftype = n.children[0].nodeType as FunctionNodeType;
+
+                    if( ftype.builtin ){
+                        //C ABI expects first parameter to come in via rcx
+                        //we're sending the address of the stack to C
+                        Asm.add( new OpMov( Register.rsp, Register.rcx));
+                    }
+
                     Asm.add( new OpCall( Register.rax, 
                         $"function call at line {n["LPAREN"].token.line}"));
-                    var ftype = n.children[0].nodeType as FunctionNodeType;
                     Asm.add( new OpAdd( Register.rsp, ftype.paramTypes.Count * 16 ));
                     //function return value came back in rax
+                    //rbx holds storage class if it's not a C function
                     if( ftype.returnType != NodeType.Void ){
-                        Asm.add(new OpPush( Register.rax, StorageClass.PRIMITIVE ));
+                        if( ftype.builtin ){
+                            Asm.add(new OpPush( Register.rax, StorageClass.PRIMITIVE ));
+                        } else {
+                            Asm.add(new OpPush( Register.rax, Register.rbx ));
+                        }
                     }
                 }
             ),

@@ -102,7 +102,8 @@ public static class SymbolTable{
             shadowed.Peek().Add(table[name]);
         }
         //locals.Count is the nesting level
-        table[name] = new VarInfo(token,locals.Count,type,new ParameterLocation(numParameters));
+        table[name] = new VarInfo(token,locals.Count,type,
+            new ParameterLocation(numParameters,name));
         locals.Peek().Add(name);
         numParameters++;
     }
@@ -114,7 +115,8 @@ public static class SymbolTable{
         SymbolTable.declareGlobal(new Token("ID","putc",-1),
             new FunctionNodeType(
                 returnType: NodeType.Int, 
-                paramTypes: new List<NodeType>(){NodeType.Int}
+                paramTypes: new List<NodeType>(){NodeType.Int},
+                builtin: true
             ),
             new Label("putc","putc")
         );
