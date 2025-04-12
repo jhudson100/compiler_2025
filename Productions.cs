@@ -83,7 +83,7 @@ public class Productions{
                     if( x == null ){
                         Utils.error(n["BREAK"].token, "Break not inside a loop");
                     }
-                    Asm.add( new OpJmp( x.exit ));
+                    Asm.add( new OpJmp( x.loopExit ));
                 }
             ),
 
@@ -146,9 +146,8 @@ public class Productions{
                     var topLoop = new Label($"top of while loop at line {line}");
                     var bottomLoop = new Label($"end of while loop at line {line}");
 
-                    n.entry = topLoop; 
-                    n.exit = bottomLoop;
-                    n.test = topLoop;
+                    n.loopExit = bottomLoop;
+                    n.loopTest = topLoop;
 
                     Asm.add( new OpLabel(topLoop));
                     n["expr"].generateCode();

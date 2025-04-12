@@ -95,6 +95,15 @@ public class ProductionsExpr{
             new("orexp :: orexp OROP andexp",
                 setNodeTypes: (n) => {
                     binary(n,NodeType.Bool,NodeType.Bool);
+                },
+                generateCode: (n) => {
+                    n["orexp"].generateCode();
+                    var end = new Label($"end of orexp at line {n["OROP"].token.line}");
+                    Asm.add( new OpMov( Register.rsp, 8, Register.rax ) );
+                    Asm.add( new OpJmpIfNonzero( Register.rax, end ) );
+                    Asm.add( new OpAdd( Register.rsp, 16 ) );
+                    n["andexp"].generateCode();
+                    Asm.add(new OpLabel(end));
                 }
             ),
             new("orexp :: andexp"),
@@ -105,7 +114,6 @@ public class ProductionsExpr{
                     binary(n,NodeType.Bool,NodeType.Bool);
                 },
                 generateCode: (n) => {
- 
                     //this is going to leave the result
                     //on top of the stack
                     n["andexp"].generateCode();
@@ -129,56 +137,63 @@ public class ProductionsExpr{
             new("relexp :: bitexp RELOP bitexp",
                 setNodeTypes: (n) => {
                     binary(n,
-                        new NodeType[]{NodeType.Int,NodeType.Float,NodeType.String},
+                        new NodeType[]{NodeType.Int,NodeType.Float,NodeType.String,NodeType.Bool},
                         NodeType.Bool
                     );
+                    if( n.children[0].nodeType == NodeType.Bool){
+                        switch(n["RELOP"].token.lexeme){
+                            case "==":
+                            case "!=":
+                                break;
+                            default:
+                                Utils.error(n["RELOP"],"Cannot do this comparison with booleans");
+                                break;  //bogus
+                        }
+                    }
                 },
                 generateCode: (n) => {
                     n.children[0].generateCode();
                     n.children[2].generateCode();
-
-                    var ntype = n["bitexp"].nodeType;
-                    if( ntype == NodeType.Bool || ntype == NodeType.Int ) {
-
-                        //10<20
-                        Asm.add( new OpPop( Register.rbx, null ));  //20
-                        Asm.add( new OpPop( Register.rax, null ));  //10
-                        
+                    if( n.children[0].nodeType == NodeType.Int ||
+                        n.children[0].nodeType == NodeType.Bool){
+                            string cmp;
+                            switch(n["RELOP"].token.lexeme){
+                                case "==": cmp="e"; break;
+                                case "!=": cmp="ne"; break;
+                                case ">=": cmp="ge"; break;
+                                case ">": cmp="g"; break;
+                                case "<=": cmp="le"; break;
+                                case "<": cmp="l"; break;
+                                default: throw new Exception();
+                            }
+                            Asm.add( new OpPop(Register.rbx,null));
+                            Asm.add( new OpPop(Register.rax,null));
+                            Asm.add( new OpCmp(Register.rax, Register.rbx));
+                            Asm.add( new OpSetCC(cmp,Register.rax));
+                            Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
+                    } else if( n.children[0].nodeType == NodeType.Float) {
                         string cmp;
-                        switch(n["RELOP"].token.lexeme ){
-                            case "<":       cmp = "lt"; break;
+                        switch(n["RELOP"].token.lexeme){
+                            case "==": cmp="eq"; break;
+                            case "!=": cmp="neq"; break;
+                            case ">=": cmp="nlt"; break;
+                            case ">": cmp="nle"; break;
+                            case "<=": cmp="le"; break;
+                            case "<": cmp="lt"; break;
                             default: throw new Exception();
                         }
-                        Asm.add( new OpCmp(Register.rax, Register.rbx));
-                        Asm.add( new OpSetCC( cmp, Register.rax ));
-                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
-
-                    } else if( ntype == NodeType.String) {
-                        //TBD later
-                        throw new Exception();
-                    } else if( ntype == NodeType.Float ){
-                        //10<20
-                        Asm.add( new OpPopF( Register.xmm1, null ));  //20
-                        Asm.add( new OpPopF( Register.xmm0, null ));  //10
-                        
-                        string cmp;
-                        switch(n["RELOP"].token.lexeme ){
-                            case "<":       cmp = "lt"; break;
-                            default: throw new Exception();
-                        }
-                        Asm.add( new OpCmpF(cmp, Register.xmm0, Register.xmm1));
+                        Asm.add( new OpPopF(Register.xmm1,null));
+                        Asm.add( new OpPopF(Register.xmm0,null));
+                        Asm.add( new OpCmpF(cmp,Register.xmm0, Register.xmm1));
                         Asm.add( new OpMov( Register.xmm0, Register.rax));
-                        Asm.add( new OpNeg( Register.rax ));
-                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
-
-                    
-                    } else 
-                    {
-                        throw new Exception();
+                        Asm.add( new OpAnd(Register.rax, 1));
+                        Asm.add( new OpPush(Register.rax, StorageClass.PRIMITIVE));
+                    } else {
+                        Console.WriteLine("Bad node type:" +n.nodeType);
+                        throw new NotImplementedException();
                     }
-                }    
-                
-                ),
+                }
+            ),
             new("relexp :: bitexp"),
 
             //bitwise: or, and, xor
@@ -313,6 +328,13 @@ public class ProductionsExpr{
             new("unaryexp :: NOTOP unaryexp",
                 setNodeTypes: (n) => {
                     unary(n,NodeType.Bool,NodeType.Bool);
+                },
+                generateCode: (n) => {
+                    n["unaryexp"].generateCode();
+                    Asm.add( new OpPop(Register.rax,null));
+                    //change 0->1 and 1->0
+                    Asm.add( new OpXor(Register.rax,1));
+                    Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
                 }
             ),
             new("unaryexp :: preincexp"),
@@ -390,7 +412,14 @@ public class ProductionsExpr{
                     n.nodeType = NodeType.Bool;
                 },
                 generateCode: (n) => {
-                    throw new NotImplementedException();
+                    int v;
+                    switch(n["BOOLCONST"].token.lexeme){
+                        case "true":    v=1; break;
+                        case "false":   v=0; break;
+                        default: throw new Exception();
+                    }
+                    Asm.add(new OpMov(v,Register.rax,n["BOOLCONST"].token.lexeme));
+                    Asm.add(new OpPush(Register.rax,StorageClass.PRIMITIVE));
                 }
             ),
 
