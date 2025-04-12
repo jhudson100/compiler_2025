@@ -116,8 +116,9 @@ public class Productions{
             new("stmts :: stmt SEMI stmts"),
             new("stmts :: SEMI"),
             new("stmts :: lambda"),
-            new("stmt :: assign | cond | loop | vardecl | return"),
-                        new( "break :: BREAK",
+            new("stmt :: assign | cond | loop | vardecl | return | break | continue"),
+
+            new( "break :: BREAK",
                 generateCode: (n) => {
                     TreeNode x = n;
                     while( x != null && x.sym != "loop" ){
@@ -130,6 +131,20 @@ public class Productions{
                 }
             ),
 
+            new("continue :: CONTINUE",
+                generateCode: (n) => {
+                     var p = n;
+                     while(p!=null && p.sym != "loop"){
+                         p = p.parent;
+                     }
+                     if( p == null ){
+                         Utils.error(n.children[0].token, "Continue not in a loop");
+                     }
+                     Asm.add( new OpJmp( p.loopTest ) );
+                 }
+             ),
+
+
             new("stmt :: expr",
                 generateCode: (n) => {
                     n["expr"].generateCode();
@@ -139,12 +154,7 @@ public class Productions{
                     }
                 }
             ),
-
-            new( "continue :: CONTINUE",
-                generateCode: (n) => {
-                    throw new NotImplementedException();
-                }
-            ),
+ 
             new("assign :: expr EQ expr",
                 setNodeTypes: (n) => {
                     n.children[0].setNodeTypes();
@@ -171,12 +181,31 @@ public class Productions{
                 }
             ),
             new("cond :: IF LPAREN expr RPAREN braceblock",
+                setNodeTypes: (n) => {
+                    foreach(var c in n.children)
+                        c.setNodeTypes();
+                    if( n["expr"].nodeType != NodeType.Bool){
+                        Utils.error(n["IF"].token, "Bad type for conditional");
+                    }
+                },
                 generateCode: (n) => {
-                    throw new NotImplementedException();
+                    var endif = new Label($"endif for line {n["IF"].token.line}");
+                    n["expr"].generateCode();
+                    Asm.add(new OpPop(Register.rax,null));
+                    Asm.add(new OpJmpIfZero(Register.rax,endif));
+                    n["braceblock"].generateCode();
+                    Asm.add(new OpLabel(endif));
                 }
             ),
             new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock",
-            generateCode: (n) => {
+                setNodeTypes: (n) => {
+                    foreach(var c in n.children)
+                        c.setNodeTypes();
+                    if( n["expr"].nodeType != NodeType.Bool){
+                        Utils.error(n["IF"].token, "Bad type for conditional");
+                    }
+                },
+                generateCode: (n) => {
                     var elseLabel = new Label($"else at line {n["ELSE"].token.line}");
                     var endifLabel = new Label($"end of if starting at line {n["IF"].token.line}");
                     
@@ -194,7 +223,15 @@ public class Productions{
                 }
             ),
             new("loop :: WHILE LPAREN expr RPAREN braceblock",
-            generateCode: (n) => {
+                setNodeTypes: (n) => {
+                    foreach(var c in n.children)
+                        c.setNodeTypes();
+                    if( n["expr"].nodeType != NodeType.Bool){
+                        Utils.error(n["WHILE"].token, "Bad type for conditional");
+                    }
+                },
+
+                generateCode: (n) => {
                     int line = n["WHILE"].token.line;
                     var topLoop = new Label($"top of while loop at line {line}");
                     var bottomLoop = new Label($"end of while loop at line {line}");
@@ -212,9 +249,26 @@ public class Productions{
                 }
             ),
             new("loop :: REPEAT braceblock UNTIL LPAREN expr RPAREN",
+                setNodeTypes: (n) => {
+                    foreach(var c in n.children)
+                        c.setNodeTypes();
+                    if( n["expr"].nodeType != NodeType.Bool){
+                        Utils.error(n["LPAREN"].token, "Bad type for conditional");
+                    }
+                },
                 generateCode: (n) => {
-                    throw new NotImplementedException();
+                    n.loopTest = new Label($"loop test for loop at {n["LPAREN"].token.line}");
+                    n.loopExit = new Label($"loop exit for loop at {n["RPAREN"].token.line}");
+                    var loopStart = new Label($"loop start for loop at line {n["REPEAT"].token.line}");
+                    Asm.add(new OpLabel(loopStart));
+                    n["braceblock"].generateCode();
+                    Asm.add(new OpLabel(n.loopTest));
+                    n["expr"].generateCode();
+                    Asm.add(new OpPop(Register.rax,null));
+                    Asm.add(new OpJmpIfZero(Register.rax,loopStart));
+                    Asm.add(new OpLabel(n.loopExit));
                 }
+
             ),
             new("return :: RETURN expr",
                 setNodeTypes: (n) => {
@@ -274,9 +328,17 @@ public class Productions{
                     throw new Exception("FINISH ME");
                 }
             ),
-            new("vardecl :: VAR ID COLON TYPE EQ expr"),
-            new("vardecl :: VAR ID COLON ID"),  //for user-defined types
-            new("vardecl :: VAR ID COLON ID EQ expr"),  //for user-defined types
+             
+            new("vardecl :: VAR ID COLON ID",        //for user-defined types
+                setNodeTypes: (n) => {
+                    throw new NotImplementedException();
+                }
+            ), 
+            new("vardecl :: VAR ID COLON ID EQ expr",       //for user-defined types
+                setNodeTypes: (n) => {
+                    throw new NotImplementedException();
+                }
+            ),  
 
         });
 
