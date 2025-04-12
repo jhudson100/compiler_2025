@@ -350,7 +350,75 @@ public class ProductionsExpr{
             //array, member, function call
             new("amfexp :: amfexp DOT factor"),
             new("amfexp :: amfexp LBRACKET expr RBRACKET"),
-            new("amfexp :: amfexp LPAREN calllist RPAREN"),
+            new("amfexp :: amfexp LPAREN calllist RPAREN",
+                setNodeTypes: (n) => {
+                    foreach(var c in n.children){
+                        c.setNodeTypes();
+                    }
+
+                    List<NodeType> ptypes = new();  //parameter types
+                    Utils.walk( n["calllist"], (TreeNode c) => {
+                        if( c.sym == "expr" )
+                            ptypes.Add(c.nodeType);
+                        if( c.sym == "amfexp" &&  c.children.Count > 1 )
+                            return false;       //don't do subtree (nested
+                                                //function call or array)
+                        else
+                            return true;
+                    });
+
+
+                    var ftype = n.children[0].nodeType as FunctionNodeType;
+                    if( ftype == null ){
+                        Utils.error(n["LPAREN"].token,
+                            "Cannot call a non-function"
+                        );
+                    }
+
+                    n.nodeType = ftype.returnType;
+
+                    if( ftype.paramTypes.Count != ptypes.Count ){
+                        Utils.error(n["LPAREN"].token,
+                            $"Parameter count mismatch: Expected {ftype.paramTypes.Count} but got {ptypes.Count}"
+                        );
+                    }
+
+                    for(int i=0;i<ftype.paramTypes.Count;i++){
+                        throw new NotImplementedException("FINISH ME");
+                    }
+                },
+                generateCode: (n) => {
+                    n["callist"].generateCode();
+                    //parameters are now on stack, from right to left
+
+                    //find out where in memory the function code lives
+                    n.children[0].pushAddressToStack();
+
+                    //get the address where the function lives to rax
+                    Asm.add( new OpPop( Register.rax, null));
+
+                    var ftype = n.children[0].nodeType as FunctionNodeType;
+
+                    if( ftype.builtin ){
+                        //C ABI expects first parameter to come in via rcx
+                        //we're sending the address of the stack to C
+                        Asm.add( new OpMov( Register.rsp, Register.rcx));
+                    }
+
+                    Asm.add( new OpCall( Register.rax, 
+                        $"function call at line {n["LPAREN"].token.line}"));
+                    Asm.add( new OpAdd( Register.rsp, ftype.paramTypes.Count * 16 ));
+                    //function return value came back in rax
+                    //rbx holds storage class if it's not a C function
+                    if( ftype.returnType != NodeType.Void ){
+                        if( ftype.builtin ){
+                            Asm.add(new OpPush( Register.rax, StorageClass.PRIMITIVE ));
+                        } else {
+                            Asm.add(new OpPush( Register.rax, Register.rbx ));
+                        }
+                    }
+                }
+            ),
             new("amfexp :: factor"),
 
             //indivisible atom
@@ -427,9 +495,15 @@ public class ProductionsExpr{
             //calllist = zero or more arguments
             //calllist2 = 1 or more arguments
             new("calllist :: lambda"),
-            new("calllist :: calllist2 COMMA expr"),
+            new("calllist :: calllist2"),
             new("calllist2 :: expr"),
-            new("calllist2 :: calllist2 COMMA expr")
+            new("calllist2 :: calllist2 COMMA expr",
+                generateCode: (n) => {
+                    //right to left
+                    n["expr"].generateCode();
+                    n["calllist2"].generateCode();
+                }
+            )
 
         });
 

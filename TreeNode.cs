@@ -28,6 +28,11 @@ public class TreeNode{
     //for loop nodes
     public Label loopTest;
     public Label loopExit;
+    
+    //true if we can prove that some code under this node
+    //absolutely definitely positively no doubt about it returns.
+    public bool returns=false;
+
 
     public TreeNode this[string childSym] {
         get {
@@ -222,6 +227,10 @@ public class TreeNode{
                 return t;
         }
         return null;
+    }
+
+    public void returnCheck(){
+        this.production?.pspec.returnCheck(this);
     }
 
 

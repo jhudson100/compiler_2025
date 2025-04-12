@@ -8,8 +8,32 @@ public class Productions{
             new("decls :: funcdecl decls | classdecl decls | vardecl decls | SEMI decls | lambda"),
             new("funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI",
                 collectFunctionNames: (n) => {
+
+                    foreach(var c in n.children){
+                        c.collectFunctionNames();
+                    }
+
                     string funcName = n.children[1].token.lexeme;
-                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType());
+
+
+                    NodeType returnType = n["optionalReturn"].nodeType;
+
+                    List<NodeType> argTypes = new();
+
+                    Utils.walk( n["optionalPdecls"], (c) => {
+                        //c is a tree node
+                        if(c.sym == "TYPE" ){
+                            argTypes.Add(NodeType.typeFromToken(c.token));
+                        }
+                        return true;
+                    });
+
+
+                    var ftype = new FunctionNodeType(
+                        returnType,argTypes,false
+                    );
+                    n.nodeType = ftype;
+                    SymbolTable.declareGlobal(n["ID"].token, ftype);
                     foreach(var c in n.children ){
                         c.collectFunctionNames();
                     }
@@ -21,6 +45,19 @@ public class Productions{
                     }
                     n.numLocals = SymbolTable.numLocals;
                     SymbolTable.leaveFunctionScope();
+                },
+                returnCheck: (n) => {
+                    foreach(var c in n.children){
+                        c.returnCheck();
+                    }
+                    var ftype = n.nodeType as FunctionNodeType;
+                    if( ftype.returnType != NodeType.Void ){
+                        if( n["stmts"].returns == false ){
+                            Utils.error(n["FUNC"].token,
+                                "Non-void function might not return"
+                            );
+                        }
+                    }
                 },
                 generateCode: (n) => {
                     VarInfo vi = SymbolTable.lookup(n["ID"].token); //lookup the function that we're in
@@ -43,7 +80,14 @@ public class Productions{
                     SymbolTable.leaveLocalScope();
                 }
             ),
-            new("optionalReturn :: lambda | COLON TYPE"),
+            new("optionalReturn :: lambda | COLON TYPE",
+                collectFunctionNames: (n) => {
+                    if( n.children.Count == 0 )
+                        n.nodeType = NodeType.Void;
+                    else
+                        n.nodeType = NodeType.typeFromToken(n["TYPE"].token);
+                } 
+            ),
             new("optionalSemi :: lambda | SEMI"),
             new("optionalPdecls :: lambda | pdecls"),
             new("pdecls :: pdecl | pdecl COMMA pdecls"),
@@ -51,7 +95,7 @@ public class Productions{
                 setNodeTypes: (n) => {
                     SymbolTable.declareParameter(
                         n["ID"].token,
-                        NodeType.tokenToNodeType(n["TYPE"].token)
+                        NodeType.typeFromToken(n["TYPE"].token)
                     );
                 }
             ),
@@ -72,9 +116,8 @@ public class Productions{
             new("stmts :: stmt SEMI stmts"),
             new("stmts :: SEMI"),
             new("stmts :: lambda"),
-            new("stmt :: assign | cond | loop | vardecl | return | break | continue"),
-
-            new( "break :: BREAK",
+            new("stmt :: assign | cond | loop | vardecl | return"),
+                        new( "break :: BREAK",
                 generateCode: (n) => {
                     TreeNode x = n;
                     while( x != null && x.sym != "loop" ){
@@ -84,6 +127,16 @@ public class Productions{
                         Utils.error(n["BREAK"].token, "Break not inside a loop");
                     }
                     Asm.add( new OpJmp( x.loopExit ));
+                }
+            ),
+
+            new("stmt :: expr",
+                generateCode: (n) => {
+                    n["expr"].generateCode();
+                    //if result is not void, must discard values
+                    if( n["expr"].nodeType != NodeType.Void ){
+                        Asm.add( new OpAdd(Register.rsp,16));
+                    }
                 }
             ),
 
@@ -164,6 +217,24 @@ public class Productions{
                 }
             ),
             new("return :: RETURN expr",
+                setNodeTypes: (n) => {
+                    foreach(var c in n.children){
+                        c.setNodeTypes();
+                    }
+                    TreeNode p = n;
+                    while( p.sym != "funcdecl" ){
+                        p=p.parent;
+                    }
+                    //funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI
+                    var retType = p["optionalReturn"].nodeType;
+                    var gotType = n["expr"].nodeType ;
+                    if( gotType != retType ){
+                        Utils.error(n["RETURN"].token, 
+                            $"Return type mismatch: Expected {retType} but got {gotType}"
+                        );
+                    }
+
+                },
                 generateCode: (n) => {
 
                     Asm.add(new OpComment( 
@@ -171,23 +242,36 @@ public class Productions{
                     n["expr"].generateCode();   //leaves value on top of stack
 
                     //ABI says return values come back in rax
-                    Asm.add( new OpPop(Register.rax,null));
+                    //our code expects storage class to come back
+                    //in rbx
+                    Asm.add( new OpPop(Register.rax,Register.rbx));
                     Utils.epilogue(n["RETURN"].token);
                 
                 }),
             new("return :: RETURN",
+                setNodeTypes: (n) => {
+                    throw new NotImplementedException();
+                },
                 generateCode: (n) => {
                     Utils.epilogue(n["RETURN"].token);
                 }
             ),
             new("vardecl :: VAR ID COLON TYPE",
-                setNodeTypes: (n) => {
-                    var tok = n["ID"].token;
-                    var typ = NodeType.tokenToNodeType(n["TYPE"].token);
-                    if( SymbolTable.currentlyInGlobalScope() )
-                        SymbolTable.declareGlobal(tok,typ);
-                    else
-                        SymbolTable.declareLocal(tok,typ);
+                setNodeTypes:(n) => {
+                    var t = NodeType.typeFromToken(n["TYPE"].token) ;
+                    if( SymbolTable.currentlyInGlobalScope()){
+                        SymbolTable.declareGlobal( n["ID"].token, t);
+                    } else {
+                        SymbolTable.declareLocal( n.children[1].token, t );
+                    }
+                }
+            ),
+            new("vardecl :: VAR ID COLON TYPE EQ expr",
+                setNodeTypes:(n)=>{
+                    n["expr"].setNodeTypes();
+                    //look at expr.nodeType
+                    // look at TYPE
+                    throw new Exception("FINISH ME");
                 }
             ),
             new("vardecl :: VAR ID COLON TYPE EQ expr"),

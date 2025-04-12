@@ -18,6 +18,14 @@ namespace lab{
             Asm.add( new OpRet());
         }
         
+        public delegate bool WalkCallback(TreeNode n);
+        public static void walk(TreeNode root, WalkCallback f){
+            if( false == f(root) )
+                return;
+            foreach(var c in root.children){
+                walk(c,f);
+            }
+        }
     } //Utils
 
 } //namespace

@@ -15,6 +15,12 @@ public static class Asm{
         w.WriteLine("_start:");
         w.WriteLine("    andq $~0xf, %rsp  /*align the stack*/");
 
+
+        //call rtinit to initialize the runtime
+        w.WriteLine("    sub $32, %rsp");
+        w.WriteLine("    call rtinit");
+        w.WriteLine("    add $32, %rsp");
+
         //TBD: See if we have variable of the name of main
         //if not, make a nice message telling the user
         //we need a main function.
@@ -36,6 +42,16 @@ public static class Asm{
         }
 
         //return value from main is in rax
+
+        w.WriteLine("    mov %rax, %r13");
+
+        //call rtcleanup to cleanup our runtime
+        w.WriteLine("    sub $32, %rsp");
+        w.WriteLine("    call rtcleanup");
+        w.WriteLine("    add $32, %rsp");
+
+        w.WriteLine("    mov %r13, %rax");
+        
 
         //call ExitProcess() with return value of main
         w.WriteLine("    mov %rax, %rcx");
