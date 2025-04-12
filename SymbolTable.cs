@@ -64,7 +64,7 @@ public static class SymbolTable{
 
     public static VarInfo lookup(string name){
         if( !table.ContainsKey(name) )
-            Utils.error(null,$"Use of undeclared variable {name}");
+            Utils.error($"Use of undeclared variable {name}");
         return table[name];
     }
 

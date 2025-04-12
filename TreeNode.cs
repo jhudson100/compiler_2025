@@ -25,12 +25,9 @@ public class TreeNode{
     //which are variables
     public VarInfo varInfo = null;
 
-
-    //only meaningful for loop nodes; otherwise they are null
-    public Label entry=null;
-    public Label exit=null;
-    public Label test=null;
-
+    //for loop nodes
+    public Label loopTest;
+    public Label loopExit;
 
     public TreeNode this[string childSym] {
         get {
@@ -73,28 +70,7 @@ public class TreeNode{
         this.children.Insert(0,n);
     }
 
-    public Token firstToken(){
-        if( this.token != null)
-            return this.token;
-        foreach(var c in this.children){
-            Token t = c.firstToken();
-            if(t!=null)
-                return t;
-        }
-        return null;
-    }
-
-    public Token lastToken(){
-        if( this.token != null)
-            return this.token;
-        for(int i=this.children.Count-1;i>=0;i--){
-            Token t = this.children[i].lastToken();
-            if(t!=null)
-                return t;
-        }
-        return null;
-    }
-
+   
     public void toJson(StreamWriter w, string prefix=""){
         string prefix0=prefix;
         prefix += "  ";
@@ -222,6 +198,30 @@ public class TreeNode{
 
     public void generateCode(){
         this.production?.pspec.generateCode(this);
+    }
+
+    public Token firstToken(){
+        if( this.token != null )
+            return this.token;
+        else {
+            foreach(var c in children){
+                var t = c.firstToken();
+                if(t != null )
+                    return t;
+            }
+            return null;
+        }
+    }
+ 
+    public Token lastToken(){
+        if( this.token != null)
+            return this.token;
+        for(int i=this.children.Count-1;i>=0;i--){
+            Token t = this.children[i].lastToken();
+            if(t!=null)
+                return t;
+        }
+        return null;
     }
 
 
