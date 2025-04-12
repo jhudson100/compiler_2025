@@ -95,6 +95,15 @@ public class ProductionsExpr{
             new("orexp :: orexp OROP andexp",
                 setNodeTypes: (n) => {
                     binary(n,NodeType.Bool,NodeType.Bool);
+                },
+                generateCode: (n) => {
+                    n["orexp"].generateCode();
+                    var end = new Label($"end of orexp at line {n["OROP"].token.line}");
+                    Asm.add( new OpMov( Register.rsp, 8, Register.rax ) );
+                    Asm.add( new OpJmpIfNonzero( Register.rax, end ) );
+                    Asm.add( new OpAdd( Register.rsp, 16 ) );
+                    n["andexp"].generateCode();
+                    Asm.add(new OpLabel(end));
                 }
             ),
             new("orexp :: andexp"),
@@ -103,6 +112,15 @@ public class ProductionsExpr{
             new("andexp :: andexp ANDOP relexp",
                 setNodeTypes: (n) => {
                     binary(n,NodeType.Bool,NodeType.Bool);
+                },
+                generateCode: (n) => {
+                    n["andexp"].generateCode();
+                    var end = new Label($"end of andexp at line {n["ANDOP"].token.line}");
+                    Asm.add( new OpMov( Register.rsp, 8, Register.rax ) );
+                    Asm.add( new OpJmpIfZero( Register.rax, end ) );
+                    Asm.add( new OpAdd( Register.rsp, 16 ) );
+                    n["relexp"].generateCode();
+                    Asm.add(new OpLabel(end));
                 }
             ),
             new("andexp :: relexp"),
@@ -302,6 +320,13 @@ public class ProductionsExpr{
             new("unaryexp :: NOTOP unaryexp",
                 setNodeTypes: (n) => {
                     unary(n,NodeType.Bool,NodeType.Bool);
+                },
+                generateCode: (n) => {
+                    n["unaryexp"].generateCode();
+                    Asm.add( new OpPop(Register.rax,null));
+                    //change 0->1 and 1->0
+                    Asm.add( new OpXor(Register.rax,1));
+                    Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE));
                 }
             ),
             new("unaryexp :: preincexp"),

@@ -19,6 +19,10 @@ public class TreeNode{
 
     public VarInfo varInfo = null;
 
+    //for loop nodes
+    public Label loopTest;
+    public Label loopExit;
+
     public TreeNode this[string childSym] {
         get {
             foreach( var c in this.children ){
