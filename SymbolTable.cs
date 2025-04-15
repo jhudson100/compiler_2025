@@ -8,6 +8,7 @@ public static class SymbolTable{
     static int nestingLevel=0;
     public static int numLocals = 0;
     static int numParameters = 0;
+    public static List<Tuple<string,NodeType>> localTypes = new();     //name and type of all locals
 
     public static void enterFunctionScope(){ 
         numParameters = 0;
@@ -15,6 +16,7 @@ public static class SymbolTable{
         nestingLevel++;
         shadowed.Push( new() );
         locals.Push( new() );
+        localTypes.Clear();
     }
     public static void leaveFunctionScope(){
         nestingLevel--;
@@ -78,6 +80,7 @@ public static class SymbolTable{
     }
     public static void declareLocal(Token token, NodeType type){
         string name = token.lexeme;
+        localTypes.Add( new(name,type) );
         if( table.ContainsKey(name)){
             var info = table[name];
             if( info.nestingLevel == nestingLevel )
@@ -120,6 +123,17 @@ public static class SymbolTable{
             ),
             new Label("putc","putc")
         );
+
+        SymbolTable.declareGlobal(
+            new Token("ID","print",-1),
+            new FunctionNodeType(
+                returnType: NodeType.Void, 
+                paramTypes: new List<NodeType>(){NodeType.String},
+                builtin: true
+            ),
+            new Label("print","print")
+        );
+        
 
     }
 }

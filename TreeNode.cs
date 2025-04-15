@@ -33,7 +33,9 @@ public class TreeNode{
     //absolutely definitely positively no doubt about it returns.
     public bool returns=false;
 
-
+    //only defined for function declaration nodes
+    public List<Tuple<string,NodeType> > locals;
+    
     public TreeNode this[string childSym] {
         get {
             foreach( var c in this.children ){

@@ -469,6 +469,7 @@ public class ProductionsExpr{
             new("factor :: STRINGCONST",
                 setNodeTypes: (n) => {
                     n.nodeType = NodeType.String;
+                    StringPool.addString( n.children[0].token.lexeme );
                 },
                 generateCode: (n) => {
                     throw new NotImplementedException();

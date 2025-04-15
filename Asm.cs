@@ -62,6 +62,33 @@ public static class Asm{
             op.output(w);
         }
 
+        w.WriteLine($".section {Configuration.Configuration.readonlyDataSection}");
+
+        w.WriteLine("emptyString:");
+        w.WriteLine("    .quad 0  /* length */");
+
+        foreach( var oneString in StringPool.allStrings ){
+            w.WriteLine( $"{oneString.Value}:");
+            w.WriteLine($"     .quad {oneString.Key.Length}");
+            w.Write("    .byte ");
+            string comma = "";
+            foreach( var oneCharacter in oneString.Key ){
+                w.Write(comma);
+                w.Write((int)oneCharacter);       //write it to the file
+                comma=", ";
+            }
+            if(  oneString.Key.Length % 8 != 0 ){
+                int howMuch = 8-oneString.Key.Length % 8;
+                for(int i=0;i<howMuch;i++){
+                    w.Write(comma);
+                    w.Write('0');
+                }
+            }
+
+            w.WriteLine();
+
+        }
+
         w.WriteLine(".section .data");
         foreach( string name in SymbolTable.table.Keys){
             var vi = SymbolTable.table[name];
@@ -69,10 +96,12 @@ public static class Asm{
             if( vi.type as FunctionNodeType != null  )
                 continue;
             w.WriteLine( $"{loc.lbl}:   /* {loc.lbl.comment} */" );
-            w.WriteLine( "    .quad 0  /* storage class = primitive */");
-            w.WriteLine( "    .quad 0  /* value */");
+            w.WriteLine("    .quad 0  /* storage class */");
+            if( vi.type == NodeType.String )
+                w.WriteLine("    .quad emptyString  /* value */");
+            else
+                w.WriteLine("    .quad 0  /* value */");
         }
-
     }
 }
 

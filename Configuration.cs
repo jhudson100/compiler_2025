@@ -44,6 +44,8 @@ namespace Configuration{
             "ld.lld", "-o", "out.exe", "{}", "ExitProcess.o"
         };
 
+        public static string readonlyDataSection = ".rodata";
+
     }
 
 }

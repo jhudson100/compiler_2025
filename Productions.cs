@@ -44,6 +44,8 @@ public class Productions{
                         c.setNodeTypes();
                     }
                     n.numLocals = SymbolTable.numLocals;
+                    n.locals = new();
+                    n.locals.AddRange( SymbolTable.localTypes );
                     SymbolTable.leaveFunctionScope();
                 },
                 returnCheck: (n) => {
@@ -65,9 +67,23 @@ public class Productions{
                     Asm.add( new OpLabel(loc.lbl));
                     Asm.add( new OpPush( Register.rbp, StorageClass.NO_STORAGE_CLASS));
                     Asm.add( new OpMov( src: Register.rsp, dest: Register.rbp));
-                    if( n.numLocals > 0 ){
-                        Asm.add( new OpSub( Register.rsp, n.numLocals*16 ));
+
+                    foreach(var tmp in n.locals){
+                        string name = tmp.Item1;
+                        NodeType typ = tmp.Item2;
+                        if( typ as StringNodeType == null ){
+                            Asm.add( new OpComment( name ) );
+                            Asm.add( new OpMov( 0, Register.rax ) );
+                        } else {
+                            Asm.add( new OpComment( name ) );
+                            Asm.add( new OpMov(new Label("emptyString","emptyString"), Register.rax) );
+                        }
+                        Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE ) );
                     }
+
+                    //if( n.numLocals > 0 ){
+                    //    Asm.add( new OpSub( Register.rsp, n.numLocals*16 ));
+                    //}
                     n["stmts"].generateCode();
                     Utils.epilogue(n.lastToken());
                 }
