@@ -15,13 +15,22 @@ public class Productions{
                     SymbolTable.enterFunctionScope();
                     n["optionalPdecls"].setNodeTypes();
                     n["stmts"].setNodeTypes();
-
+                    n.numLocals = SymbolTable.numLocals;
                     SymbolTable.leaveFunctionScope();
                 },
                 generateCode: (n) => {
                     var loc = SymbolTable.lookup(n["ID"].token).location as GlobalLocation;
                     Asm.add(new OpLabel( loc.lbl ));
+
+                    Asm.add( new OpPush( Register.rbp, StorageClass.NO_STORAGE_CLASS));
+                    Asm.add( new OpMov( src: Register.rsp, dest: Register.rbp));
+
+                    VarInfo vi = SymbolTable.lookup(n["ID"].token); //lookup the function that we're in
+                    if( n.numLocals > 0 ){
+                        Asm.add( new OpSub( Register.rsp, n.numLocals*16, $"space for {n.numLocals} locals" ));
+                    }
                     n["stmts"].generateCode();
+                    Utils.epilogue(n.lastToken());
                 }
             ),
             new("braceblock :: LBRACE stmts RBRACE",
@@ -59,7 +68,14 @@ public class Productions{
             new("stmts :: stmt SEMI stmts"),
             new("stmts :: SEMI"),
             new("stmts :: lambda"),
-            new("stmt :: assign | cond | loop | vardecl | return | break | continue"),
+            new("stmt :: assign | cond | loop | vardecl | return | break | continue",
+                generateCode: (n) => {
+                    Asm.add(new OpComment($"begin statement {n.children[0].sym} at line {n.firstToken().line}"));
+                    foreach(var c in n.children)
+                        c.generateCode();
+                    Asm.add(new OpComment($"end statement {n.children[0].sym} at line {n.lastToken().line}"));
+                }
+            ),
             new("assign :: expr EQ expr",
                 setNodeTypes: (n) => {
                     n.children[0].setNodeTypes();
@@ -69,7 +85,23 @@ public class Productions{
                     }
                 },
                 generateCode: (n) => {
-                    throw new NotImplementedException();
+                    Asm.add(new OpComment("Assign: Push address of lhs to stack"));
+                    n.children[0].pushAddressToStack();
+                    Asm.add(new OpComment("Assign: Push value of rhs to stack"));
+                    n.children[2].generateCode();
+                    Asm.add(new OpComment("Assign: Copy value to memory"));
+                    //get the value (rhs) to rax
+                    //storage class to rbx
+                    Asm.add(new OpPop(Register.rax, Register.rbx));
+                    //address of variable is in rcx;
+                    //discard storage class (storage class of an
+                    //address is 0)
+                    Asm.add( new OpPop( Register.rcx, null));
+
+                    //Write data + storage to memory
+                    //Storage class first, then data
+                    Asm.add( new OpMov( src: Register.rbx, Register.rcx, 0));
+                    Asm.add( new OpMov( src: Register.rax, Register.rcx, 8));
                 }
             ),
             new("break :: BREAK",
@@ -180,11 +212,11 @@ public class Productions{
                 generateCode: (n) => {
                     n["expr"].generateCode();
                     Asm.add(new OpPop(Register.rax, null));
-                    Asm.add( new OpRet());
+                    Utils.epilogue(n["RETURN"].token);
                 }),
             new("return :: RETURN",
                 generateCode: (n) => {
-                    Asm.add( new OpRet());
+                    Utils.epilogue(n["RETURN"].token);
                 }
             ),
             new("vardecl :: VAR ID COLON TYPE",

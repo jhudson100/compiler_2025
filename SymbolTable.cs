@@ -5,7 +5,7 @@ public static class SymbolTable{
     public static Dictionary<string,VarInfo> table = new();
     static Stack<List<VarInfo>> shadowed = new();
     static Stack< HashSet<String> > locals = new();
-    static int numLocals = 0;
+    public static int numLocals = 0;
     static int numParameters=0;
 
     public static void enterFunctionScope(){ 
@@ -74,7 +74,7 @@ public static class SymbolTable{
             shadowed.Peek().Add(table[name]);
         }
         //locals.Count is the nesting level
-        table[name] = new VarInfo(token,locals.Count,type,new ParameterLocation(numParameters));
+        table[name] = new VarInfo(token,locals.Count,type,new ParameterLocation(numParameters,name));
         locals.Peek().Add(name);
         numParameters++;
     }

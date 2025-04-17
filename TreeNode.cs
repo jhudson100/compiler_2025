@@ -23,6 +23,10 @@ public class TreeNode{
     public Label loopTest;
     public Label loopExit;
 
+    //only meaningful for fundecl nodes: Number of locals
+    //declared in that function
+    public int numLocals = -1;
+
     public TreeNode this[string childSym] {
         get {
             foreach( var c in this.children ){
@@ -172,6 +176,29 @@ public class TreeNode{
         throw new Exception("No such child");
     }
 
+    public Token firstToken(){
+        if( this.token != null)
+            return this.token;
+        foreach(var c in this.children){
+            Token t = c.firstToken();
+            if(t!=null)
+                return t;
+        }
+        return null;
+    }
+    public Token lastToken(){
+        if( this.token != null)
+            return this.token;
+        for(int i=this.children.Count-1;i>=0;i--){
+            Token t = this.children[i].lastToken();
+            if(t!=null)
+                return t;
+        }
+        return null;
+    }
+ 
+ 
+
     public void collectClassNames(){
         this.production?.pspec.collectClassNames(this);
     }
@@ -188,17 +215,11 @@ public class TreeNode{
         this.production?.pspec.generateCode(this);
     }
 
-    public Token firstToken(){
-        if( this.token != null )
-            return this.token;
-        else {
-            foreach(var c in children){
-                var t = c.firstToken();
-                if(t != null )
-                    return t;
-            }
-            return null;
-        }
+    public void pushAddressToStack(){
+        if( this.production != null )
+            this.production.pspec.pushAddressToStack(this);
+        else
+            Utils.error(this.firstToken(),"Cannot get address");
     }
 
 } //end TreeNode
