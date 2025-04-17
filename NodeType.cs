@@ -2,7 +2,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace lab{
-    
+
 
 public abstract class NodeType {
     public readonly string friendlyName;
@@ -43,6 +43,8 @@ public abstract class NodeType {
     public static readonly VoidNodeType Void = new ();
 
     public static NodeType typeFromToken(Token t){
+        if( t.sym != "TYPE" )
+            throw new Exception("ICE:");
         switch(t.lexeme){
             case "int": return NodeType.Int;
             case "float": return NodeType.Float;
@@ -78,7 +80,7 @@ public class FunctionNodeType: NodeType {
     public bool builtin;
 
     public FunctionNodeType(
-        NodeType returnType, 
+        NodeType returnType,
         List<NodeType> paramTypes,
         bool builtin
     ): base("func") {

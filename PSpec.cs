@@ -53,23 +53,24 @@ public class PSpec {
                 n.nodeType = n.children[0].nodeType;
         }
     }
-    
+
     void defaultGenerateCode(TreeNode n){
         foreach(TreeNode c in n.children){
             c.generateCode();
         }
     }
+
+    void defaultReturnCheck(TreeNode n){
+        foreach( var c in n.children )
+            c.returnCheck();
+    }
+
     public static void defaultPushAddressToStack(TreeNode n){
          if( n.children.Count == 1 )
              n.children[0].pushAddressToStack();
          else
              Utils.error(n.firstToken(), "Expected lvalue");
-    }
-    
-    void defaultReturnCheck(TreeNode n){
-        foreach( var c in n.children )
-            c.returnCheck();
-    }
+     }
 
 }
 

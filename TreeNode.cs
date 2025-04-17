@@ -28,14 +28,14 @@ public class TreeNode{
     //for loop nodes
     public Label loopTest;
     public Label loopExit;
-    
+
     //true if we can prove that some code under this node
     //absolutely definitely positively no doubt about it returns.
     public bool returns=false;
 
     //only defined for function declaration nodes
     public List<Tuple<string,NodeType> > locals;
-    
+
     public TreeNode this[string childSym] {
         get {
             foreach( var c in this.children ){
@@ -77,7 +77,7 @@ public class TreeNode{
         this.children.Insert(0,n);
     }
 
-   
+
     public void toJson(StreamWriter w, string prefix=""){
         string prefix0=prefix;
         prefix += "  ";
@@ -120,11 +120,11 @@ public class TreeNode{
     }
 
     public void print(string prefix=""){
-        
+
         string HLINE = "─"; // (Unicode \u2500)
         string VLINE = "│";  //(\u2502)
         string TEE = "├";  //(\u251c)
-        string ELL = "└"; // (\u2514) 
+        string ELL = "└"; // (\u2514)
 
         bool lastChild = this.parent != null && this == this.parent.children[^1];
         //if this node is the last child
@@ -184,12 +184,28 @@ public class TreeNode{
         throw new Exception("No such child");
     }
 
-    public void pushAddressToStack(){
-        if( this.production != null )
-            this.production.pspec.pushAddressToStack(this);
-        else
-            Utils.error(this.firstToken(),"Cannot get address");
+    public Token firstToken(){
+        if( this.token != null)
+            return this.token;
+        foreach(var c in this.children){
+            Token t = c.firstToken();
+            if(t!=null)
+                return t;
+        }
+        return null;
     }
+    public Token lastToken(){
+        if( this.token != null)
+            return this.token;
+        for(int i=this.children.Count-1;i>=0;i--){
+            Token t = this.children[i].lastToken();
+            if(t!=null)
+                return t;
+        }
+        return null;
+    }
+
+
 
     public void collectClassNames(){
         this.production?.pspec.collectClassNames(this);
@@ -207,28 +223,11 @@ public class TreeNode{
         this.production?.pspec.generateCode(this);
     }
 
-    public Token firstToken(){
-        if( this.token != null )
-            return this.token;
-        else {
-            foreach(var c in children){
-                var t = c.firstToken();
-                if(t != null )
-                    return t;
-            }
-            return null;
-        }
-    }
- 
-    public Token lastToken(){
-        if( this.token != null)
-            return this.token;
-        for(int i=this.children.Count-1;i>=0;i--){
-            Token t = this.children[i].lastToken();
-            if(t!=null)
-                return t;
-        }
-        return null;
+    public void pushAddressToStack(){
+        if( this.production != null )
+            this.production.pspec.pushAddressToStack(this);
+        else
+            Utils.error(this.firstToken(),"Cannot get address");
     }
 
     public void returnCheck(){

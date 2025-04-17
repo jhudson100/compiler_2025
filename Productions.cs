@@ -80,10 +80,6 @@ public class Productions{
                         }
                         Asm.add( new OpPush( Register.rax, StorageClass.PRIMITIVE ) );
                     }
-
-                    //if( n.numLocals > 0 ){
-                    //    Asm.add( new OpSub( Register.rsp, n.numLocals*16 ));
-                    //}
                     n["stmts"].generateCode();
                     Utils.epilogue(n.lastToken());
                 }
@@ -102,7 +98,7 @@ public class Productions{
                         n.nodeType = NodeType.Void;
                     else
                         n.nodeType = NodeType.typeFromToken(n["TYPE"].token);
-                } 
+                }
             ),
             new("optionalSemi :: lambda | SEMI"),
             new("optionalPdecls :: lambda | pdecls"),
@@ -132,7 +128,15 @@ public class Productions{
             new("stmts :: stmt SEMI stmts"),
             new("stmts :: SEMI"),
             new("stmts :: lambda"),
-            new("stmt :: assign | cond | loop | vardecl | return | break | continue"),
+
+            new("stmt :: assign | cond | loop | vardecl | return | break | continue",
+                generateCode: (n) => {
+                    Asm.add(new OpComment($"begin statement {n.children[0].sym} at line {n.firstToken().line}"));
+                    foreach(var c in n.children)
+                        c.generateCode();
+                    Asm.add(new OpComment($"end statement {n.children[0].sym} at line {n.lastToken().line}"));
+                }
+            ),
 
             new( "break :: BREAK",
                 generateCode: (n) => {
@@ -170,7 +174,7 @@ public class Productions{
                     }
                 }
             ),
- 
+
             new("assign :: expr EQ expr",
                 setNodeTypes: (n) => {
                     n.children[0].setNodeTypes();
@@ -180,8 +184,12 @@ public class Productions{
                     }
                 },
                 generateCode: (n) => {
+                    Asm.add(new OpComment("Assign: Push address of lhs to stack"));
                     n.children[0].pushAddressToStack();
+                    Asm.add(new OpComment("Assign: Push value of rhs to stack"));
                     n.children[2].generateCode();
+                    Asm.add(new OpComment("Assign: Copy value to memory"));
+
                     //get the value (rhs) to rax
                     //storage class to rbx
                     Asm.add(new OpPop(Register.rax, Register.rbx));
@@ -224,7 +232,7 @@ public class Productions{
                 generateCode: (n) => {
                     var elseLabel = new Label($"else at line {n["ELSE"].token.line}");
                     var endifLabel = new Label($"end of if starting at line {n["IF"].token.line}");
-                    
+
                     //make code for expr; leave result on stack
                     n["expr"].generateCode();
 
@@ -299,15 +307,14 @@ public class Productions{
                     var retType = p["optionalReturn"].nodeType;
                     var gotType = n["expr"].nodeType ;
                     if( gotType != retType ){
-                        Utils.error(n["RETURN"].token, 
+                        Utils.error(n["RETURN"].token,
                             $"Return type mismatch: Expected {retType} but got {gotType}"
                         );
                     }
 
                 },
                 generateCode: (n) => {
-
-                    Asm.add(new OpComment( 
+                    Asm.add(new OpComment(
                             $"Return at line {n.children[0].token.line}"));
                     n["expr"].generateCode();   //leaves value on top of stack
 
@@ -316,7 +323,6 @@ public class Productions{
                     //in rbx
                     Asm.add( new OpPop(Register.rax,Register.rbx));
                     Utils.epilogue(n["RETURN"].token);
-                
                 }),
             new("return :: RETURN",
                 setNodeTypes: (n) => {
@@ -344,17 +350,17 @@ public class Productions{
                     throw new Exception("FINISH ME");
                 }
             ),
-             
+
             new("vardecl :: VAR ID COLON ID",        //for user-defined types
                 setNodeTypes: (n) => {
                     throw new NotImplementedException();
                 }
-            ), 
+            ),
             new("vardecl :: VAR ID COLON ID EQ expr",       //for user-defined types
                 setNodeTypes: (n) => {
                     throw new NotImplementedException();
                 }
-            ),  
+            ),
 
         });
 

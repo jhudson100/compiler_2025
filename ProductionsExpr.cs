@@ -232,7 +232,7 @@ public class ProductionsExpr{
                     foreach(var c in n.children){
                         c.setNodeTypes();
                     }
-                    binary( n, 
+                    binary( n,
                         new NodeType[]{NodeType.Int, NodeType.Float, NodeType.String},
                         null
                     );
@@ -405,7 +405,7 @@ public class ProductionsExpr{
                         Asm.add( new OpMov( Register.rsp, Register.rcx));
                     }
 
-                    Asm.add( new OpCall( Register.rax, 
+                    Asm.add( new OpCall( Register.rax,
                         $"function call at line {n["LPAREN"].token.line}"));
                     Asm.add( new OpAdd( Register.rsp, ftype.paramTypes.Count * 16 ));
                     //function return value came back in rax

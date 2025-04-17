@@ -1,5 +1,5 @@
 namespace lab{
-    
+
 public static class SymbolTable{
 
     public static Dictionary<string,VarInfo> table = new();
@@ -10,7 +10,7 @@ public static class SymbolTable{
     static int numParameters = 0;
     public static List<Tuple<string,NodeType>> localTypes = new();     //name and type of all locals
 
-    public static void enterFunctionScope(){ 
+    public static void enterFunctionScope(){
         numParameters = 0;
         numLocals = 0;
         nestingLevel++;
@@ -37,7 +37,7 @@ public static class SymbolTable{
     }
 
     static void removeVariablesFromTableWithNestingLevelGreaterThanThreshold(int v){
-        //delete anything from table where 
+        //delete anything from table where
         //table thing's nestinglevel > v
         var toRemove = new List<string>();
         foreach(var name in table.Keys){
@@ -55,7 +55,7 @@ public static class SymbolTable{
         }
         shadowed.Pop();
     }
-    
+
 
     public static VarInfo lookup(Token id){
         string name = id.lexeme;
@@ -70,7 +70,7 @@ public static class SymbolTable{
         return table[name];
     }
 
-    public static void declareGlobal(Token token, NodeType type, Label lbl=null){ 
+    public static void declareGlobal(Token token, NodeType type, Label lbl=null){
         if(lbl == null)
             lbl = new Label(token.lexeme);
         if( table.ContainsKey(token.lexeme) )
@@ -96,7 +96,7 @@ public static class SymbolTable{
         numLocals++;
     }
 
-    public static void declareParameter(Token token, NodeType type){ 
+    public static void declareParameter(Token token, NodeType type){
         string name = token.lexeme;
         if( table.ContainsKey(name)){
             var info = table[name];
@@ -111,13 +111,13 @@ public static class SymbolTable{
         numParameters++;
     }
 
-    public static bool currentlyInGlobalScope(){ 
+    public static bool currentlyInGlobalScope(){
         return locals.Count == 0;
     }
     public static void populateBuiltins(){
         SymbolTable.declareGlobal(new Token("ID","putc",-1),
             new FunctionNodeType(
-                returnType: NodeType.Int, 
+                returnType: NodeType.Int,
                 paramTypes: new List<NodeType>(){NodeType.Int},
                 builtin: true
             ),
@@ -127,13 +127,13 @@ public static class SymbolTable{
         SymbolTable.declareGlobal(
             new Token("ID","print",-1),
             new FunctionNodeType(
-                returnType: NodeType.Void, 
+                returnType: NodeType.Void,
                 paramTypes: new List<NodeType>(){NodeType.String},
                 builtin: true
             ),
             new Label("print","print")
         );
-        
+
 
     }
 }

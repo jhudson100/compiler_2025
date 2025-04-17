@@ -14,7 +14,7 @@ namespace lab{
         }
 
         public override void output(StreamWriter w){
-            w.WriteLine($"    lea ${offset}({src}), {dest}  /* {comment} */");
+            w.WriteLine($"    lea {offset}({src}), {dest}  /* {comment} */");
         }
     }
 

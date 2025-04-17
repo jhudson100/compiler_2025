@@ -1,5 +1,5 @@
 namespace lab{
-    
+
     public static class Utils{
         public static void error(string msg){
             Utils.error( (Token)null, msg );
@@ -17,7 +17,7 @@ namespace lab{
             Asm.add( new OpPop( Register.rbp, StorageClass.NO_STORAGE_CLASS));
             Asm.add( new OpRet());
         }
-        
+
         public delegate bool WalkCallback(TreeNode n);
         public static void walk(TreeNode root, WalkCallback f){
             if( false == f(root) )
