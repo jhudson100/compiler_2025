@@ -1,6 +1,7 @@
 typedef void*                   HANDLE;
 typedef unsigned                DWORD; //32 bits
 typedef signed long long        int64_t;
+typedef unsigned long long        uint64_t;
 _Static_assert( sizeof(DWORD)       == 4, "DWORD bad");
 _Static_assert( sizeof(int64_t)     == 8, "int64_t bad");
 #define NULL ((void*)0)
@@ -56,4 +57,12 @@ __attribute__((ms_abi)) void print(StackVar stk[])
         numLeft -= count;
         p += count;
     }
+}
+
+__attribute__((ms_abi)) String* concatenateStrings(
+            StackVar* stk, uint64_t* rbp) 
+{
+    String* s = (String*) stk[0].value;
+    String* t = (String*) stk[1].value;
+    ....
 }

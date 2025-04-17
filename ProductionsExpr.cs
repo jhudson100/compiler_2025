@@ -252,6 +252,18 @@ public class ProductionsExpr{
                             case "-": binaryOpF( n, new OpSubF( Register.xmm0, Register.xmm1)); break;
                             default: throw new Exception();
                         }
+                    } else if( n.nodeType == NodeType.String){
+                        n.children[0].generateCode();
+                        n.children[2].generateCode();
+                        Asm.add( new OpMov( new Label("concatenateStrings","concatenateStrings"),
+                                            Register.rax) );
+                        Asm.add( new OpMov( Register.rsp, Register.rcx ) );
+                        Asm.add( new OpMov( Register.rbp, Register.rdx ) );
+                        Asm.add( new OpSub( Register.rsp , 32 ) );
+                        Asm.add( new OpCall( Register.rax, "call concatenateStrings" ) );
+                        //32 for shadow space, 32 for two operands
+                        Asm.add( new OpAdd( Register.rsp , 32+32 ) );
+                        Asm.add( new OpPush( Register.rax, StorageClass.HEAP) );
                     } else {
                         throw new NotImplementedException();
 
