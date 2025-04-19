@@ -30,7 +30,8 @@ public class CompilersAreGreat{
         var T = new Tokenizer(inp);
         TreeNode root = Parser.parse(T);
 
-
+        SymbolTable.populateBuiltins();
+        
         root.collectClassNames();
         root.collectFunctionNames();
         root.setNodeTypes();

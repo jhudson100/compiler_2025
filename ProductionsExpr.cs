@@ -342,7 +342,56 @@ public class ProductionsExpr{
             //array, member, function call
             new("amfexp :: amfexp DOT factor"),
             new("amfexp :: amfexp LBRACKET expr RBRACKET"),
-            new("amfexp :: amfexp LPAREN calllist RPAREN"),
+            new("amfexp :: amfexp LPAREN call-list RPAREN",
+                setNodeTypes: (n) => {
+                    foreach(var c in n.children)
+                        c.setNodeTypes();
+                    var ftype = n.children[0].nodeType as FunctionNodeType;
+                    if(ftype == null )
+                        Utils.error(n["LPAREN"].token, "Cannot call non-function");
+                    n.nodeType = ftype.returnType;
+
+                    List<NodeType> actualTypes = new();
+                    Utils.walk( n["call-list"], (c) => {
+                        if( c.sym == "expr" ){
+                            actualTypes.Add(c.nodeType);
+                            //stop because if we have nested function calls, we don't
+                            //want to look at them too!
+                            return false;
+                        }
+                        return true;
+                    });
+
+                    if( actualTypes.Count != ftype.paramTypes.Count){
+                        Utils.error(n["LPAREN"].token, "Argument count mismatch");
+                    }
+                    for(var i=0;i<actualTypes.Count;++i){
+                        if(actualTypes[i] != ftype.paramTypes[i]){
+                            Utils.error(n["LPAREN"].token,
+                                $"Argument {i+1}: Type mismatch");
+                        }
+                    }
+                },
+                generateCode: (n) => {
+                    n["call-list"].generateCode();
+                    var ftype = n.children[0].nodeType as FunctionNodeType;
+                    int line = n.firstToken().line;
+                    n.children[0].pushAddressToStack();
+                    Asm.add(new OpPop(Register.rax,null));
+                    Asm.add(new OpMov(Register.rsp,Register.rcx));
+                    Asm.add(new OpSub(Register.rsp,32));    //shadow space
+                    Asm.add(new OpCall(Register.rax,$"line {line}"));
+                    Asm.add(new OpAdd(Register.rsp, 32 + ftype.paramTypes.Count * 16 ));
+                    if( ftype.returnType == NodeType.Void ){
+                    } else if( ftype.returnType == NodeType.Bool || 
+                               ftype.returnType == NodeType.Int ){
+                        Asm.add(new OpPush(Register.rax,StorageClass.PRIMITIVE));
+                    } else {
+                        throw new NotImplementedException();
+                    }
+
+                }
+            ),
             new("amfexp :: factor"),
 
             //indivisible atom
@@ -418,10 +467,15 @@ public class ProductionsExpr{
             //function call
             //calllist = zero or more arguments
             //calllist2 = 1 or more arguments
-            new("calllist :: lambda"),
-            new("calllist :: calllist2 COMMA expr"),
-            new("calllist2 :: expr"),
-            new("calllist2 :: calllist2 COMMA expr")
+            new("call-list :: lambda"),
+            new("call-list :: call-list2"),
+            new("call-list2 :: expr"),
+            new("call-list2 :: expr COMMA call-list2",
+                generateCode: (n) => {
+                    n.children[2].generateCode();
+                    n.children[0].generateCode();
+                }
+            )
 
         });
 

@@ -17,6 +17,16 @@ namespace lab{
             Asm.add( new OpPop( Register.rbp, StorageClass.NO_STORAGE_CLASS));
             Asm.add( new OpRet());
         }
+
+        public delegate bool WalkCallback(TreeNode n);
+        public static void walk(TreeNode n, WalkCallback f){
+            if( !f(n) )
+                return;
+            foreach(var c in n.children){
+                walk(c,f);
+            }
+        }
+        
     } //Utils
 
 } //namespace

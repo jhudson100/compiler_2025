@@ -16,7 +16,8 @@ public static class Parser{
             if( !row.ContainsKey(tok.sym) ){
                 Console.WriteLine($"At line number {tok.line}:");
                 Console.WriteLine($"Unexpected token {tok.sym} ({tok.lexeme})");
-                Console.WriteLine("I expected to see one of:");
+                Console.WriteLine($"In DFA state {currentState}:");
+                Console.WriteLine("Expected to see one of:");
                 foreach(string sym in row.Keys){
                     if( Grammar.isTerminal(sym) )
                         Console.Write($"{sym} ");

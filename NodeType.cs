@@ -76,9 +76,18 @@ public class StringNodeType : NodeType {
 }
 
 public class FunctionNodeType: NodeType {
-    public FunctionNodeType(): base("func") {}
+    public NodeType returnType;
+    public List<NodeType> paramTypes;
+
+    public FunctionNodeType(NodeType returnType, List<NodeType> paramTypes): base("func") {
+        this.returnType = returnType;
+        this.paramTypes = paramTypes;
+    }
 
     public override bool Equals(Object o){
+        var f = o as FunctionNodeType;
+        if( f == null )
+            return false;
         throw new Exception("TBD");
     }
 

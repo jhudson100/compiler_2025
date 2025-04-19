@@ -30,7 +30,7 @@ public static class ParseTable{
         // DFA STATE 1
         // S' :: S • ║ $
         new Dictionary<string,ParseAction>(){
-            {"$",new ParseAction(PAction.REDUCE, 1, "S'", 86)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "S'", 87)},
         },
         // DFA STATE 2
         // S :: decls • ║ $
@@ -173,22 +173,22 @@ public static class ParseTable{
         // vardecl :: VAR ID COLON TYPE • EQ expr ║ SEMI FUNC CLASS VAR $
         new Dictionary<string,ParseAction>(){
                 {"EQ" , new ParseAction(PAction.SHIFT, 74, null, -1)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 4, "vardecl", 43)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 4, "vardecl", 43)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 4, "vardecl", 43)},
-            {"VAR",new ParseAction(PAction.REDUCE, 4, "vardecl", 43)},
-            {"$",new ParseAction(PAction.REDUCE, 4, "vardecl", 43)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 4, "vardecl", 44)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 4, "vardecl", 44)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 4, "vardecl", 44)},
+            {"VAR",new ParseAction(PAction.REDUCE, 4, "vardecl", 44)},
+            {"$",new ParseAction(PAction.REDUCE, 4, "vardecl", 44)},
         },
         // DFA STATE 13
         // vardecl :: VAR ID COLON ID • ║ SEMI FUNC CLASS VAR $
         // vardecl :: VAR ID COLON ID • EQ expr ║ SEMI FUNC CLASS VAR $
         new Dictionary<string,ParseAction>(){
                 {"EQ" , new ParseAction(PAction.SHIFT, 14, null, -1)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 4, "vardecl", 45)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 4, "vardecl", 45)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 4, "vardecl", 45)},
-            {"VAR",new ParseAction(PAction.REDUCE, 4, "vardecl", 45)},
-            {"$",new ParseAction(PAction.REDUCE, 4, "vardecl", 45)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 4, "vardecl", 46)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 4, "vardecl", 46)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 4, "vardecl", 46)},
+            {"VAR",new ParseAction(PAction.REDUCE, 4, "vardecl", 46)},
+            {"$",new ParseAction(PAction.REDUCE, 4, "vardecl", 46)},
         },
         // DFA STATE 14
         // vardecl :: VAR ID COLON ID EQ • expr ║ SEMI FUNC CLASS VAR $
@@ -219,7 +219,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -256,57 +256,57 @@ public static class ParseTable{
         // DFA STATE 15
         // vardecl :: VAR ID COLON ID EQ expr • ║ SEMI FUNC CLASS VAR $
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 6, "vardecl", 46)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 6, "vardecl", 46)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 6, "vardecl", 46)},
-            {"VAR",new ParseAction(PAction.REDUCE, 6, "vardecl", 46)},
-            {"$",new ParseAction(PAction.REDUCE, 6, "vardecl", 46)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 6, "vardecl", 47)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 6, "vardecl", 47)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 6, "vardecl", 47)},
+            {"VAR",new ParseAction(PAction.REDUCE, 6, "vardecl", 47)},
+            {"$",new ParseAction(PAction.REDUCE, 6, "vardecl", 47)},
         },
         // DFA STATE 16
         // expr :: orexp • ║ SEMI FUNC CLASS VAR $ RPAREN RBRACKET COMMA EQ
         // orexp :: orexp • OROP andexp ║ SEMI FUNC CLASS VAR $ RPAREN RBRACKET COMMA EQ OROP
         new Dictionary<string,ParseAction>(){
                 {"OROP" , new ParseAction(PAction.SHIFT, 72, null, -1)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "expr", 47)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "expr", 47)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "expr", 47)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "expr", 47)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "expr", 47)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "expr", 47)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "expr", 47)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "expr", 47)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "expr", 47)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "expr", 48)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "expr", 48)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "expr", 48)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "expr", 48)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "expr", 48)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "expr", 48)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "expr", 48)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "expr", 48)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "expr", 48)},
         },
         // DFA STATE 17
         // orexp :: andexp • ║ SEMI FUNC CLASS VAR $ OROP RPAREN RBRACKET COMMA EQ
         // andexp :: andexp • ANDOP relexp ║ SEMI FUNC CLASS VAR $ OROP RPAREN RBRACKET COMMA EQ ANDOP
         new Dictionary<string,ParseAction>(){
                 {"ANDOP" , new ParseAction(PAction.SHIFT, 70, null, -1)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "orexp", 49)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "orexp", 50)},
         },
         // DFA STATE 18
         // andexp :: relexp • ║ SEMI FUNC CLASS VAR $ OROP ANDOP RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "andexp", 51)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "andexp", 52)},
         },
         // DFA STATE 19
         // relexp :: bitexp • RELOP bitexp ║ SEMI FUNC CLASS VAR $ OROP ANDOP RPAREN RBRACKET COMMA EQ
@@ -315,119 +315,119 @@ public static class ParseTable{
         new Dictionary<string,ParseAction>(){
                 {"RELOP" , new ParseAction(PAction.SHIFT, 66, null, -1)},
                 {"BITOP" , new ParseAction(PAction.SHIFT, 67, null, -1)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "relexp", 53)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "relexp", 54)},
         },
         // DFA STATE 20
         // bitexp :: shiftexp • ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP RPAREN RBRACKET COMMA EQ
         // shiftexp :: shiftexp • SHIFTOP sumexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP RPAREN RBRACKET COMMA EQ SHIFTOP
         new Dictionary<string,ParseAction>(){
                 {"SHIFTOP" , new ParseAction(PAction.SHIFT, 64, null, -1)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "bitexp", 55)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "bitexp", 56)},
         },
         // DFA STATE 21
         // shiftexp :: sumexp • ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP RPAREN RBRACKET COMMA EQ
         // sumexp :: sumexp • ADDOP prodexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP RPAREN RBRACKET COMMA EQ ADDOP
         new Dictionary<string,ParseAction>(){
                 {"ADDOP" , new ParseAction(PAction.SHIFT, 62, null, -1)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "shiftexp", 57)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "shiftexp", 58)},
         },
         // DFA STATE 22
         // sumexp :: prodexp • ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP RPAREN RBRACKET COMMA EQ
         // prodexp :: prodexp • MULOP powexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP RPAREN RBRACKET COMMA EQ MULOP
         new Dictionary<string,ParseAction>(){
                 {"MULOP" , new ParseAction(PAction.SHIFT, 60, null, -1)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "sumexp", 59)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "sumexp", 60)},
         },
         // DFA STATE 23
         // prodexp :: powexp • ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "prodexp", 61)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "prodexp", 62)},
         },
         // DFA STATE 24
         // powexp :: unaryexp • POWOP powexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
         // powexp :: unaryexp • ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
                 {"POWOP" , new ParseAction(PAction.SHIFT, 58, null, -1)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "powexp", 63)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "powexp", 64)},
         },
         // DFA STATE 25
         // unaryexp :: BITNOTOP • unaryexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
@@ -441,7 +441,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
@@ -478,7 +478,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
@@ -515,7 +515,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
@@ -543,23 +543,23 @@ public static class ParseTable{
         // DFA STATE 28
         // unaryexp :: preincexp • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "unaryexp", 67)},
+            {"POWOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "unaryexp", 68)},
         },
         // DFA STATE 29
         // preincexp :: PLUSPLUS • preincexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
@@ -569,7 +569,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
@@ -595,101 +595,101 @@ public static class ParseTable{
         // postincexp :: postincexp • PLUSPLUS ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ PLUSPLUS
         new Dictionary<string,ParseAction>(){
                 {"PLUSPLUS" , new ParseAction(PAction.SHIFT, 53, null, -1)},
-            {"POWOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "preincexp", 69)},
+            {"POWOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "preincexp", 70)},
         },
         // DFA STATE 31
         // postincexp :: amfexp • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ
         // amfexp :: amfexp • DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ DOT LBRACKET LPAREN
         // amfexp :: amfexp • LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT RPAREN RBRACKET COMMA EQ LBRACKET LPAREN
-        // amfexp :: amfexp • LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET RPAREN RBRACKET COMMA EQ LPAREN
+        // amfexp :: amfexp • LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET RPAREN RBRACKET COMMA EQ LPAREN
         new Dictionary<string,ParseAction>(){
                 {"DOT" , new ParseAction(PAction.SHIFT, 41, null, -1)},
                 {"LBRACKET" , new ParseAction(PAction.SHIFT, 42, null, -1)},
                 {"LPAREN" , new ParseAction(PAction.SHIFT, 43, null, -1)},
-            {"POWOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "postincexp", 71)},
+            {"POWOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "postincexp", 72)},
         },
         // DFA STATE 32
         // amfexp :: factor • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"DOT",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"LBRACKET",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"LPAREN",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "amfexp", 75)},
+            {"POWOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"DOT",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"LBRACKET",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"LPAREN",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "amfexp", 76)},
         },
         // DFA STATE 33
         // factor :: NUM • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"DOT",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"LBRACKET",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"LPAREN",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "factor", 76)},
+            {"POWOP",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"DOT",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"LBRACKET",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"LPAREN",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "factor", 77)},
         },
         // DFA STATE 34
         // factor :: LPAREN • expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
@@ -720,7 +720,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -757,31 +757,6 @@ public static class ParseTable{
         // DFA STATE 35
         // factor :: ID • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"VAR",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"$",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"OROP",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"DOT",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"LBRACKET",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"LPAREN",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-            {"EQ",new ParseAction(PAction.REDUCE, 1, "factor", 78)},
-        },
-        // DFA STATE 36
-        // factor :: FNUM • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
-        new Dictionary<string,ParseAction>(){
             {"POWOP",new ParseAction(PAction.REDUCE, 1, "factor", 79)},
             {"RELOP",new ParseAction(PAction.REDUCE, 1, "factor", 79)},
             {"SEMI",new ParseAction(PAction.REDUCE, 1, "factor", 79)},
@@ -804,8 +779,8 @@ public static class ParseTable{
             {"COMMA",new ParseAction(PAction.REDUCE, 1, "factor", 79)},
             {"EQ",new ParseAction(PAction.REDUCE, 1, "factor", 79)},
         },
-        // DFA STATE 37
-        // factor :: STRINGCONST • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
+        // DFA STATE 36
+        // factor :: FNUM • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
             {"POWOP",new ParseAction(PAction.REDUCE, 1, "factor", 80)},
             {"RELOP",new ParseAction(PAction.REDUCE, 1, "factor", 80)},
@@ -829,8 +804,8 @@ public static class ParseTable{
             {"COMMA",new ParseAction(PAction.REDUCE, 1, "factor", 80)},
             {"EQ",new ParseAction(PAction.REDUCE, 1, "factor", 80)},
         },
-        // DFA STATE 38
-        // factor :: BOOLCONST • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
+        // DFA STATE 37
+        // factor :: STRINGCONST • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
             {"POWOP",new ParseAction(PAction.REDUCE, 1, "factor", 81)},
             {"RELOP",new ParseAction(PAction.REDUCE, 1, "factor", 81)},
@@ -854,6 +829,31 @@ public static class ParseTable{
             {"COMMA",new ParseAction(PAction.REDUCE, 1, "factor", 81)},
             {"EQ",new ParseAction(PAction.REDUCE, 1, "factor", 81)},
         },
+        // DFA STATE 38
+        // factor :: BOOLCONST • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
+        new Dictionary<string,ParseAction>(){
+            {"POWOP",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"VAR",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"$",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"OROP",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"DOT",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"LBRACKET",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"LPAREN",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+            {"EQ",new ParseAction(PAction.REDUCE, 1, "factor", 82)},
+        },
         // DFA STATE 39
         // factor :: LPAREN expr • RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
@@ -862,27 +862,27 @@ public static class ParseTable{
         // DFA STATE 40
         // factor :: LPAREN expr RPAREN • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"DOT",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"LBRACKET",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"LPAREN",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "factor", 77)},
+            {"POWOP",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"DOT",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"LBRACKET",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"LPAREN",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "factor", 78)},
         },
         // DFA STATE 41
         // amfexp :: amfexp DOT • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ DOT LBRACKET LPAREN
@@ -930,7 +930,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP RBRACKET OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP RBRACKET OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP RBRACKET OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP RBRACKET OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP RBRACKET OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP RBRACKET OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP RBRACKET OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP RBRACKET OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -965,94 +965,11 @@ public static class ParseTable{
                 {"BOOLCONST" , new ParseAction(PAction.SHIFT, 38, null, -1)},
         },
         // DFA STATE 43
-        // amfexp :: amfexp LPAREN • calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET RPAREN RBRACKET COMMA EQ LPAREN
-        // calllist :: • ║ RPAREN
-        // calllist :: • calllist2 COMMA expr ║ RPAREN
-        // calllist2 :: • expr ║ COMMA
-        // calllist2 :: • calllist2 COMMA expr ║ COMMA
-        // expr :: • orexp ║ COMMA
-        // orexp :: • orexp OROP andexp ║ COMMA OROP
-        // orexp :: • andexp ║ COMMA OROP
-        // andexp :: • andexp ANDOP relexp ║ COMMA OROP ANDOP
-        // andexp :: • relexp ║ COMMA OROP ANDOP
-        // relexp :: • bitexp RELOP bitexp ║ COMMA OROP ANDOP
-        // relexp :: • bitexp ║ COMMA OROP ANDOP
-        // bitexp :: • bitexp BITOP shiftexp ║ RELOP COMMA OROP ANDOP BITOP
-        // bitexp :: • shiftexp ║ RELOP COMMA OROP ANDOP BITOP
-        // shiftexp :: • shiftexp SHIFTOP sumexp ║ RELOP COMMA OROP ANDOP BITOP SHIFTOP
-        // shiftexp :: • sumexp ║ RELOP COMMA OROP ANDOP BITOP SHIFTOP
-        // sumexp :: • sumexp ADDOP prodexp ║ RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP
-        // sumexp :: • prodexp ║ RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP
-        // prodexp :: • prodexp MULOP powexp ║ RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // prodexp :: • powexp ║ RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // powexp :: • unaryexp POWOP powexp ║ RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // powexp :: • unaryexp ║ RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • BITNOTOP unaryexp ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • ADDOP unaryexp ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • NOTOP unaryexp ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • preincexp ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // preincexp :: • PLUSPLUS preincexp ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // preincexp :: • postincexp ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // postincexp :: • postincexp PLUSPLUS ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
-        // postincexp :: • amfexp ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
-        // amfexp :: • amfexp DOT factor ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • factor ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • NUM ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • LPAREN expr RPAREN ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • ID ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • FNUM ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • STRINGCONST ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • BOOLCONST ║ POWOP RELOP COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        new Dictionary<string,ParseAction>(){
-                {"calllist" , new ParseAction(PAction.SHIFT, 44, null, -1)},
-                {"calllist2" , new ParseAction(PAction.SHIFT, 45, null, -1)},
-                {"expr" , new ParseAction(PAction.SHIFT, 46, null, -1)},
-                {"orexp" , new ParseAction(PAction.SHIFT, 16, null, -1)},
-                {"andexp" , new ParseAction(PAction.SHIFT, 17, null, -1)},
-                {"relexp" , new ParseAction(PAction.SHIFT, 18, null, -1)},
-                {"bitexp" , new ParseAction(PAction.SHIFT, 19, null, -1)},
-                {"shiftexp" , new ParseAction(PAction.SHIFT, 20, null, -1)},
-                {"sumexp" , new ParseAction(PAction.SHIFT, 21, null, -1)},
-                {"prodexp" , new ParseAction(PAction.SHIFT, 22, null, -1)},
-                {"powexp" , new ParseAction(PAction.SHIFT, 23, null, -1)},
-                {"unaryexp" , new ParseAction(PAction.SHIFT, 24, null, -1)},
-                {"BITNOTOP" , new ParseAction(PAction.SHIFT, 25, null, -1)},
-                {"ADDOP" , new ParseAction(PAction.SHIFT, 26, null, -1)},
-                {"NOTOP" , new ParseAction(PAction.SHIFT, 27, null, -1)},
-                {"preincexp" , new ParseAction(PAction.SHIFT, 28, null, -1)},
-                {"PLUSPLUS" , new ParseAction(PAction.SHIFT, 29, null, -1)},
-                {"postincexp" , new ParseAction(PAction.SHIFT, 30, null, -1)},
-                {"amfexp" , new ParseAction(PAction.SHIFT, 31, null, -1)},
-                {"factor" , new ParseAction(PAction.SHIFT, 32, null, -1)},
-                {"NUM" , new ParseAction(PAction.SHIFT, 33, null, -1)},
-                {"LPAREN" , new ParseAction(PAction.SHIFT, 34, null, -1)},
-                {"ID" , new ParseAction(PAction.SHIFT, 35, null, -1)},
-                {"FNUM" , new ParseAction(PAction.SHIFT, 36, null, -1)},
-                {"STRINGCONST" , new ParseAction(PAction.SHIFT, 37, null, -1)},
-                {"BOOLCONST" , new ParseAction(PAction.SHIFT, 38, null, -1)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 0, "calllist", 82)},
-        },
-        // DFA STATE 44
-        // amfexp :: amfexp LPAREN calllist • RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET RPAREN RBRACKET COMMA EQ LPAREN
-        new Dictionary<string,ParseAction>(){
-                {"RPAREN" , new ParseAction(PAction.SHIFT, 49, null, -1)},
-        },
-        // DFA STATE 45
-        // calllist :: calllist2 • COMMA expr ║ RPAREN
-        // calllist2 :: calllist2 • COMMA expr ║ COMMA
-        new Dictionary<string,ParseAction>(){
-                {"COMMA" , new ParseAction(PAction.SHIFT, 47, null, -1)},
-        },
-        // DFA STATE 46
-        // calllist2 :: expr • ║ COMMA
-        new Dictionary<string,ParseAction>(){
-            {"COMMA",new ParseAction(PAction.REDUCE, 1, "calllist2", 84)},
-        },
-        // DFA STATE 47
-        // calllist :: calllist2 COMMA • expr ║ RPAREN
-        // calllist2 :: calllist2 COMMA • expr ║ COMMA
+        // amfexp :: amfexp LPAREN • call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET RPAREN RBRACKET COMMA EQ LPAREN
+        // call-list :: • ║ RPAREN
+        // call-list :: • call-list2 ║ RPAREN
+        // call-list2 :: • expr ║ RPAREN
+        // call-list2 :: • expr COMMA call-list2 ║ RPAREN
         // expr :: • orexp ║ RPAREN COMMA
         // orexp :: • orexp OROP andexp ║ RPAREN COMMA OROP
         // orexp :: • andexp ║ RPAREN COMMA OROP
@@ -1080,7 +997,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -1089,7 +1006,93 @@ public static class ParseTable{
         // factor :: • STRINGCONST ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • BOOLCONST ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         new Dictionary<string,ParseAction>(){
-                {"expr" , new ParseAction(PAction.SHIFT, 48, null, -1)},
+                {"call-list" , new ParseAction(PAction.SHIFT, 44, null, -1)},
+                {"call-list2" , new ParseAction(PAction.SHIFT, 45, null, -1)},
+                {"expr" , new ParseAction(PAction.SHIFT, 46, null, -1)},
+                {"orexp" , new ParseAction(PAction.SHIFT, 16, null, -1)},
+                {"andexp" , new ParseAction(PAction.SHIFT, 17, null, -1)},
+                {"relexp" , new ParseAction(PAction.SHIFT, 18, null, -1)},
+                {"bitexp" , new ParseAction(PAction.SHIFT, 19, null, -1)},
+                {"shiftexp" , new ParseAction(PAction.SHIFT, 20, null, -1)},
+                {"sumexp" , new ParseAction(PAction.SHIFT, 21, null, -1)},
+                {"prodexp" , new ParseAction(PAction.SHIFT, 22, null, -1)},
+                {"powexp" , new ParseAction(PAction.SHIFT, 23, null, -1)},
+                {"unaryexp" , new ParseAction(PAction.SHIFT, 24, null, -1)},
+                {"BITNOTOP" , new ParseAction(PAction.SHIFT, 25, null, -1)},
+                {"ADDOP" , new ParseAction(PAction.SHIFT, 26, null, -1)},
+                {"NOTOP" , new ParseAction(PAction.SHIFT, 27, null, -1)},
+                {"preincexp" , new ParseAction(PAction.SHIFT, 28, null, -1)},
+                {"PLUSPLUS" , new ParseAction(PAction.SHIFT, 29, null, -1)},
+                {"postincexp" , new ParseAction(PAction.SHIFT, 30, null, -1)},
+                {"amfexp" , new ParseAction(PAction.SHIFT, 31, null, -1)},
+                {"factor" , new ParseAction(PAction.SHIFT, 32, null, -1)},
+                {"NUM" , new ParseAction(PAction.SHIFT, 33, null, -1)},
+                {"LPAREN" , new ParseAction(PAction.SHIFT, 34, null, -1)},
+                {"ID" , new ParseAction(PAction.SHIFT, 35, null, -1)},
+                {"FNUM" , new ParseAction(PAction.SHIFT, 36, null, -1)},
+                {"STRINGCONST" , new ParseAction(PAction.SHIFT, 37, null, -1)},
+                {"BOOLCONST" , new ParseAction(PAction.SHIFT, 38, null, -1)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 0, "call-list", 83)},
+        },
+        // DFA STATE 44
+        // amfexp :: amfexp LPAREN call-list • RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET RPAREN RBRACKET COMMA EQ LPAREN
+        new Dictionary<string,ParseAction>(){
+                {"RPAREN" , new ParseAction(PAction.SHIFT, 49, null, -1)},
+        },
+        // DFA STATE 45
+        // call-list :: call-list2 • ║ RPAREN
+        new Dictionary<string,ParseAction>(){
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "call-list", 84)},
+        },
+        // DFA STATE 46
+        // call-list2 :: expr • ║ RPAREN
+        // call-list2 :: expr • COMMA call-list2 ║ RPAREN
+        new Dictionary<string,ParseAction>(){
+                {"COMMA" , new ParseAction(PAction.SHIFT, 47, null, -1)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 1, "call-list2", 85)},
+        },
+        // DFA STATE 47
+        // call-list2 :: expr COMMA • call-list2 ║ RPAREN
+        // call-list2 :: • expr ║ RPAREN
+        // call-list2 :: • expr COMMA call-list2 ║ RPAREN
+        // expr :: • orexp ║ RPAREN COMMA
+        // orexp :: • orexp OROP andexp ║ RPAREN COMMA OROP
+        // orexp :: • andexp ║ RPAREN COMMA OROP
+        // andexp :: • andexp ANDOP relexp ║ RPAREN COMMA OROP ANDOP
+        // andexp :: • relexp ║ RPAREN COMMA OROP ANDOP
+        // relexp :: • bitexp RELOP bitexp ║ RPAREN COMMA OROP ANDOP
+        // relexp :: • bitexp ║ RPAREN COMMA OROP ANDOP
+        // bitexp :: • bitexp BITOP shiftexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP
+        // bitexp :: • shiftexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP
+        // shiftexp :: • shiftexp SHIFTOP sumexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP
+        // shiftexp :: • sumexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP
+        // sumexp :: • sumexp ADDOP prodexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP
+        // sumexp :: • prodexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP
+        // prodexp :: • prodexp MULOP powexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // prodexp :: • powexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // powexp :: • unaryexp POWOP powexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // powexp :: • unaryexp ║ RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • BITNOTOP unaryexp ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • ADDOP unaryexp ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • NOTOP unaryexp ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • preincexp ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // preincexp :: • PLUSPLUS preincexp ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // preincexp :: • postincexp ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // postincexp :: • postincexp PLUSPLUS ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
+        // postincexp :: • amfexp ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
+        // amfexp :: • amfexp DOT factor ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • factor ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • NUM ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • LPAREN expr RPAREN ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • ID ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • FNUM ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • STRINGCONST ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • BOOLCONST ║ POWOP RELOP RPAREN COMMA OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        new Dictionary<string,ParseAction>(){
+                {"call-list2" , new ParseAction(PAction.SHIFT, 48, null, -1)},
+                {"expr" , new ParseAction(PAction.SHIFT, 46, null, -1)},
                 {"orexp" , new ParseAction(PAction.SHIFT, 16, null, -1)},
                 {"andexp" , new ParseAction(PAction.SHIFT, 17, null, -1)},
                 {"relexp" , new ParseAction(PAction.SHIFT, 18, null, -1)},
@@ -1115,14 +1118,42 @@ public static class ParseTable{
                 {"BOOLCONST" , new ParseAction(PAction.SHIFT, 38, null, -1)},
         },
         // DFA STATE 48
-        // calllist :: calllist2 COMMA expr • ║ RPAREN
-        // calllist2 :: calllist2 COMMA expr • ║ COMMA
+        // call-list2 :: expr COMMA call-list2 • ║ RPAREN
         new Dictionary<string,ParseAction>(){
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "calllist", 83)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "calllist2", 85)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "call-list2", 86)},
         },
         // DFA STATE 49
-        // amfexp :: amfexp LPAREN calllist RPAREN • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET RPAREN RBRACKET COMMA EQ LPAREN
+        // amfexp :: amfexp LPAREN call-list RPAREN • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET RPAREN RBRACKET COMMA EQ LPAREN
+        new Dictionary<string,ParseAction>(){
+            {"POWOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"VAR",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"$",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"OROP",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"DOT",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"LBRACKET",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"EQ",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+            {"LPAREN",new ParseAction(PAction.REDUCE, 4, "amfexp", 75)},
+        },
+        // DFA STATE 50
+        // amfexp :: amfexp LBRACKET expr • RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT RPAREN RBRACKET COMMA EQ LBRACKET LPAREN
+        new Dictionary<string,ParseAction>(){
+                {"RBRACKET" , new ParseAction(PAction.SHIFT, 51, null, -1)},
+        },
+        // DFA STATE 51
+        // amfexp :: amfexp LBRACKET expr RBRACKET • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT RPAREN RBRACKET COMMA EQ LBRACKET LPAREN
         new Dictionary<string,ParseAction>(){
             {"POWOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
             {"RELOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
@@ -1139,113 +1170,104 @@ public static class ParseTable{
             {"MULOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
             {"PLUSPLUS",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
             {"DOT",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
-            {"LBRACKET",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
             {"RPAREN",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
             {"RBRACKET",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
             {"COMMA",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
             {"EQ",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
+            {"LBRACKET",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
             {"LPAREN",new ParseAction(PAction.REDUCE, 4, "amfexp", 74)},
-        },
-        // DFA STATE 50
-        // amfexp :: amfexp LBRACKET expr • RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT RPAREN RBRACKET COMMA EQ LBRACKET LPAREN
-        new Dictionary<string,ParseAction>(){
-                {"RBRACKET" , new ParseAction(PAction.SHIFT, 51, null, -1)},
-        },
-        // DFA STATE 51
-        // amfexp :: amfexp LBRACKET expr RBRACKET • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT RPAREN RBRACKET COMMA EQ LBRACKET LPAREN
-        new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"VAR",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"$",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"OROP",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"DOT",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"EQ",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"LBRACKET",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
-            {"LPAREN",new ParseAction(PAction.REDUCE, 4, "amfexp", 73)},
         },
         // DFA STATE 52
         // amfexp :: amfexp DOT factor • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ DOT LBRACKET LPAREN
         new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"DOT",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"LBRACKET",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
-            {"LPAREN",new ParseAction(PAction.REDUCE, 3, "amfexp", 72)},
+            {"POWOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"DOT",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"LBRACKET",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
+            {"LPAREN",new ParseAction(PAction.REDUCE, 3, "amfexp", 73)},
         },
         // DFA STATE 53
         // postincexp :: postincexp PLUSPLUS • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ PLUSPLUS
         new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"VAR",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"$",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"OROP",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"EQ",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
-            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 2, "postincexp", 70)},
+            {"POWOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"VAR",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"$",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"OROP",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"EQ",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
+            {"PLUSPLUS",new ParseAction(PAction.REDUCE, 2, "postincexp", 71)},
         },
         // DFA STATE 54
         // preincexp :: PLUSPLUS preincexp • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"VAR",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"$",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"OROP",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
-            {"EQ",new ParseAction(PAction.REDUCE, 2, "preincexp", 68)},
+            {"POWOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"VAR",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"$",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"OROP",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
+            {"EQ",new ParseAction(PAction.REDUCE, 2, "preincexp", 69)},
         },
         // DFA STATE 55
         // unaryexp :: NOTOP unaryexp • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
+        new Dictionary<string,ParseAction>(){
+            {"POWOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"VAR",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"$",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"OROP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+            {"EQ",new ParseAction(PAction.REDUCE, 2, "unaryexp", 67)},
+        },
+        // DFA STATE 56
+        // unaryexp :: ADDOP unaryexp • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
             {"POWOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 66)},
             {"RELOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 66)},
@@ -1265,8 +1287,8 @@ public static class ParseTable{
             {"COMMA",new ParseAction(PAction.REDUCE, 2, "unaryexp", 66)},
             {"EQ",new ParseAction(PAction.REDUCE, 2, "unaryexp", 66)},
         },
-        // DFA STATE 56
-        // unaryexp :: ADDOP unaryexp • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
+        // DFA STATE 57
+        // unaryexp :: BITNOTOP unaryexp • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
             {"POWOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 65)},
             {"RELOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 65)},
@@ -1286,27 +1308,6 @@ public static class ParseTable{
             {"COMMA",new ParseAction(PAction.REDUCE, 2, "unaryexp", 65)},
             {"EQ",new ParseAction(PAction.REDUCE, 2, "unaryexp", 65)},
         },
-        // DFA STATE 57
-        // unaryexp :: BITNOTOP unaryexp • ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
-        new Dictionary<string,ParseAction>(){
-            {"POWOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"VAR",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"$",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"OROP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-            {"EQ",new ParseAction(PAction.REDUCE, 2, "unaryexp", 64)},
-        },
         // DFA STATE 58
         // powexp :: unaryexp POWOP • powexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
         // powexp :: • unaryexp POWOP powexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
@@ -1321,7 +1322,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
@@ -1350,22 +1351,22 @@ public static class ParseTable{
         // DFA STATE 59
         // powexp :: unaryexp POWOP powexp • ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
-            {"RELOP",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "powexp", 62)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "powexp", 63)},
         },
         // DFA STATE 60
         // prodexp :: prodexp MULOP • powexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP RPAREN RBRACKET COMMA EQ MULOP
@@ -1381,7 +1382,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP PLUSPLUS RPAREN RBRACKET COMMA EQ MULOP
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ MULOP
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ MULOP
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ MULOP
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ MULOP
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ MULOP
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ MULOP
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ MULOP
@@ -1410,22 +1411,22 @@ public static class ParseTable{
         // DFA STATE 61
         // prodexp :: prodexp MULOP powexp • ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP RPAREN RBRACKET COMMA EQ MULOP
         new Dictionary<string,ParseAction>(){
-            {"RELOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
-            {"MULOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 60)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
+            {"MULOP",new ParseAction(PAction.REDUCE, 3, "prodexp", 61)},
         },
         // DFA STATE 62
         // sumexp :: sumexp ADDOP • prodexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP RPAREN RBRACKET COMMA EQ ADDOP
@@ -1443,7 +1444,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ ADDOP
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ADDOP
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ADDOP
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ADDOP
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ADDOP
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ADDOP
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ADDOP
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ADDOP
@@ -1475,21 +1476,21 @@ public static class ParseTable{
         // prodexp :: prodexp • MULOP powexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP MULOP RPAREN RBRACKET COMMA EQ ADDOP
         new Dictionary<string,ParseAction>(){
                 {"MULOP" , new ParseAction(PAction.SHIFT, 60, null, -1)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
-            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 58)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
+            {"ADDOP",new ParseAction(PAction.REDUCE, 3, "sumexp", 59)},
         },
         // DFA STATE 64
         // shiftexp :: shiftexp SHIFTOP • sumexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP RPAREN RBRACKET COMMA EQ SHIFTOP
@@ -1509,7 +1510,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ SHIFTOP
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ SHIFTOP
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ SHIFTOP
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ SHIFTOP
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ SHIFTOP
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ SHIFTOP
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ SHIFTOP
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ SHIFTOP
@@ -1542,20 +1543,20 @@ public static class ParseTable{
         // sumexp :: sumexp • ADDOP prodexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP ADDOP RPAREN RBRACKET COMMA EQ SHIFTOP
         new Dictionary<string,ParseAction>(){
                 {"ADDOP" , new ParseAction(PAction.SHIFT, 62, null, -1)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
-            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 56)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
+            {"SHIFTOP",new ParseAction(PAction.REDUCE, 3, "shiftexp", 57)},
         },
         // DFA STATE 66
         // relexp :: bitexp RELOP • bitexp ║ SEMI FUNC CLASS VAR $ OROP ANDOP RPAREN RBRACKET COMMA EQ
@@ -1579,7 +1580,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp DOT factor ║ POWOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // amfexp :: • factor ║ POWOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • NUM ║ POWOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
         // factor :: • LPAREN expr RPAREN ║ POWOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ
@@ -1629,7 +1630,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ BITOP
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ BITOP
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ BITOP
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ BITOP
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ BITOP
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ BITOP
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ BITOP
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ BITOP
@@ -1663,36 +1664,36 @@ public static class ParseTable{
         // shiftexp :: shiftexp • SHIFTOP sumexp ║ RELOP SEMI FUNC CLASS VAR $ OROP ANDOP SHIFTOP RPAREN RBRACKET COMMA EQ BITOP
         new Dictionary<string,ParseAction>(){
                 {"SHIFTOP" , new ParseAction(PAction.SHIFT, 64, null, -1)},
-            {"RELOP",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
-            {"BITOP",new ParseAction(PAction.REDUCE, 3, "bitexp", 54)},
+            {"RELOP",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
+            {"BITOP",new ParseAction(PAction.REDUCE, 3, "bitexp", 55)},
         },
         // DFA STATE 69
         // relexp :: bitexp RELOP bitexp • ║ SEMI FUNC CLASS VAR $ OROP ANDOP RPAREN RBRACKET COMMA EQ
         // bitexp :: bitexp • BITOP shiftexp ║ SEMI FUNC CLASS VAR $ OROP ANDOP BITOP RPAREN RBRACKET COMMA EQ
         new Dictionary<string,ParseAction>(){
                 {"BITOP" , new ParseAction(PAction.SHIFT, 67, null, -1)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "relexp", 52)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "relexp", 53)},
         },
         // DFA STATE 70
         // andexp :: andexp ANDOP • relexp ║ SEMI FUNC CLASS VAR $ OROP RPAREN RBRACKET COMMA EQ ANDOP
@@ -1718,7 +1719,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ ANDOP
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ANDOP
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ANDOP
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ANDOP
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ANDOP
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ANDOP
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ANDOP
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ ANDOP
@@ -1752,17 +1753,17 @@ public static class ParseTable{
         // DFA STATE 71
         // andexp :: andexp ANDOP relexp • ║ SEMI FUNC CLASS VAR $ OROP RPAREN RBRACKET COMMA EQ ANDOP
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
-            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "andexp", 50)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
+            {"ANDOP",new ParseAction(PAction.REDUCE, 3, "andexp", 51)},
         },
         // DFA STATE 72
         // orexp :: orexp OROP • andexp ║ SEMI FUNC CLASS VAR $ RPAREN RBRACKET COMMA EQ OROP
@@ -1790,7 +1791,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS RPAREN RBRACKET COMMA EQ OROP
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ OROP
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ OROP
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ OROP
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ OROP
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ OROP
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ OROP
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN RPAREN RBRACKET COMMA EQ OROP
@@ -1827,16 +1828,16 @@ public static class ParseTable{
         // andexp :: andexp • ANDOP relexp ║ SEMI FUNC CLASS VAR $ ANDOP RPAREN RBRACKET COMMA EQ OROP
         new Dictionary<string,ParseAction>(){
                 {"ANDOP" , new ParseAction(PAction.SHIFT, 70, null, -1)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
-            {"VAR",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
-            {"$",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
-            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
-            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
-            {"COMMA",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
-            {"EQ",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
-            {"OROP",new ParseAction(PAction.REDUCE, 3, "orexp", 48)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
+            {"VAR",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
+            {"$",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
+            {"RPAREN",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
+            {"RBRACKET",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
+            {"COMMA",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
+            {"EQ",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
+            {"OROP",new ParseAction(PAction.REDUCE, 3, "orexp", 49)},
         },
         // DFA STATE 74
         // vardecl :: VAR ID COLON TYPE EQ • expr ║ SEMI FUNC CLASS VAR $
@@ -1867,7 +1868,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI FUNC CLASS VAR $ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -1904,11 +1905,11 @@ public static class ParseTable{
         // DFA STATE 75
         // vardecl :: VAR ID COLON TYPE EQ expr • ║ SEMI FUNC CLASS VAR $
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 6, "vardecl", 44)},
-            {"FUNC",new ParseAction(PAction.REDUCE, 6, "vardecl", 44)},
-            {"CLASS",new ParseAction(PAction.REDUCE, 6, "vardecl", 44)},
-            {"VAR",new ParseAction(PAction.REDUCE, 6, "vardecl", 44)},
-            {"$",new ParseAction(PAction.REDUCE, 6, "vardecl", 44)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 6, "vardecl", 45)},
+            {"FUNC",new ParseAction(PAction.REDUCE, 6, "vardecl", 45)},
+            {"CLASS",new ParseAction(PAction.REDUCE, 6, "vardecl", 45)},
+            {"VAR",new ParseAction(PAction.REDUCE, 6, "vardecl", 45)},
+            {"$",new ParseAction(PAction.REDUCE, 6, "vardecl", 45)},
         },
         // DFA STATE 76
         // classdecl :: CLASS ID • LBRACE memberdecls RBRACE SEMI ║ SEMI FUNC CLASS VAR $
@@ -2164,6 +2165,7 @@ public static class ParseTable{
         // stmt :: • return ║ SEMI
         // stmt :: • break ║ SEMI
         // stmt :: • continue ║ SEMI
+        // stmt :: • expr ║ SEMI
         // assign :: • expr EQ expr ║ SEMI
         // cond :: • IF LPAREN expr RPAREN braceblock ║ SEMI
         // cond :: • IF LPAREN expr RPAREN braceblock ELSE braceblock ║ SEMI
@@ -2177,41 +2179,41 @@ public static class ParseTable{
         // return :: • RETURN ║ SEMI
         // break :: • BREAK ║ SEMI
         // continue :: • CONTINUE ║ SEMI
-        // expr :: • orexp ║ EQ
-        // orexp :: • orexp OROP andexp ║ EQ OROP
-        // orexp :: • andexp ║ EQ OROP
-        // andexp :: • andexp ANDOP relexp ║ EQ OROP ANDOP
-        // andexp :: • relexp ║ EQ OROP ANDOP
-        // relexp :: • bitexp RELOP bitexp ║ EQ OROP ANDOP
-        // relexp :: • bitexp ║ EQ OROP ANDOP
-        // bitexp :: • bitexp BITOP shiftexp ║ RELOP EQ OROP ANDOP BITOP
-        // bitexp :: • shiftexp ║ RELOP EQ OROP ANDOP BITOP
-        // shiftexp :: • shiftexp SHIFTOP sumexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP
-        // shiftexp :: • sumexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP
-        // sumexp :: • sumexp ADDOP prodexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP
-        // sumexp :: • prodexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP
-        // prodexp :: • prodexp MULOP powexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // prodexp :: • powexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // powexp :: • unaryexp POWOP powexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // powexp :: • unaryexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • BITNOTOP unaryexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • ADDOP unaryexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • NOTOP unaryexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • preincexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // preincexp :: • PLUSPLUS preincexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // preincexp :: • postincexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // postincexp :: • postincexp PLUSPLUS ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
-        // postincexp :: • amfexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
-        // amfexp :: • amfexp DOT factor ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • factor ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • NUM ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • LPAREN expr RPAREN ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • ID ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • FNUM ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • STRINGCONST ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • BOOLCONST ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // expr :: • orexp ║ SEMI EQ
+        // orexp :: • orexp OROP andexp ║ SEMI EQ OROP
+        // orexp :: • andexp ║ SEMI EQ OROP
+        // andexp :: • andexp ANDOP relexp ║ SEMI EQ OROP ANDOP
+        // andexp :: • relexp ║ SEMI EQ OROP ANDOP
+        // relexp :: • bitexp RELOP bitexp ║ SEMI EQ OROP ANDOP
+        // relexp :: • bitexp ║ SEMI EQ OROP ANDOP
+        // bitexp :: • bitexp BITOP shiftexp ║ RELOP SEMI EQ OROP ANDOP BITOP
+        // bitexp :: • shiftexp ║ RELOP SEMI EQ OROP ANDOP BITOP
+        // shiftexp :: • shiftexp SHIFTOP sumexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP
+        // shiftexp :: • sumexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP
+        // sumexp :: • sumexp ADDOP prodexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP
+        // sumexp :: • prodexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP
+        // prodexp :: • prodexp MULOP powexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // prodexp :: • powexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // powexp :: • unaryexp POWOP powexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // powexp :: • unaryexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • BITNOTOP unaryexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • ADDOP unaryexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • NOTOP unaryexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • preincexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // preincexp :: • PLUSPLUS preincexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // preincexp :: • postincexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // postincexp :: • postincexp PLUSPLUS ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
+        // postincexp :: • amfexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
+        // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • factor ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • NUM ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • ID ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • FNUM ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • STRINGCONST ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • BOOLCONST ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         new Dictionary<string,ParseAction>(){
                 {"stmts" , new ParseAction(PAction.SHIFT, 108, null, -1)},
                 {"stmt" , new ParseAction(PAction.SHIFT, 109, null, -1)},
@@ -2307,9 +2309,11 @@ public static class ParseTable{
             {"SEMI",new ParseAction(PAction.REDUCE, 1, "stmt", 33)},
         },
         // DFA STATE 118
+        // stmt :: expr • ║ SEMI
         // assign :: expr • EQ expr ║ SEMI
         new Dictionary<string,ParseAction>(){
                 {"EQ" , new ParseAction(PAction.SHIFT, 144, null, -1)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "stmt", 34)},
         },
         // DFA STATE 119
         // cond :: IF • LPAREN expr RPAREN braceblock ║ SEMI
@@ -2359,7 +2363,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -2392,22 +2396,22 @@ public static class ParseTable{
                 {"FNUM" , new ParseAction(PAction.SHIFT, 36, null, -1)},
                 {"STRINGCONST" , new ParseAction(PAction.SHIFT, 37, null, -1)},
                 {"BOOLCONST" , new ParseAction(PAction.SHIFT, 38, null, -1)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "return", 42)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "return", 43)},
         },
         // DFA STATE 123
         // break :: BREAK • ║ SEMI
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "break", 35)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "break", 36)},
         },
         // DFA STATE 124
         // continue :: CONTINUE • ║ SEMI
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 1, "continue", 36)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 1, "continue", 37)},
         },
         // DFA STATE 125
         // return :: RETURN expr • ║ SEMI
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 2, "return", 41)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 2, "return", 42)},
         },
         // DFA STATE 126
         // loop :: REPEAT braceblock • UNTIL LPAREN expr RPAREN ║ SEMI
@@ -2426,6 +2430,7 @@ public static class ParseTable{
         // stmt :: • return ║ SEMI
         // stmt :: • break ║ SEMI
         // stmt :: • continue ║ SEMI
+        // stmt :: • expr ║ SEMI
         // assign :: • expr EQ expr ║ SEMI
         // cond :: • IF LPAREN expr RPAREN braceblock ║ SEMI
         // cond :: • IF LPAREN expr RPAREN braceblock ELSE braceblock ║ SEMI
@@ -2439,41 +2444,41 @@ public static class ParseTable{
         // return :: • RETURN ║ SEMI
         // break :: • BREAK ║ SEMI
         // continue :: • CONTINUE ║ SEMI
-        // expr :: • orexp ║ EQ
-        // orexp :: • orexp OROP andexp ║ EQ OROP
-        // orexp :: • andexp ║ EQ OROP
-        // andexp :: • andexp ANDOP relexp ║ EQ OROP ANDOP
-        // andexp :: • relexp ║ EQ OROP ANDOP
-        // relexp :: • bitexp RELOP bitexp ║ EQ OROP ANDOP
-        // relexp :: • bitexp ║ EQ OROP ANDOP
-        // bitexp :: • bitexp BITOP shiftexp ║ RELOP EQ OROP ANDOP BITOP
-        // bitexp :: • shiftexp ║ RELOP EQ OROP ANDOP BITOP
-        // shiftexp :: • shiftexp SHIFTOP sumexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP
-        // shiftexp :: • sumexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP
-        // sumexp :: • sumexp ADDOP prodexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP
-        // sumexp :: • prodexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP
-        // prodexp :: • prodexp MULOP powexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // prodexp :: • powexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // powexp :: • unaryexp POWOP powexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // powexp :: • unaryexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • BITNOTOP unaryexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • ADDOP unaryexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • NOTOP unaryexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • preincexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // preincexp :: • PLUSPLUS preincexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // preincexp :: • postincexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // postincexp :: • postincexp PLUSPLUS ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
-        // postincexp :: • amfexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
-        // amfexp :: • amfexp DOT factor ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • factor ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • NUM ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • LPAREN expr RPAREN ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • ID ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • FNUM ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • STRINGCONST ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • BOOLCONST ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // expr :: • orexp ║ SEMI EQ
+        // orexp :: • orexp OROP andexp ║ SEMI EQ OROP
+        // orexp :: • andexp ║ SEMI EQ OROP
+        // andexp :: • andexp ANDOP relexp ║ SEMI EQ OROP ANDOP
+        // andexp :: • relexp ║ SEMI EQ OROP ANDOP
+        // relexp :: • bitexp RELOP bitexp ║ SEMI EQ OROP ANDOP
+        // relexp :: • bitexp ║ SEMI EQ OROP ANDOP
+        // bitexp :: • bitexp BITOP shiftexp ║ RELOP SEMI EQ OROP ANDOP BITOP
+        // bitexp :: • shiftexp ║ RELOP SEMI EQ OROP ANDOP BITOP
+        // shiftexp :: • shiftexp SHIFTOP sumexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP
+        // shiftexp :: • sumexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP
+        // sumexp :: • sumexp ADDOP prodexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP
+        // sumexp :: • prodexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP
+        // prodexp :: • prodexp MULOP powexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // prodexp :: • powexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // powexp :: • unaryexp POWOP powexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // powexp :: • unaryexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • BITNOTOP unaryexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • ADDOP unaryexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • NOTOP unaryexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • preincexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // preincexp :: • PLUSPLUS preincexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // preincexp :: • postincexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // postincexp :: • postincexp PLUSPLUS ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
+        // postincexp :: • amfexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
+        // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • factor ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • NUM ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • ID ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • FNUM ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • STRINGCONST ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • BOOLCONST ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         new Dictionary<string,ParseAction>(){
                 {"stmts" , new ParseAction(PAction.SHIFT, 128, null, -1)},
                 {"stmt" , new ParseAction(PAction.SHIFT, 109, null, -1)},
@@ -2564,7 +2569,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -2606,7 +2611,7 @@ public static class ParseTable{
         // DFA STATE 133
         // loop :: REPEAT braceblock UNTIL LPAREN expr RPAREN • ║ SEMI
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 6, "loop", 40)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 6, "loop", 41)},
         },
         // DFA STATE 134
         // loop :: WHILE LPAREN • expr RPAREN braceblock ║ SEMI
@@ -2637,7 +2642,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -2686,7 +2691,7 @@ public static class ParseTable{
         // DFA STATE 137
         // loop :: WHILE LPAREN expr RPAREN braceblock • ║ SEMI
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 5, "loop", 39)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 5, "loop", 40)},
         },
         // DFA STATE 138
         // cond :: IF LPAREN • expr RPAREN braceblock ║ SEMI
@@ -2718,7 +2723,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP RPAREN OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -2771,7 +2776,7 @@ public static class ParseTable{
         // cond :: IF LPAREN expr RPAREN braceblock • ELSE braceblock ║ SEMI
         new Dictionary<string,ParseAction>(){
                 {"ELSE" , new ParseAction(PAction.SHIFT, 142, null, -1)},
-            {"SEMI",new ParseAction(PAction.REDUCE, 5, "cond", 37)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 5, "cond", 38)},
         },
         // DFA STATE 142
         // cond :: IF LPAREN expr RPAREN braceblock ELSE • braceblock ║ SEMI
@@ -2783,7 +2788,7 @@ public static class ParseTable{
         // DFA STATE 143
         // cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock • ║ SEMI
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 7, "cond", 38)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 7, "cond", 39)},
         },
         // DFA STATE 144
         // assign :: expr EQ • expr ║ SEMI
@@ -2814,7 +2819,7 @@ public static class ParseTable{
         // postincexp :: • amfexp ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
         // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // amfexp :: • factor ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • NUM ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
@@ -2851,7 +2856,7 @@ public static class ParseTable{
         // DFA STATE 145
         // assign :: expr EQ expr • ║ SEMI
         new Dictionary<string,ParseAction>(){
-            {"SEMI",new ParseAction(PAction.REDUCE, 3, "assign", 34)},
+            {"SEMI",new ParseAction(PAction.REDUCE, 3, "assign", 35)},
         },
         // DFA STATE 146
         // stmts :: stmt SEMI • stmts ║ RBRACE
@@ -2865,6 +2870,7 @@ public static class ParseTable{
         // stmt :: • return ║ SEMI
         // stmt :: • break ║ SEMI
         // stmt :: • continue ║ SEMI
+        // stmt :: • expr ║ SEMI
         // assign :: • expr EQ expr ║ SEMI
         // cond :: • IF LPAREN expr RPAREN braceblock ║ SEMI
         // cond :: • IF LPAREN expr RPAREN braceblock ELSE braceblock ║ SEMI
@@ -2878,41 +2884,41 @@ public static class ParseTable{
         // return :: • RETURN ║ SEMI
         // break :: • BREAK ║ SEMI
         // continue :: • CONTINUE ║ SEMI
-        // expr :: • orexp ║ EQ
-        // orexp :: • orexp OROP andexp ║ EQ OROP
-        // orexp :: • andexp ║ EQ OROP
-        // andexp :: • andexp ANDOP relexp ║ EQ OROP ANDOP
-        // andexp :: • relexp ║ EQ OROP ANDOP
-        // relexp :: • bitexp RELOP bitexp ║ EQ OROP ANDOP
-        // relexp :: • bitexp ║ EQ OROP ANDOP
-        // bitexp :: • bitexp BITOP shiftexp ║ RELOP EQ OROP ANDOP BITOP
-        // bitexp :: • shiftexp ║ RELOP EQ OROP ANDOP BITOP
-        // shiftexp :: • shiftexp SHIFTOP sumexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP
-        // shiftexp :: • sumexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP
-        // sumexp :: • sumexp ADDOP prodexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP
-        // sumexp :: • prodexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP
-        // prodexp :: • prodexp MULOP powexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // prodexp :: • powexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // powexp :: • unaryexp POWOP powexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // powexp :: • unaryexp ║ RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • BITNOTOP unaryexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • ADDOP unaryexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • NOTOP unaryexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // unaryexp :: • preincexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // preincexp :: • PLUSPLUS preincexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // preincexp :: • postincexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
-        // postincexp :: • postincexp PLUSPLUS ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
-        // postincexp :: • amfexp ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
-        // amfexp :: • amfexp DOT factor ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • amfexp LPAREN calllist RPAREN ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // amfexp :: • factor ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • NUM ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • LPAREN expr RPAREN ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • ID ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • FNUM ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • STRINGCONST ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
-        // factor :: • BOOLCONST ║ POWOP RELOP EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // expr :: • orexp ║ SEMI EQ
+        // orexp :: • orexp OROP andexp ║ SEMI EQ OROP
+        // orexp :: • andexp ║ SEMI EQ OROP
+        // andexp :: • andexp ANDOP relexp ║ SEMI EQ OROP ANDOP
+        // andexp :: • relexp ║ SEMI EQ OROP ANDOP
+        // relexp :: • bitexp RELOP bitexp ║ SEMI EQ OROP ANDOP
+        // relexp :: • bitexp ║ SEMI EQ OROP ANDOP
+        // bitexp :: • bitexp BITOP shiftexp ║ RELOP SEMI EQ OROP ANDOP BITOP
+        // bitexp :: • shiftexp ║ RELOP SEMI EQ OROP ANDOP BITOP
+        // shiftexp :: • shiftexp SHIFTOP sumexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP
+        // shiftexp :: • sumexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP
+        // sumexp :: • sumexp ADDOP prodexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP
+        // sumexp :: • prodexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP
+        // prodexp :: • prodexp MULOP powexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // prodexp :: • powexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // powexp :: • unaryexp POWOP powexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // powexp :: • unaryexp ║ RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • BITNOTOP unaryexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • ADDOP unaryexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • NOTOP unaryexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // unaryexp :: • preincexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // preincexp :: • PLUSPLUS preincexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // preincexp :: • postincexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP
+        // postincexp :: • postincexp PLUSPLUS ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
+        // postincexp :: • amfexp ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS
+        // amfexp :: • amfexp DOT factor ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LBRACKET expr RBRACKET ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • amfexp LPAREN call-list RPAREN ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // amfexp :: • factor ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • NUM ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • LPAREN expr RPAREN ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • ID ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • FNUM ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • STRINGCONST ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
+        // factor :: • BOOLCONST ║ POWOP RELOP SEMI EQ OROP ANDOP BITOP SHIFTOP ADDOP MULOP PLUSPLUS DOT LBRACKET LPAREN
         new Dictionary<string,ParseAction>(){
                 {"stmts" , new ParseAction(PAction.SHIFT, 147, null, -1)},
                 {"stmt" , new ParseAction(PAction.SHIFT, 109, null, -1)},

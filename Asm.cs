@@ -15,6 +15,10 @@ public static class Asm{
         w.WriteLine("_start:");
         w.WriteLine("    andq $~0xf, %rsp  /*align the stack*/");
 
+        w.WriteLine("    sub $32, %rsp");
+        w.WriteLine("    call rtinit");
+        w.WriteLine("    add $32, %rsp");
+
         //TBD: See if we have variable of the name of main
         //if not, make a nice message telling the user
         //we need a main function.
@@ -30,10 +34,13 @@ public static class Asm{
         w.WriteLine($"    call {loc.lbl.value}  /* {loc.lbl.comment} */");
 
         //return value from main is in rax
-
-        //call ExitProcess() with return value of main
-        w.WriteLine("    mov %rax, %rcx");
-        w.WriteLine("    sub $32,%rsp");
+        w.WriteLine("    sub $8,%rsp"); //need to keep stack aligned
+        w.WriteLine("    push %rax");
+        w.WriteLine("    sub $32, %rsp");
+        w.WriteLine("    call rtcleanup");
+        w.WriteLine("    add $32, %rsp");
+        w.WriteLine("    pop %rcx");    //return value goes to rcx so it's parameter to ExitProcess
+        w.WriteLine("    sub $24,%rsp");    //already have sub 8 above
         w.WriteLine("    call ExitProcess");
 
         foreach( var op in ops ){

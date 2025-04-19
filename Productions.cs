@@ -9,7 +9,17 @@ public class Productions{
             new("funcdecl :: FUNC ID LPAREN optionalPdecls RPAREN optionalReturn LBRACE stmts RBRACE SEMI",
                 collectFunctionNames: (n) => {
                     string funcName = n.children[1].token.lexeme;
-                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType());
+                    n["optionalReturn"].setNodeTypes();
+                    var rtype = n["optionalReturn"].nodeType;
+                    var ptypes = new List<NodeType>();
+                    Utils.walk(n["optionalPdecls"], (c) => {
+                        if( c.sym == "pdecl" ){
+                            ptypes.Add( NodeType.tokenToNodeType( c["TYPE"].token ));
+                            return false;
+                        }
+                        return true;
+                    });
+                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType(rtype,ptypes));
                 },
                 setNodeTypes: (n) => {
                     SymbolTable.enterFunctionScope();
@@ -41,7 +51,16 @@ public class Productions{
                     SymbolTable.leaveLocalScope();
                 }
             ),
-            new("optionalReturn :: lambda | COLON TYPE"),
+            new("optionalReturn :: lambda",
+                setNodeTypes: (n) => {
+                    n.nodeType = NodeType.Void;
+                }
+            ),
+            new("optionalReturn :: COLON TYPE",
+                setNodeTypes: (n) => {
+                    n.nodeType = NodeType.tokenToNodeType(n["TYPE"].token);
+                }
+            ),
             new("optionalSemi :: lambda | SEMI"),
             new("optionalPdecls :: lambda | pdecls"),
             new("pdecls :: pdecl | pdecl COMMA pdecls"),
@@ -76,10 +95,26 @@ public class Productions{
                     Asm.add(new OpComment($"end statement {n.children[0].sym} at line {n.lastToken().line}"));
                 }
             ),
+            new("stmt :: expr",
+                generateCode: (n) => {
+                    Asm.add(new OpComment($"begin statement {n.children[0].sym} at line {n.firstToken().line}"));
+                    var c = n.children[0];
+                    c.generateCode();
+                    if( c.nodeType == null )
+                        throw new Exception();
+                    if( c.nodeType != NodeType.Void ){
+                        Asm.add(new OpPop(null,null));
+                    }
+                    Asm.add(new OpComment($"end statement {n.children[0].sym} at line {n.lastToken().line}"));
+                }
+            ),
             new("assign :: expr EQ expr",
                 setNodeTypes: (n) => {
                     n.children[0].setNodeTypes();
                     n.children[2].setNodeTypes();
+                    if( n.children[0].nodeType as FunctionNodeType != null ){
+                        Utils.error(n["EQ"].token, "Cannot assign functions");
+                    }
                     if( n.children[0].nodeType != n.children[2].nodeType){
                         Utils.error(n["EQ"].token,$"Type mismatch in assign: {n.children[0].nodeType} vs {n.children[2].nodeType}");
                     }
