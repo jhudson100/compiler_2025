@@ -26,7 +26,10 @@ namespace lab{
                     w.WriteLine($"    pop {this.sclass}  /* storage class */");
                 }
             }
-            w.WriteLine($"    pop {this.value}  /* value */");
+            if( this.value == null )
+                w.WriteLine("    add $8, %rsp  /* discard value */");
+            else
+                w.WriteLine($"    pop {this.value}  /* value */");
         }
     }
 
