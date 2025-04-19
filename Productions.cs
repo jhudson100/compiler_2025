@@ -23,7 +23,7 @@ public class Productions{
                     var ptypes = new List<NodeType>();
                     Utils.walk(n["optionalPdecls"], (c) => {
                         if( c.sym == "pdecl" ){
-                            ptypes.Add( NodeType.tokenToNodeType( c["TYPE"].token ));
+                            ptypes.Add( NodeType.typeFromToken( c["TYPE"].token ));
                             return false;
                         }
                         return true;
@@ -38,7 +38,7 @@ public class Productions{
                         c.collectFunctionNames();
                     }
 
-                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType(rtype,ptypes));
+                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType(returnType,ptypes,false));
                 },
                 setNodeTypes: (n) => {
                     SymbolTable.enterFunctionScope();
@@ -102,7 +102,7 @@ public class Productions{
             ),
             new("optionalReturn :: COLON TYPE",
                 setNodeTypes: (n) => {
-                    n.nodeType = NodeType.tokenToNodeType(n["TYPE"].token);
+                    n.nodeType = NodeType.typeFromToken(n["TYPE"].token);
                 }
             ),
             new("optionalSemi :: lambda | SEMI"),
