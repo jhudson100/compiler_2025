@@ -62,6 +62,8 @@ namespace lab{
         public OpMov( ulong src, IntRegister dest) : this((long)src, dest,""){}
 
         public override void output(StreamWriter w){
+            string opcode = "movq";
+
             string src,dest;
             string comment = this.comment;
             if( srcIndirect ){
@@ -72,6 +74,7 @@ namespace lab{
                 } else if( srcFloatReg != null ) {
                     src = srcFloatReg.ToString();
                 } else if( srcLabel != null ) {
+                    opcode = "movabs";
                     src = "$"+srcLabel.value;   //want the address the label is pointing to
                     comment += " "+srcLabel.comment;
                 }
@@ -89,7 +92,7 @@ namespace lab{
                     dest = destFloatReg.ToString();
             }
 
-            w.WriteLine($"    movq {src}, {dest}    /* {comment} */");
+            w.WriteLine($"    {opcode} {src}, {dest}    /* {comment} */");
         }
     }
 
