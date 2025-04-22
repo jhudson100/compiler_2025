@@ -18,6 +18,21 @@ namespace lab{
             Asm.add( new OpRet());
         }
 
+        public static void returnCheck(TreeNode n, NodeType actualType){
+            var p = n.parent;
+            while(p != null && p.sym != "funcdecl" ){
+                p=p.parent;
+            }
+            if(p==null){
+                Utils.error(n,"Return outside of a function");
+            }
+            var expectedReturnType = p["optionalReturn"].nodeType;
+            if( expectedReturnType == null )
+                throw new Exception("Didn't set type of return?");
+            if( actualType != expectedReturnType )
+                Utils.error(n,"Return type mismatch");
+        }
+
         public delegate bool WalkCallback(TreeNode n);
         public static void walk(TreeNode n, WalkCallback f){
             if( !f(n) )

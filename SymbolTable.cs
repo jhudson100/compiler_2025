@@ -86,10 +86,23 @@ public static class SymbolTable{
     }
 
     public static void populateBuiltins(){
-        declareGlobal( new Token("ID","putc",-1), new FunctionNodeType( NodeType.Bool, new(){ NodeType.Int } ), new Label("putc","putc") );
-        declareGlobal( new Token("ID","newline",-1), new FunctionNodeType( NodeType.Void, new() ), new Label("newline","newline") );
-        declareGlobal( new Token("ID","putv",-1), new FunctionNodeType( NodeType.Bool, new(){ NodeType.Int, NodeType.Int} ), new Label("putv","putv") );
-        declareGlobal( new Token("ID","getc",-1), new FunctionNodeType( NodeType.Int, new() ), new Label("getc","getc") );
+        declareGlobal( 
+            new Token("ID","putc",-1), 
+            new FunctionNodeType( NodeType.Bool, new(){ NodeType.Int }, true ), 
+            new Label("putc","putc") 
+        );
+        declareGlobal( 
+            new Token("ID","newline",-1), 
+            new FunctionNodeType( NodeType.Void, new(),true ), 
+            new Label("newline","newline") );
+        declareGlobal( 
+            new Token("ID","putv",-1),
+            new FunctionNodeType( NodeType.Bool, new(){ NodeType.Int, NodeType.Int},true ),
+            new Label("putv","putv") );
+        declareGlobal( 
+            new Token("ID","getc",-1), 
+            new FunctionNodeType( NodeType.Int, new(), true ), 
+            new Label("getc","getc") );
     }
 }
 

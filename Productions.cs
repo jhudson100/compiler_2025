@@ -19,8 +19,17 @@ public class Productions{
                         }
                         return true;
                     });
-                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType(rtype,ptypes));
+                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType(rtype,ptypes,false));
                 },
+                
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    var rtype = n["optionalReturn"].nodeType;
+                    if( rtype != NodeType.Void && !n["stmts"].returns )
+                        Utils.error(n,"Function might not return");
+                },
+
                 setNodeTypes: (n) => {
                     SymbolTable.enterFunctionScope();
                     n["optionalPdecls"].setNodeTypes();
@@ -49,6 +58,12 @@ public class Productions{
                     foreach(var c in n.children)
                         c.setNodeTypes();
                     SymbolTable.leaveLocalScope();
+                },
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n["stmts"].returns )
+                        n.returns = true;
                 }
             ),
             new("optionalReturn :: lambda",
@@ -84,10 +99,25 @@ public class Productions{
             new("membervardecl :: VAR ID COLON TYPE SEMI"),
             new("memberfuncdecl :: funcdecl"),
 
-            new("stmts :: stmt SEMI stmts"),
+            new("stmts :: stmt SEMI stmts",
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n["stmt"].returns )
+                        n.returns = true;
+                    if( n["stmts"].returns )
+                        n.returns = true;
+                }
+            ),
             new("stmts :: SEMI"),
             new("stmts :: lambda"),
             new("stmt :: assign | cond | loop | vardecl | return | break | continue",
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n.children[0].returns )
+                        n.returns = true;
+                },
                 generateCode: (n) => {
                     Asm.add(new OpComment($"begin statement {n.children[0].sym} at line {n.firstToken().line}"));
                     foreach(var c in n.children)
@@ -96,6 +126,12 @@ public class Productions{
                 }
             ),
             new("stmt :: expr",
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n.children[0].returns )
+                        n.returns = true;
+                },
                 generateCode: (n) => {
                     Asm.add(new OpComment($"begin statement {n.children[0].sym} at line {n.firstToken().line}"));
                     var c = n.children[0];
@@ -182,6 +218,12 @@ public class Productions{
                 }
             ),
             new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock",
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n.children[4].returns && n.children[6].returns )
+                        n.returns = true;
+                },
                 setNodeTypes: (n) => {
                     foreach(var c in n.children)
                         c.setNodeTypes();
@@ -244,12 +286,27 @@ public class Productions{
                 }
             ),
             new("return :: RETURN expr",
+                setNodeTypes: (n) => {
+                    foreach(var c in n.children){
+                        c.setNodeTypes();
+                    }
+                    Utils.returnCheck(n,n["expr"].nodeType);
+                },
+                returnCheck: (n) => {
+                    n.returns=true;
+                },
                 generateCode: (n) => {
                     n["expr"].generateCode();
-                    Asm.add(new OpPop(Register.rax, null));
+                    Asm.add(new OpPop(Register.rax, Register.rbx));
                     Utils.epilogue(n["RETURN"].token);
                 }),
             new("return :: RETURN",
+                setNodeTypes: (n) => {
+                    Utils.returnCheck(n, NodeType.Void);
+                },
+                returnCheck: (n) => {
+                    n.returns=true;
+                },
                 generateCode: (n) => {
                     Utils.epilogue(n["RETURN"].token);
                 }
@@ -264,9 +321,21 @@ public class Productions{
                         SymbolTable.declareLocal(tok,typ);
                 }
             ),
-            new("vardecl :: VAR ID COLON TYPE EQ expr"),
-            new("vardecl :: VAR ID COLON ID"),  //for user-defined types
-            new("vardecl :: VAR ID COLON ID EQ expr"),  //for user-defined types
+            new("vardecl :: VAR ID COLON TYPE EQ expr",
+                generateCode: (n) => {
+                    throw new NotImplementedException();
+                }
+            ),
+            new("vardecl :: VAR ID COLON ID",
+                generateCode: (n) => {
+                    throw new NotImplementedException();
+                }
+            ),  //for user-defined types
+            new("vardecl :: VAR ID COLON ID EQ expr",
+            generateCode: (n) => {
+                    throw new NotImplementedException();
+                }
+            ),  //for user-defined types
 
         });
 

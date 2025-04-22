@@ -379,9 +379,14 @@ public class ProductionsExpr{
                     n.children[0].pushAddressToStack();
                     Asm.add(new OpPop(Register.rax,null));
                     Asm.add(new OpMov(Register.rsp,Register.rcx));
-                    Asm.add(new OpSub(Register.rsp,32));    //shadow space
+                    if( ftype.builtin)
+                        Asm.add(new OpSub(Register.rsp,32));    //shadow space
                     Asm.add(new OpCall(Register.rax,$"line {line}"));
-                    Asm.add(new OpAdd(Register.rsp, 32 + ftype.paramTypes.Count * 16 ));
+                    if( ftype.builtin )
+                        Asm.add(new OpAdd(Register.rsp, 32 + ftype.paramTypes.Count * 16 ));
+                    else //TODO: If there are zero parameters, omit this
+                        Asm.add(new OpAdd(Register.rsp, ftype.paramTypes.Count * 16 ));
+                        
                     if( ftype.returnType == NodeType.Void ){
                     } else if( ftype.returnType == NodeType.Bool || 
                                ftype.returnType == NodeType.Int ){

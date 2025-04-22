@@ -4,7 +4,7 @@ namespace lab{
         IntRegister op1;
         IntRegister op2Reg=null;
         int op2Constant;
-        string comment;
+        string comment="";
 
         // sub $42, %rax   <-- subtract constant from register
         public OpSub( IntRegister op1, int op2, string comment=""){

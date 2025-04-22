@@ -78,17 +78,21 @@ public class StringNodeType : NodeType {
 public class FunctionNodeType: NodeType {
     public NodeType returnType;
     public List<NodeType> paramTypes;
+    public bool builtin;
 
-    public FunctionNodeType(NodeType returnType, List<NodeType> paramTypes): base("func") {
+    public FunctionNodeType(NodeType returnType,
+                 List<NodeType> paramTypes,
+                 bool builtin): base("func") {
         this.returnType = returnType;
         this.paramTypes = paramTypes;
+        this.builtin = builtin;
     }
 
     public override bool Equals(Object o){
         var f = o as FunctionNodeType;
         if( f == null )
             return false;
-        throw new Exception("TBD");
+        return false;   //functions never compare as equal
     }
 
     public override int GetHashCode()

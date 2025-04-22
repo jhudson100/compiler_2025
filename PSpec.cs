@@ -12,13 +12,15 @@ public class PSpec {
     public WalkCallbackType setNodeTypes;
     public WalkCallbackType generateCode;
     public WalkCallbackType pushAddressToStack;
+    public WalkCallbackType returnCheck;
 
     public PSpec(string p,
                  WalkCallbackType collectClassNames=null,
                  WalkCallbackType collectFunctionNames=null,
                  WalkCallbackType setNodeTypes=null,
                  WalkCallbackType generateCode=null,
-                 WalkCallbackType pushAddressToStack=null
+                 WalkCallbackType pushAddressToStack=null,
+                 WalkCallbackType returnCheck=null
     ){
         this.spec=p;
         this.collectClassNames = collectClassNames ?? defaultCollectClassNames;
@@ -26,6 +28,7 @@ public class PSpec {
         this.setNodeTypes = setNodeTypes ?? defaultSetNodeTypes;
         this.generateCode = generateCode ?? defaultGenerateCode;
         this.pushAddressToStack = pushAddressToStack ?? defaultPushAddressToStack;
+        this.returnCheck = returnCheck ?? defaultReturnCheck;
     }
 
     void defaultCollectClassNames(TreeNode n){
@@ -64,6 +67,13 @@ public class PSpec {
          else
              Utils.error(n.firstToken(), "Expected lvalue");
      }
+
+
+    public static void defaultReturnCheck(TreeNode n){
+        foreach(var c in n.children )
+            c.returnCheck();
+     }
+
 
 }
 

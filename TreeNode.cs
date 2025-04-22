@@ -27,6 +27,9 @@ public class TreeNode{
     //declared in that function
     public int numLocals = -1;
 
+    //true if we can prove this node executes a return statement
+    public bool returns=false;
+
     public TreeNode this[string childSym] {
         get {
             foreach( var c in this.children ){
@@ -213,6 +216,11 @@ public class TreeNode{
 
     public void generateCode(){
         this.production?.pspec.generateCode(this);
+    }
+
+
+    public void returnCheck(){
+        this.production?.pspec.returnCheck(this);
     }
 
     public void pushAddressToStack(){
