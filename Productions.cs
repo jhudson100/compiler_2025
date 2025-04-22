@@ -13,21 +13,21 @@ public class Productions{
                         c.collectFunctionNames();
                     }
 
+                    n["optionalReturn"].setNodeTypes();
+                    var returnType = n["optionalReturn"].nodeType;
+
                     string funcName = n.children[1].token.lexeme;
-
-
-                    NodeType returnType = n["optionalReturn"].nodeType;
 
                     List<NodeType> argTypes = new();
 
-                    Utils.walk( n["optionalPdecls"], (c) => {
-                        //c is a tree node
-                        if(c.sym == "TYPE" ){
-                            argTypes.Add(NodeType.typeFromToken(c.token));
+                    var ptypes = new List<NodeType>();
+                    Utils.walk(n["optionalPdecls"], (c) => {
+                        if( c.sym == "pdecl" ){
+                            ptypes.Add( NodeType.typeFromToken( c["TYPE"].token ));
+                            return false;
                         }
                         return true;
                     });
-
 
                     var ftype = new FunctionNodeType(
                         returnType,argTypes,false
@@ -37,6 +37,8 @@ public class Productions{
                     foreach(var c in n.children ){
                         c.collectFunctionNames();
                     }
+
+                    SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType(returnType,ptypes,false));
                 },
                 setNodeTypes: (n) => {
                     SymbolTable.enterFunctionScope();
@@ -92,12 +94,15 @@ public class Productions{
                     SymbolTable.leaveLocalScope();
                 }
             ),
-            new("optionalReturn :: lambda | COLON TYPE",
-                collectFunctionNames: (n) => {
-                    if( n.children.Count == 0 )
-                        n.nodeType = NodeType.Void;
-                    else
-                        n.nodeType = NodeType.typeFromToken(n["TYPE"].token);
+
+            new("optionalReturn :: lambda",
+                setNodeTypes: (n) => {
+                    n.nodeType = NodeType.Void;
+                }
+            ),
+            new("optionalReturn :: COLON TYPE",
+                setNodeTypes: (n) => {
+                    n.nodeType = NodeType.typeFromToken(n["TYPE"].token);
                 }
             ),
             new("optionalSemi :: lambda | SEMI"),
@@ -164,21 +169,26 @@ public class Productions{
                  }
              ),
 
-
             new("stmt :: expr",
                 generateCode: (n) => {
-                    n["expr"].generateCode();
-                    //if result is not void, must discard values
-                    if( n["expr"].nodeType != NodeType.Void ){
-                        Asm.add( new OpAdd(Register.rsp,16));
+                    Asm.add(new OpComment($"begin statement {n.children[0].sym} at line {n.firstToken().line}"));
+                    var c = n.children[0];
+                    c.generateCode();
+                    if( c.nodeType == null )
+                        throw new Exception();
+                    if( c.nodeType != NodeType.Void ){
+                        Asm.add(new OpPop(null,null));
                     }
+                    Asm.add(new OpComment($"end statement {n.children[0].sym} at line {n.lastToken().line}"));
                 }
             ),
-
             new("assign :: expr EQ expr",
                 setNodeTypes: (n) => {
                     n.children[0].setNodeTypes();
                     n.children[2].setNodeTypes();
+                    if( n.children[0].nodeType as FunctionNodeType != null ){
+                        Utils.error(n["EQ"].token, "Cannot assign functions");
+                    }
                     if( n.children[0].nodeType != n.children[2].nodeType){
                         Utils.error(n["EQ"].token,$"Type mismatch in assign: {n.children[0].nodeType} vs {n.children[2].nodeType}");
                     }

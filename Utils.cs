@@ -19,10 +19,10 @@ namespace lab{
         }
 
         public delegate bool WalkCallback(TreeNode n);
-        public static void walk(TreeNode root, WalkCallback f){
-            if( false == f(root) )
+        public static void walk(TreeNode n, WalkCallback f){
+            if( !f(n) )
                 return;
-            foreach(var c in root.children){
+            foreach(var c in n.children){
                 walk(c,f);
             }
         }

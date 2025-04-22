@@ -10,7 +10,10 @@ namespace lab{
         }
 
         public override void output(StreamWriter w){
-            w.WriteLine($"    call *{this.op1}  /* {comment} */ ");
+            string comment = this.comment;
+            if( comment.Length > 0 )
+                comment = "/* "+comment+" */";
+            w.WriteLine($"    call *{op1}   {comment}");
         }
     }
 

@@ -6,3 +6,4 @@ dfa.dot
 *.o
 out.asm
 tree.json
+dfa.txt

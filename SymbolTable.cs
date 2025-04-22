@@ -71,13 +71,13 @@ public static class SymbolTable{
     }
 
     public static void declareGlobal(Token token, NodeType type, Label lbl=null){
-        if(lbl == null)
+        if(lbl == null )
             lbl = new Label(token.lexeme);
         if( table.ContainsKey(token.lexeme) )
             Utils.error(token,$"Redeclaration of global variable {token.lexeme}");
-        table[token.lexeme] = new VarInfo(token,0,type,
-            new GlobalLocation(lbl));
+        table[token.lexeme] = new VarInfo(token,0,type,new GlobalLocation(lbl));
     }
+
     public static void declareLocal(Token token, NodeType type){
         string name = token.lexeme;
         localTypes.Add( new(name,type) );
@@ -114,17 +114,36 @@ public static class SymbolTable{
     public static bool currentlyInGlobalScope(){
         return locals.Count == 0;
     }
-    public static void populateBuiltins(){
-        SymbolTable.declareGlobal(new Token("ID","putc",-1),
-            new FunctionNodeType(
-                returnType: NodeType.Int,
-                paramTypes: new List<NodeType>(){NodeType.Int},
-                builtin: true
-            ),
-            new Label("putc","putc")
-        );
 
-        SymbolTable.declareGlobal(
+
+
+
+    public static void populateBuiltins(){
+        declareGlobal( 
+            new Token("ID","putc",-1),  
+            new FunctionNodeType( 
+                    returnType: NodeType.Bool, 
+                    paramTypes: new(){ NodeType.Int } ,
+                    builtin: true
+                ), 
+                new Label("putc","putc") 
+        );
+        declareGlobal( 
+            new Token("ID","newline",-1),    
+            new FunctionNodeType( NodeType.Void, new(), true ), 
+            new Label("newline","newline") 
+        );
+        declareGlobal( 
+            new Token("ID","putv",-1),       
+            new FunctionNodeType( NodeType.Bool, new(){ NodeType.Int, NodeType.Int}, true ), 
+            new Label("putv","putv") 
+        );
+        declareGlobal( 
+            new Token("ID","getc",-1),       
+            new FunctionNodeType( NodeType.Int, new(), true ), 
+            new Label("getc","getc") 
+        );
+        declareGlobal(
             new Token("ID","print",-1),
             new FunctionNodeType(
                 returnType: NodeType.Void,
@@ -133,8 +152,6 @@ public static class SymbolTable{
             ),
             new Label("print","print")
         );
-
-
     }
 }
 

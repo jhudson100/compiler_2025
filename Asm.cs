@@ -43,19 +43,13 @@ public static class Asm{
 
         //return value from main is in rax
 
-        w.WriteLine("    mov %rax, %r13");
-
-        //call rtcleanup to cleanup our runtime
+        w.WriteLine("    sub $8,%rsp"); //need to keep stack aligned
+        w.WriteLine("    push %rax");
         w.WriteLine("    sub $32, %rsp");
         w.WriteLine("    call rtcleanup");
         w.WriteLine("    add $32, %rsp");
-
-        w.WriteLine("    mov %r13, %rax");
-        
-
-        //call ExitProcess() with return value of main
-        w.WriteLine("    mov %rax, %rcx");
-        w.WriteLine("    sub $32,%rsp");
+        w.WriteLine("    pop %rcx");    //return value goes to rcx so it's parameter to ExitProcess
+        w.WriteLine("    sub $24,%rsp");    //already have sub 8 above
         w.WriteLine("    call ExitProcess");
 
         foreach( var op in ops ){

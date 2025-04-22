@@ -93,7 +93,6 @@ public class FunctionNodeType: NodeType {
         var f2 = o as FunctionNodeType;
         if( f2 == null )
             return false;
-
         throw new Exception("TBD");
     }
 
