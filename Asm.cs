@@ -14,7 +14,7 @@ public static class Asm{
         w.WriteLine(".global _start");
         w.WriteLine("_start:");
         w.WriteLine("    andq $~0xf, %rsp  /*align the stack*/");
-
+        w.WriteLine("    xor %rbp, %rbp");
 
         //call rtinit to initialize the runtime
         w.WriteLine("    sub $32, %rsp");
