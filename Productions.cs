@@ -40,6 +40,15 @@ public class Productions{
 
                     SymbolTable.declareGlobal(n["ID"].token, new FunctionNodeType(returnType,ptypes,false));
                 },
+                
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    var rtype = n["optionalReturn"].nodeType;
+                    if( rtype != NodeType.Void && !n["stmts"].returns )
+                        Utils.error(n,"Function might not return");
+                },
+
                 setNodeTypes: (n) => {
                     SymbolTable.enterFunctionScope();
                     foreach(var c in n.children ){
@@ -49,19 +58,6 @@ public class Productions{
                     n.locals = new();
                     n.locals.AddRange( SymbolTable.localTypes );
                     SymbolTable.leaveFunctionScope();
-                },
-                returnCheck: (n) => {
-                    foreach(var c in n.children){
-                        c.returnCheck();
-                    }
-                    var ftype = n.nodeType as FunctionNodeType;
-                    if( ftype.returnType != NodeType.Void ){
-                        if( n["stmts"].returns == false ){
-                            Utils.error(n["FUNC"].token,
-                                "Non-void function might not return"
-                            );
-                        }
-                    }
                 },
                 generateCode: (n) => {
                     VarInfo vi = SymbolTable.lookup(n["ID"].token); //lookup the function that we're in
@@ -92,6 +88,12 @@ public class Productions{
                     foreach(var c in n.children)
                         c.setNodeTypes();
                     SymbolTable.leaveLocalScope();
+                },
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n["stmts"].returns )
+                        n.returns = true;
                 }
             ),
 
@@ -130,11 +132,26 @@ public class Productions{
             new("membervardecl :: VAR ID COLON TYPE SEMI"),
             new("memberfuncdecl :: funcdecl"),
 
-            new("stmts :: stmt SEMI stmts"),
+            new("stmts :: stmt SEMI stmts",
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n["stmt"].returns )
+                        n.returns = true;
+                    if( n["stmts"].returns )
+                        n.returns = true;
+                }
+            ),
             new("stmts :: SEMI"),
             new("stmts :: lambda"),
 
             new("stmt :: assign | cond | loop | vardecl | return | break | continue",
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n.children[0].returns )
+                        n.returns = true;
+                },
                 generateCode: (n) => {
                     Asm.add(new OpComment($"begin statement {n.children[0].sym} at line {n.firstToken().line}"));
                     foreach(var c in n.children)
@@ -170,6 +187,12 @@ public class Productions{
              ),
 
             new("stmt :: expr",
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n.children[0].returns )
+                        n.returns = true;
+                },
                 generateCode: (n) => {
                     Asm.add(new OpComment($"begin statement {n.children[0].sym} at line {n.firstToken().line}"));
                     var c = n.children[0];
@@ -232,6 +255,12 @@ public class Productions{
                 }
             ),
             new("cond :: IF LPAREN expr RPAREN braceblock ELSE braceblock",
+                returnCheck: (n) => {
+                    foreach(var c in n.children)
+                        c.returnCheck();
+                    if( n.children[4].returns && n.children[6].returns )
+                        n.returns = true;
+                },
                 setNodeTypes: (n) => {
                     foreach(var c in n.children)
                         c.setNodeTypes();
@@ -332,11 +361,18 @@ public class Productions{
                     //our code expects storage class to come back
                     //in rbx
                     Asm.add( new OpPop(Register.rax,Register.rbx));
-                    Utils.epilogue(n["RETURN"].token);
-                }),
+                    Utils.returnCheck(n,n["expr"].nodeType);
+                },
+                returnCheck: (n) => {
+                    n.returns=true;
+                }
+            ),
             new("return :: RETURN",
                 setNodeTypes: (n) => {
-                    throw new NotImplementedException();
+                    Utils.returnCheck(n, NodeType.Void);
+                },
+                returnCheck: (n) => {
+                    n.returns=true;
                 },
                 generateCode: (n) => {
                     Utils.epilogue(n["RETURN"].token);
@@ -371,6 +407,21 @@ public class Productions{
                     throw new NotImplementedException();
                 }
             ),
+            new("vardecl :: VAR ID COLON TYPE EQ expr",
+                generateCode: (n) => {
+                    throw new NotImplementedException();
+                }
+            ),
+            new("vardecl :: VAR ID COLON ID",
+                generateCode: (n) => {
+                    throw new NotImplementedException();
+                }
+            ),  //for user-defined types
+            new("vardecl :: VAR ID COLON ID EQ expr",
+                generateCode: (n) => {
+                    throw new NotImplementedException();
+                }
+            ),  //for user-defined types
 
         });
 

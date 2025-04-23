@@ -36,6 +36,7 @@ public class TreeNode{
     //only defined for function declaration nodes
     public List<Tuple<string,NodeType> > locals;
 
+
     public TreeNode this[string childSym] {
         get {
             foreach( var c in this.children ){
@@ -223,6 +224,11 @@ public class TreeNode{
         this.production?.pspec.generateCode(this);
     }
 
+
+    public void returnCheck(){
+        this.production?.pspec.returnCheck(this);
+    }
+
     public void pushAddressToStack(){
         if( this.production != null )
             this.production.pspec.pushAddressToStack(this);
@@ -230,9 +236,6 @@ public class TreeNode{
             Utils.error(this.firstToken(),"Cannot get address");
     }
 
-    public void returnCheck(){
-        this.production?.pspec.returnCheck(this);
-    }
 
 
 } //end TreeNode

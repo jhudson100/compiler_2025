@@ -65,12 +65,14 @@ public class PSpec {
             c.returnCheck();
     }
 
-    public static void defaultPushAddressToStack(TreeNode n){
+    public void defaultPushAddressToStack(TreeNode n){
          if( n.children.Count == 1 )
              n.children[0].pushAddressToStack();
          else
              Utils.error(n.firstToken(), "Expected lvalue");
      }
+
+
 
 }
 

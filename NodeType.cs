@@ -93,7 +93,7 @@ public class FunctionNodeType: NodeType {
         var f2 = o as FunctionNodeType;
         if( f2 == null )
             return false;
-        throw new Exception("TBD");
+        return false;   //functions never compare as equal
     }
 
     public override int GetHashCode()

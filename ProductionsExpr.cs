@@ -399,7 +399,7 @@ public class ProductionsExpr{
                     n.children[0].pushAddressToStack();
                     Asm.add(new OpPop(Register.rax,null));
 
-                     if( ftype.builtin ){
+                    if( ftype.builtin ){
                         //C ABI expects first parameter to come in via rcx
                         //we're sending the address of the stack to C
                         Asm.add( new OpMov( Register.rsp, Register.rcx));
