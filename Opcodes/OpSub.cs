@@ -19,6 +19,10 @@ namespace lab{
             this.op2Reg = op2;
         }
 
+        public override bool touchesStack(){
+           return this.op1 == Register.rsp;
+        }
+
         public override void output(StreamWriter w){
             string comment = this.comment;
             if( comment.Length > 0 )

@@ -6,6 +6,10 @@ namespace lab{
             this.lbl=lbl;
         }
 
+        public override bool transfersControl(){
+            return true;
+        }
+
         public override void output(StreamWriter w){
             w.WriteLine($"    jmp {lbl.value}  /* {lbl.comment} */");
         }

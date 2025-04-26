@@ -8,6 +8,10 @@ namespace lab{
             this.sclass=sclass;
         }
 
+        public override bool touchesStack(){
+           return true;
+        }
+
         public override void output(StreamWriter w){
             w.WriteLine("    sub $8, %rsp  /* push float value */");
             w.WriteLine($"    movq {this.reg}, (%rsp)  /* push float value */");

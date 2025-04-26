@@ -17,7 +17,7 @@ namespace lab{
         string comment = "";
 
         //move immediate (constant) to an int register
-        public OpMov( long src, IntRegister dest, string comment){
+        public OpMov( long src, IntRegister dest, string comment=""){
             this.immediate=src;
             this.destIntReg=dest;
             this.comment=comment;
@@ -56,6 +56,10 @@ namespace lab{
             this.immediate=-1;
             this.srcFloatReg=src;
             this.destIntReg=dest;
+        }
+
+        public override bool touchesStack(){
+           return this.destIntReg == Register.rsp;
         }
 
         //mov constant to register

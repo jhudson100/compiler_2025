@@ -24,8 +24,18 @@ public class CompilersAreGreat{
             return;
         }
 
+        bool optimize=false;
+        string infile;
 
-        string inp = File.ReadAllText(args[0]);
+        if( args[0] == "-O" ){
+            optimize=true;
+            infile = args[1];
+        } else {
+            infile = args[0];
+        }
+
+
+        string inp = File.ReadAllText(infile);
         var tokens = new List<Token>();
         var T = new Tokenizer(inp);
         TreeNode root = Parser.parse(T);
@@ -37,6 +47,17 @@ public class CompilersAreGreat{
         root.setNodeTypes();
         root.returnCheck();
         root.generateCode();
+
+
+        if(optimize){
+            int num;
+            do{
+                num = Optimizer.applyAll();
+                Console.WriteLine("Optimizer pass: Applied "+num+" optimizations");
+            } while(num > 0 );
+        }
+
+
 
         using(var w = new StreamWriter("out.asm")){
             Asm.output(w);

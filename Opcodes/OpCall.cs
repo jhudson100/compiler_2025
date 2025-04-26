@@ -9,6 +9,14 @@ namespace lab{
             this.comment=comment;
         }
 
+        public override bool touchesStack(){
+           return true;
+        }
+
+        public override bool transfersControl(){
+            return true;
+        }
+
         public override void output(StreamWriter w){
             string comment = this.comment;
             if( comment.Length > 0 )

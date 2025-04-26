@@ -14,6 +14,11 @@ namespace lab{
             this.op2 = op2;
         }
 
+        public override bool touchesStack(){
+           return this.op1 == Register.rsp;
+        }
+
+
         public override void output(StreamWriter w){
             if( op2 == null )
                 w.WriteLine($"    add ${this.op2Constant}, {this.op1}");
