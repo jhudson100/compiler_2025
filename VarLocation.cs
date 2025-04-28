@@ -23,7 +23,7 @@ public class GlobalLocation : VarLocation{
     public override void pushAddressToStack(IntRegister temp1){
         //get address of the global to temp1
         Asm.add( new OpMov( lbl, temp1 ));
-        Asm.add( new OpPush(temp1, StorageClass.PRIMITIVE) );
+        Asm.add( new OpPush(temp1, StorageClass.PRIMITIVE,"address: "+lbl.comment) );
     }
  
     public override void pushValueToStack(IntRegister temp1, IntRegister temp2)
@@ -31,11 +31,11 @@ public class GlobalLocation : VarLocation{
         //get address of the global to temp1
         Asm.add( new OpMov( lbl, temp1 ));
         //dereference that address to get storage class to temp2
-        Asm.add( new OpMov( temp1, 0, temp2));
+        Asm.add( new OpMov( temp1, 0, temp2, $"{lbl.comment}: storage class"));
         //dereference that address to get value to temp1
-        Asm.add( new OpMov( temp1, 8, temp1));
+        Asm.add( new OpMov( temp1, 8, temp1, $"{lbl.comment}: value"));
         //push value and storage class
-        Asm.add( new OpPush( temp1, temp2));
+        Asm.add( new OpPush( temp1, temp2,lbl.comment));
     }
 
 }
@@ -65,7 +65,7 @@ public class LocalLocation : VarLocation{
         Asm.add( new OpLea( Register.rbp, -offset, temporary, name ));
 
         //an address is always a primitive object
-        Asm.add( new OpPush( temporary, StorageClass.PRIMITIVE));
+        Asm.add( new OpPush( temporary, StorageClass.PRIMITIVE, "address of "+name));
     }
 
     public override void pushValueToStack(IntRegister temp1, IntRegister temp2)
@@ -76,9 +76,9 @@ public class LocalLocation : VarLocation{
         //lea = load effective address
         // lea offset(%rbp), %rax  ----> compute rbp+offset and store to rax
         Asm.add( new OpLea( Register.rbp, -offset, temp1, name ));
-        Asm.add( new OpMov( temp1,0, temp2 ));
-        Asm.add( new OpMov( temp1,8, temp1 ));
-        Asm.add( new OpPush( temp1, temp2) );
+        Asm.add( new OpMov( temp1,0, temp2, name+": storage class" ));
+        Asm.add( new OpMov( temp1,8, temp1, name+": value" ));
+        Asm.add( new OpPush( temp1, temp2, name) );
     }
 
 }

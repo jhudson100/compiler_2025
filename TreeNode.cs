@@ -30,6 +30,10 @@ public class TreeNode{
     //true if we can prove this node executes a return statement
     public bool returns=false;
 
+    //only for funcdecl nodes
+    public NodeType[] localVarTypes;
+    public string[] localVarNames;
+
     public TreeNode this[string childSym] {
         get {
             foreach( var c in this.children ){

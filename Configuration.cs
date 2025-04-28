@@ -52,6 +52,7 @@ namespace Configuration{
                 "CloseHandle.o","runtime.o"
         };
 
+        public static string readonlyDataSection = ".rodata";
     }
 
 }

@@ -47,6 +47,28 @@ public static class Asm{
             op.output(w);
         }
 
+        w.WriteLine(".section "+Configuration.Configuration.readonlyDataSection);
+
+        w.WriteLine("emptyString:");
+        w.WriteLine(".quad 0");
+
+        foreach(var t in StringPool.allStrings ){
+            w.WriteLine($"{t.Value.value}:  /* {t.Value.comment} */" );
+            w.WriteLine("    .quad "+t.Key.Length);
+            w.Write("    .byte ");
+            string sep="";
+            foreach(char c in t.Key){
+                w.Write(sep);
+                w.Write( (int)c);
+                sep=", ";
+            }
+            //padding
+            for(int i=0;i<8 - t.Key.Length % 8; ++i){
+                w.Write(", 0");
+            }
+            w.WriteLine();
+        }
+        
         w.WriteLine(".section .data");
         foreach( string name in SymbolTable.table.Keys){
             vi = SymbolTable.table[name];
@@ -54,8 +76,13 @@ public static class Asm{
             if( vi.type as FunctionNodeType != null  )
                 continue;
             w.WriteLine( $"{loc.lbl}:   /* {loc.lbl.comment} */" );
-            w.WriteLine( "    .quad 0  /* storage class = primitive */");
-            w.WriteLine( "    .quad 0  /* value */");
+            if( vi.type == NodeType.String){
+                w.WriteLine("    .quad 0  /* storage class = primitive */");
+                w.WriteLine("    .quad emptyString");
+            } else {
+                w.WriteLine( "    .quad 0  /* storage class = primitive */");
+                w.WriteLine( "    .quad 0  /* value */");
+            }
         }
 
     }

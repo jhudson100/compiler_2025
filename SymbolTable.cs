@@ -103,6 +103,14 @@ public static class SymbolTable{
             new Token("ID","getc",-1), 
             new FunctionNodeType( NodeType.Int, new(), true ), 
             new Label("getc","getc") );
+        declareGlobal( 
+            new Token("ID","print",-1), 
+            new FunctionNodeType( NodeType.Void, new(){NodeType.String}, true ), 
+            new Label("print","print") );
+        declareGlobal( 
+            new Token("ID","length",-1), 
+            new FunctionNodeType( NodeType.Int, new(){NodeType.String}, true ), 
+            new Label("length","length") );
     }
 }
 

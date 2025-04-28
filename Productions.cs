@@ -35,6 +35,20 @@ public class Productions{
                     n["optionalPdecls"].setNodeTypes();
                     n["stmts"].setNodeTypes();
                     n.numLocals = SymbolTable.numLocals;
+                     n.numLocals = SymbolTable.numLocals;    //should have this already
+                    n.localVarTypes = new NodeType[n.numLocals];
+                    n.localVarNames = new string[n.numLocals];
+
+                    foreach( var item in SymbolTable.table ){
+                        string varname = item.Key;
+                        VarInfo vi = item.Value;
+                        var lloc = vi.location as LocalLocation;
+                        if( lloc != null ){
+                            n.localVarTypes[lloc.num] = vi.type;
+                            n.localVarNames[lloc.num] = varname;
+                        }
+                    }
+
                     SymbolTable.leaveFunctionScope();
                 },
                 generateCode: (n) => {
@@ -45,9 +59,27 @@ public class Productions{
                     Asm.add( new OpMov( src: Register.rsp, dest: Register.rbp));
 
                     VarInfo vi = SymbolTable.lookup(n["ID"].token); //lookup the function that we're in
-                    if( n.numLocals > 0 ){
-                        Asm.add( new OpSub( Register.rsp, n.numLocals*16, $"space for {n.numLocals} locals" ));
+
+                    bool raxGood=false;
+                    
+                    Asm.add( new OpSub( Register.rsp, n.localVarTypes.Length*16));
+
+                    for(int i=0;i<n.localVarTypes.Length;++i){
+                        int sclassOffset = -16 * (i+1);
+                        int valueOffset = sclassOffset+8;
+                        if( n.localVarTypes[i] == NodeType.String ){
+                            if(!raxGood){
+                                Asm.add( new OpMov( new Label("emptyString","emptyString"), Register.rax) );
+                                raxGood=true;
+                            }
+                            Asm.add( new OpMov( Register.rax, Register.rbp, valueOffset, n.localVarNames[i]+": value" ));
+                            Asm.add( new OpMov( 0, Register.rbp, sclassOffset, n.localVarNames[i]+": storage class = primitive") );
+                        } else{
+                            Asm.add( new OpMov( 0, Register.rbp, valueOffset, n.localVarNames[i]+": value") );
+                            Asm.add( new OpMov( 0, Register.rbp, sclassOffset, n.localVarNames[i]+": storage class = primitive") );
+                        }
                     }
+
                     n["stmts"].generateCode();
                     Utils.epilogue(n.lastToken());
                 }
@@ -171,8 +203,8 @@ public class Productions{
 
                     //Write data + storage to memory
                     //Storage class first, then data
-                    Asm.add( new OpMov( src: Register.rbx, Register.rcx, 0));
-                    Asm.add( new OpMov( src: Register.rax, Register.rcx, 8));
+                    Asm.add( new OpMov( src: Register.rbx, Register.rcx, 0, "storage class"));
+                    Asm.add( new OpMov( src: Register.rax, Register.rcx, 8, "value"));
                 }
             ),
             new("break :: BREAK",

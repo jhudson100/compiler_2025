@@ -7,6 +7,13 @@ _Static_assert( sizeof(DWORD)       == 4, "DWORD bad");
 _Static_assert( sizeof(int64_t)     == 8, "int64_t bad");
 #define NULL 0
 
+typedef struct String_{
+    uint64_t length;
+    char data[1];        //variable length
+} String;
+
+
+
 typedef struct StackVar_ {
     int64_t storageClass;
     int64_t value;
@@ -165,4 +172,31 @@ __attribute__((ms_abi)) unsigned getc(StackVar* stk)
     if( 0 == ReadFile( stdin, A, 1, &count, NULL ) )
         return -1;   //error; what to return?
     return A[0];
+}
+
+
+__attribute__((ms_abi)) void print(StackVar* stk)
+{
+    String* s = (String*)stk[0].value;
+    uint64_t numLeft = s->length;
+    char* p = s->data;
+    while( numLeft > 0 ){
+        DWORD toWrite;
+        if( numLeft > 0x7fffffff)
+            toWrite = 0x7fffffff;
+        else
+            toWrite = numLeft;
+        DWORD didWrite;
+        WriteFile(stdout,p,toWrite,&didWrite,NULL);
+        p += didWrite;
+        numLeft -= didWrite;
+    }
+    return;
+}
+
+
+__attribute__((ms_abi)) uint64_t length(StackVar* stk)
+{
+    String* s = (String*)stk[0].value;
+    return s->length;
 }

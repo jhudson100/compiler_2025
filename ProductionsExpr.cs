@@ -449,9 +449,30 @@ public class ProductionsExpr{
                     n.nodeType = NodeType.String;
                 },
                 generateCode: (n) => {
-                    throw new NotImplementedException();
+                    var s = n.children[0].token.lexeme;
+                    string t="";
+                    for(int i=1;i<s.Length-1;i++){
+                        if( s[i] == '\\' ){
+                            i++;
+                            if( i == s.Length-1 )
+                                Utils.error(n,"Bad string: Trailing backslash");
+                            switch(s[i]){
+                                case 'n': t += "\n"; break;
+                                case 't': t += "\t"; break;
+                                case '\\': t += "\\"; break;
+                                case '"': t += "\""; break;
+                                default:
+                                    Utils.error(n,"Bad string: Bad backslash escape");
+                                    break;
+                            }
+                        } else {
+                            t += s[i];
+                        }
+                    }
+                    var lbl = StringPool.lookup(t);
+                    Asm.add(new OpMov(lbl,Register.rax));
+                    Asm.add(new OpPush(Register.rax, StorageClass.PRIMITIVE,$"pushing {lbl.comment}"));
                 }
-
             ),
             new("factor :: BOOLCONST",
                 setNodeTypes: (n) => {
